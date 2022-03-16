@@ -1,0 +1,143 @@
+[debug] > Exec(early(addDefaultCommands), None, None)
+[debug] > Exec(addDefaultCommands, None, None)
+[debug] > Exec(early(initialize), None, None)
+[debug] > Exec(initialize, None, None)
+[debug] > Exec(early(addPluginSbtFile="""C:\Users\pc\AppData\Local\Temp\idea.sbt"""), None, None)
+[debug] > Exec(addPluginSbtFile="""C:\Users\pc\AppData\Local\Temp\idea.sbt""", None, None)
+[debug] > Exec(boot, None, None)
+[debug] > Exec(writeSbtVersion, None, None)
+[debug] > Exec(reload, None, None)
+[debug] > Exec(sbtStashOnFailure, None, None)
+[debug] > Exec(onFailure loadFailed, None, None)
+[debug] > Exec(loadp, None, None)
+[info] welcome to sbt 1.5.5 (Oracle Corporation Java 1.8.0_281)
+[debug]       Load.loadUnit: plugins took 52.3553ms
+[debug]       Load.loadUnit: defsScala took 0.1806ms
+[debug] [Loading] Scanning directory C:\Users\pc\.sbt\1.0\plugins
+[debug] [Loading] Found non-root projects 
+[debug] [Loading] Done in C:\Users\pc\.sbt\1.0\plugins, returning: ()
+[debug] deducing auto plugins based on known facts Set(Atom(sbt.plugins.CorePlugin)) and clauses Clauses(Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.IvyPlugin)))
+[debug] Clause(Atom(sbt.ScriptedPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.SbtPlugin),Set(Atom(sbt.ScriptedPlugin)))
+[debug] Clause(Atom(sbt.plugins.SemanticdbPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.JUnitXmlReportPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.MiniDependencyTreePlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.CorePlugin),Set(Atom(sbt.plugins.IvyPlugin)))
+[debug] Clause(Atom(sbt.plugins.IvyPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.SemanticdbPlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.JUnitXmlReportPlugin)))
+[debug] Clause(Atom(sbt.plugins.CorePlugin),Set(Atom(sbt.plugins.Giter8TemplatePlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.MiniDependencyTreePlugin))))
+[debug]   :: deduced result: Matched(sbt.plugins.CorePlugin,sbt.plugins.Giter8TemplatePlugin,sbt.plugins.IvyPlugin,sbt.plugins.JvmPlugin,sbt.plugins.MiniDependencyTreePlugin,sbt.plugins.JUnitXmlReportPlugin,sbt.plugins.SemanticdbPlugin)
+[debug] Plugins.deducer#function took 10.2174 ms
+[debug]           Load.resolveProject(global-plugins) took 29.9667ms
+[debug]         Load.loadTransitive: finalizeProject(Project(id global-plugins, base: C:\Users\pc\.sbt\1.0\plugins, plugins: List(<none>))) took 57.7814ms
+[debug] [Loading] Done in C:\Users\pc\.sbt\1.0\plugins, returning: (global-plugins)
+[debug]       Load.loadUnit: loadedProjectsRaw took 69.9505ms
+[debug]       Load.loadUnit: cleanEvalClasses took 0.1619ms
+[debug]     Load.loadUnit(file:/C:/Users/pc/.sbt/1.0/plugins/, ...) took 126.9777ms
+[debug]   Load.apply: load took 222.7511ms
+[debug]   Load.apply: resolveProjects took 3.8703ms
+[debug]   Load.apply: finalTransforms took 31.2267ms
+[debug]   Load.apply: config.delegates took 4.6005ms
+[debug]   Load.apply: Def.make(settings)... took 209.5537ms
+[debug]   Load.apply: structureIndex took 63.0555ms
+[debug]   Load.apply: mkStreams took 1.158ms
+[info] loading global plugins from C:\Users\pc\.sbt\1.0\plugins
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Load.defaultLoad until apply took 20226.7387ms
+[debug]           Load.loadUnit: plugins took 13.9474ms
+[debug]           Load.loadUnit: defsScala took 0.0022ms
+[debug] [Loading] Scanning directory D:\SCALA\SRIO\project
+[debug]             Load.loadUnit: mkEval took 5.5974ms
+[debug] [Loading] Found non-root projects 
+[debug] [Loading] Done in D:\SCALA\SRIO\project, returning: ()
+[debug] deducing auto plugins based on known facts Set(Atom(sbt.plugins.CorePlugin)) and clauses Clauses(Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.IvyPlugin)))
+[debug] Clause(Atom(sbt.ScriptedPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.SbtPlugin),Set(Atom(sbt.ScriptedPlugin)))
+[debug] Clause(Atom(sbt.plugins.SemanticdbPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.JUnitXmlReportPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.MiniDependencyTreePlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.CorePlugin),Set(Atom(sbt.plugins.IvyPlugin)))
+[debug] Clause(Atom(sbt.plugins.IvyPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.SemanticdbPlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.JUnitXmlReportPlugin)))
+[debug] Clause(Atom(sbt.plugins.CorePlugin),Set(Atom(sbt.plugins.Giter8TemplatePlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.MiniDependencyTreePlugin))))
+[debug]   :: deduced result: Matched(sbt.plugins.CorePlugin,sbt.plugins.Giter8TemplatePlugin,sbt.plugins.IvyPlugin,sbt.plugins.JvmPlugin,sbt.plugins.MiniDependencyTreePlugin,sbt.plugins.JUnitXmlReportPlugin,sbt.plugins.SemanticdbPlugin)
+[debug] Plugins.deducer#function took 0.9564 ms
+[info] loading settings for project srio-build from idea.sbt ...
+[debug]               Load.resolveProject(srio-build) took 1.4816ms
+[debug]             Load.loadTransitive: finalizeProject(Project(id srio-build, base: D:\SCALA\SRIO\project, plugins: List(<none>))) took 2.7184ms
+[debug] [Loading] Done in D:\SCALA\SRIO\project, returning: (srio-build)
+[debug]           Load.loadUnit: loadedProjectsRaw took 1255.8425ms
+[debug]           Load.loadUnit: cleanEvalClasses took 2.8475ms
+[debug]         Load.loadUnit(file:/D:/SCALA/SRIO/project/, ...) took 1273.0753ms
+[debug]       Load.apply: load took 1273.7007ms
+[debug]       Load.apply: resolveProjects took 0.0772ms
+[debug]       Load.apply: finalTransforms took 3.897ms
+[debug]       Load.apply: config.delegates took 0.2065ms
+[debug]       Load.apply: Def.make(settings)... took 38.0213ms
+[debug]       Load.apply: structureIndex took 15.9899ms
+[debug]       Load.apply: mkStreams took 0.0021ms
+[info] loading project definition from D:\SCALA\SRIO\project
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[warn] Unrecognized repository Scala Plugin Bundled Repository, ignoring it
+[debug]     Load.loadUnit: plugins took 4002.1848ms
+[debug]     Load.loadUnit: defsScala took 0.0022ms
+[debug] [Loading] Scanning directory D:\SCALA\SRIO
+[debug]       Load.loadUnit: mkEval took 0.1171ms
+[debug] [Loading] Found non-root projects 
+[debug] [Loading] Done in D:\SCALA\SRIO, returning: ()
+[debug] deducing auto plugins based on known facts Set(Atom(sbt.plugins.CorePlugin)) and clauses Clauses(Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.IvyPlugin)))
+[debug] Clause(Atom(sbt.ScriptedPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.SbtPlugin),Set(Atom(sbt.ScriptedPlugin)))
+[debug] Clause(Atom(sbt.plugins.SemanticdbPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.JUnitXmlReportPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.MiniDependencyTreePlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(org.jetbrains.sbt.StructurePlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(org.jetbrains.sbt.IdeaShellPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(org.jetbrains.sbt.indices.SbtIntellijIndicesPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.CorePlugin),Set(Atom(sbt.plugins.IvyPlugin)))
+[debug] Clause(Atom(sbt.plugins.IvyPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.SemanticdbPlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.JUnitXmlReportPlugin)))
+[debug] Clause(Atom(sbt.plugins.CorePlugin),Set(Atom(sbt.plugins.Giter8TemplatePlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.MiniDependencyTreePlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(org.jetbrains.sbt.StructurePlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(org.jetbrains.sbt.IdeaShellPlugin)))
+[debug] Clause(And(Set(Atom(sbt.plugins.CorePlugin), Atom(sbt.plugins.JvmPlugin))),Set(Atom(org.jetbrains.sbt.indices.SbtIntellijIndicesPlugin))))
+[debug]   :: deduced result: Matched(sbt.plugins.CorePlugin,sbt.plugins.Giter8TemplatePlugin,sbt.plugins.IvyPlugin,sbt.plugins.JvmPlugin,sbt.plugins.SemanticdbPlugin,org.jetbrains.sbt.indices.SbtIntellijIndicesPlugin,sbt.plugins.JUnitXmlReportPlugin,org.jetbrains.sbt.IdeaShellPlugin,org.jetbrains.sbt.StructurePlugin,sbt.plugins.MiniDependencyTreePlugin)
+[debug] Plugins.deducer#function took 1.0885 ms
+[info] loading settings for project srio from build.sbt ...
+[debug]         Load.resolveProject(srio) took 24.1852ms
+[debug]       Load.loadTransitive: finalizeProject(Project(id srio, base: D:\SCALA\SRIO, plugins: List(<none>))) took 25.9739ms
+[debug] [Loading] Done in D:\SCALA\SRIO, returning: (srio)
+[debug]     Load.loadUnit: loadedProjectsRaw took 777.5789ms
+[debug]     Load.loadUnit: cleanEvalClasses took 4.7075ms
+[debug]   Load.loadUnit(file:/D:/SCALA/SRIO/, ...) took 4784.8725ms
+[debug] Load.apply: load took 4785.6374ms
+[debug] Load.apply: resolveProjects took 0.0701ms
+[debug] Load.apply: finalTransforms took 14.173ms
+[debug] Load.apply: config.delegates took 0.164ms
+[debug] Load.apply: Def.make(settings)... took 29.201ms
+[debug] Load.apply: structureIndex took 9.5214ms
+[debug] Load.apply: mkStreams took 0.0023ms
+[info] set current project to EMIF_Test (in build file:/D:/SCALA/SRIO/)
+[debug] > Exec(sbtPopOnFailure, None, None)
+[debug] > Exec(resumeFromFailure, None, None)
+[debug] > Exec(notifyUsersAboutShell, None, None)
+[debug] > Exec(iflast shell, None, None)
+[debug] > Exec(; set ideaPort in Global := 54384 ; idea-shell, None, None)
+[debug] > Exec(set ideaPort in Global := 54384, None, None)
+[info] Defining Global / ideaPort
+[info] The new value will be used by Compile / compile, Test / compile
+[debug] Defining 
+[debug] 	Global / ideaPort
+[debug] 
+[debug] The new value will be used by 
+[debug] 	Compile / compile
+[debug] 	Test / compile
+[info] Reapplying settings...
+[info] set current project to EMIF_Test (in build file:/D:/SCALA/SRIO/)
+[debug] > Exec(idea-shell, None, None)
