@@ -1,0 +1,537 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      VME_REG
+    </title>
+    <style>
+      div{
+          text-align: center;
+      }
+
+      body{ font-size: 0.8em; }
+      p.regif-title{
+          font-weight:800;
+          font-size:1.2em;
+      }
+      td{
+          white-space:pre-line; word-wrap: break-word; word-break: break-all;
+      }
+      td.fixWidth{
+          min-width:50px;
+          max-width:300px;
+      }
+      td.fixWidth2{
+          min-width:50px;
+          max-width:400px;
+      }
+      footer div p.info{
+          font-weight:300;
+          font-size:0.7em;
+      }
+      a {
+        color:black;text-decoration:none;
+      }
+      a:hover {
+          color:#09f;
+      }
+
+
+      .theme-default {
+          border: 3px solid #000;
+          border-collapse: collapse;
+      }
+      .theme-default td,
+      .theme-default th{
+          border: 1px solid #000;
+          border-top: 1px dashed #555;
+          border-bottom: 1px dashed #555;
+          padding: 3px;
+      }
+      .theme-default th{
+          background: #bbb;
+      }
+      .theme-default tbody td.reserved{
+          color: #bbb;
+          font-weight:200;
+          background : #eee;
+          /* text-decoration:line-through; */
+          text-decoration-color:#888;
+      }
+      .theme-default tbody tr.reg{
+          border-top: 2px solid #000;
+      }
+
+
+      .theme-spring{
+          border-collapse: collapse;
+          font-size: 1.em;
+          min-width: 800px;
+          border-radius: 5px 5px 0 0 ;
+          overflow: hidden;
+          box-shadow: 0 -10px 20px rgba(0,0,0,0.15);
+      }
+      .theme-spring th,
+      .theme-spring td {
+          padding:5px 10px;
+      }
+      .theme-spring thead tr {
+          background-color: #009879;
+          color: #ffffff;
+          text-align:center;
+          font-weight: bold;
+      }
+      .theme-spring tbody tr{
+          border-bottom: 1px solid #ddd;
+      }
+      .theme-spring tbody td{
+          border: 1px solid #ddd;
+      }
+      .theme-spring tbody tr:last-of-type{
+          border-bottom: 3px solid #009879;
+      }
+      .theme-spring tbody tr.active-row {
+          font-weight: blod;
+          color: #009879;
+      }
+      .theme-spring tbody td.reserved{
+          color: #aaa;
+          background : #fffff0;
+          /* font-style:italic; */
+          font-weight:200;
+          font-size:1.0em;
+      }
+      .theme-spring tbody tr.green{
+          background :#fffff0 ;
+      }
+
+    </style>
+  </head>
+  <body>
+  <header align="center">
+  <p class="regif-title"> VME_REG Interface Document </p>
+  </header>
+  <div class="table">
+  <table  align="center" class="theme-default">
+      <br/>
+
+      <thead>
+        <tr align="center" >
+          <th>AddressOffset</th>
+          <th>RegName</th>
+          <th>Description</th>
+          <th>Width</th>
+          <th>Section</th>
+          <th>FieldName</th>
+          <th>R/W</th>
+          <th>Reset value</th>
+          <th>Field-Description</th>
+        </tr>
+      <thead>
+
+      <tbody>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x0</td>
+            <td align="left" rowspan="1">MY_REG0</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg0 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >VME_Reg0</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >VME_Reg0</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x2</td>
+            <td align="left" rowspan="1">MY_REG1</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg1 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >VME_Reg1</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >VME_Reg1</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x4</td>
+            <td align="left" rowspan="1">MY_REG2</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg2 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >VME_Reg2</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >VME_Reg2</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x6</td>
+            <td align="left" rowspan="1">MY_REG3</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg3 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >VME_Reg3</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >VME_Reg3</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x8</td>
+            <td align="left" rowspan="1">MY_REG4</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg4 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >VME_Reg4</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >VME_Reg4</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0xa</td>
+            <td align="left" rowspan="1">MY_REG5</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg5 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >VME_Reg5</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >VME_Reg5</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0xc</td>
+            <td align="left" rowspan="1">MY_REG6</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg6 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >VME_Reg6</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >VME_Reg6</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0xe</td>
+            <td align="left" rowspan="1">MY_REG7</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg7 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >VME_Reg7</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >VME_Reg7</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x10</td>
+            <td align="left" rowspan="1">MY_REG8</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg8 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >VME_Reg8</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >VME_Reg8</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x12</td>
+            <td align="left" rowspan="1">MY_REG9</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg9 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >VME_Reg9</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >VME_Reg9</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x14</td>
+            <td align="left" rowspan="1">MY_REG10</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg10 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >VME_Reg10</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >VME_Reg10</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x16</td>
+            <td align="left" rowspan="1">MY_REG11</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg11 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >VME_Reg11</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >VME_Reg11</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x18</td>
+            <td align="left" rowspan="1">MY_REG12</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg12 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >SENSOR_Reg0_H</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >SENSOR_Reg0_H</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x1a</td>
+            <td align="left" rowspan="1">MY_REG13</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg13 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >SENSOR_Reg0_L</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >SENSOR_Reg0_L</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x1c</td>
+            <td align="left" rowspan="1">MY_REG14</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg14 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >SENSOR_Reg1_H</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >SENSOR_Reg1_H</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x1e</td>
+            <td align="left" rowspan="1">MY_REG15</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg15 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >SENSOR_Reg1_L</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >SENSOR_Reg1_L</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x20</td>
+            <td align="left" rowspan="1">MY_REG16</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg16 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >SENSOR_Reg2_H</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >SENSOR_Reg2_H</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x22</td>
+            <td align="left" rowspan="1">MY_REG17</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg17 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >SENSOR_Reg2_L</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >SENSOR_Reg2_L</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x24</td>
+            <td align="left" rowspan="1">MY_REG18</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg18 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >SENSOR_Reg3_H</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >SENSOR_Reg3_H</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x26</td>
+            <td align="left" rowspan="1">MY_REG19</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg19 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >SENSOR_Reg3_L</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >SENSOR_Reg3_L</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x28</td>
+            <td align="left" rowspan="1">MY_REG20</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg20 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >SENSOR_Reg4_H</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >SENSOR_Reg4_H</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x2a</td>
+            <td align="left" rowspan="1">MY_REG21</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg21 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >SENSOR_Reg4_L</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >SENSOR_Reg4_L</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x2c</td>
+            <td align="left" rowspan="1">MY_REG22</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg22 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >SENSOR_Reg5_H</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >SENSOR_Reg5_H</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x2e</td>
+            <td align="left" rowspan="1">MY_REG23</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg23 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >SENSOR_Reg5_L</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >SENSOR_Reg5_L</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x30</td>
+            <td align="left" rowspan="1">MY_REG24</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg24 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >SENSOR_Reg6_H</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >SENSOR_Reg6_H</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x32</td>
+            <td align="left" rowspan="1">MY_REG25</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg25 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >SENSOR_Reg6_L</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >SENSOR_Reg6_L</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x34</td>
+            <td align="left" rowspan="1">MY_REG26</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg26 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >SENSOR_Reg7_H</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >SENSOR_Reg7_H</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x36</td>
+            <td align="left" rowspan="1">MY_REG27</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg27 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >SENSOR_Reg7_L</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >SENSOR_Reg7_L</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x38</td>
+            <td align="left" rowspan="1">MY_REG28</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg28 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >SENSOR_Reg8_H</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >SENSOR_Reg8_H</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x3a</td>
+            <td align="left" rowspan="1">MY_REG29</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg29 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >SENSOR_Reg8_L</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >SENSOR_Reg8_L</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x3c</td>
+            <td align="left" rowspan="1">MY_REG30</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg30 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >SENSOR_Reg9_H</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >SENSOR_Reg9_H</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x3e</td>
+            <td align="left" rowspan="1">MY_REG31</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg31 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >SENSOR_Reg9_L</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >SENSOR_Reg9_L</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x40</td>
+            <td align="left" rowspan="1">MY_REG32</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg32 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >SENSOR_Reg10_H</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >SENSOR_Reg10_H</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x42</td>
+            <td align="left" rowspan="1">MY_REG33</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg33 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >SENSOR_Reg10_L</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >SENSOR_Reg10_L</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x44</td>
+            <td align="left" rowspan="1">MY_REG34</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg34 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >SENSOR_Reg11_H</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >SENSOR_Reg11_H</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x46</td>
+            <td align="left" rowspan="1">MY_REG35</td>
+            <td class="fixWidth" align="center" rowspan="1">My_Reg35 </td>
+            <td align="center" rowspan="1">16</td>
+            <td class="" >[15:0]</td>
+            <td class="" >SENSOR_Reg11_L</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >SENSOR_Reg11_L</td>
+          </tr>
+      </tbody>
+  </table>
+  </div>
+  <footer align="center">
+  <div> <p class="info">Powered By <a href="https://spinalhdl.github.io/SpinalDoc-RTD/"> SpinalHDL </a> </p> </div>
+  </footer>
+  </body>
+</html>

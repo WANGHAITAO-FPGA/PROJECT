@@ -1,0 +1,1378 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Mdcb_Regif
+    </title>
+    <style>
+      div{
+          text-align: center;
+      }
+
+      body{ font-size: 0.8em; }
+      p.regif-title{
+          font-weight:800;
+          font-size:1.2em;
+      }
+      td{
+          white-space:pre-line; word-wrap: break-word; word-break: break-all;
+      }
+      td.fixWidth{
+          min-width:50px;
+          max-width:300px;
+      }
+      td.fixWidth2{
+          min-width:50px;
+          max-width:400px;
+      }
+      footer div p.info{
+          font-weight:300;
+          font-size:0.7em;
+      }
+      a {
+        color:black;text-decoration:none;
+      }
+      a:hover {
+          color:#09f;
+      }
+
+
+      .theme-default {
+          border: 3px solid #000;
+          border-collapse: collapse;
+      }
+      .theme-default td,
+      .theme-default th{
+          border: 1px solid #000;
+          border-top: 1px dashed #555;
+          border-bottom: 1px dashed #555;
+          padding: 3px;
+      }
+      .theme-default th{
+          background: #bbb;
+      }
+      .theme-default tbody td.reserved{
+          color: #bbb;
+          font-weight:200;
+          background : #eee;
+          /* text-decoration:line-through; */
+          text-decoration-color:#888;
+      }
+      .theme-default tbody tr.reg{
+          border-top: 2px solid #000;
+      }
+
+
+      .theme-spring{
+          border-collapse: collapse;
+          font-size: 1.em;
+          min-width: 800px;
+          border-radius: 5px 5px 0 0 ;
+          overflow: hidden;
+          box-shadow: 0 -10px 20px rgba(0,0,0,0.15);
+      }
+      .theme-spring th,
+      .theme-spring td {
+          padding:5px 10px;
+      }
+      .theme-spring thead tr {
+          background-color: #009879;
+          color: #ffffff;
+          text-align:center;
+          font-weight: bold;
+      }
+      .theme-spring tbody tr{
+          border-bottom: 1px solid #ddd;
+      }
+      .theme-spring tbody td{
+          border: 1px solid #ddd;
+      }
+      .theme-spring tbody tr:last-of-type{
+          border-bottom: 3px solid #009879;
+      }
+      .theme-spring tbody tr.active-row {
+          font-weight: blod;
+          color: #009879;
+      }
+      .theme-spring tbody td.reserved{
+          color: #aaa;
+          background : #fffff0;
+          /* font-style:italic; */
+          font-weight:200;
+          font-size:1.0em;
+      }
+      .theme-spring tbody tr.green{
+          background :#fffff0 ;
+      }
+
+    </style>
+  </head>
+  <body>
+  <header align="center">
+  <p class="regif-title"> Mdcb_Regif Interface Document </p>
+  </header>
+  <div class="table">
+  <table  align="center" class="theme-default">
+      <br/>
+
+      <thead>
+        <tr align="center" >
+          <th>AddressOffset</th>
+          <th>RegName</th>
+          <th>Description</th>
+          <th>Width</th>
+          <th>Section</th>
+          <th>FieldName</th>
+          <th>R/W</th>
+          <th>Reset value</th>
+          <th>Field-Description</th>
+        </tr>
+      <thead>
+
+      <tbody>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x0</td>
+            <td align="left" rowspan="1">MY_REG_HEADER</td>
+            <td class="fixWidth" align="center" rowspan="1">帧头 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >HEADER</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >帧头</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x4</td>
+            <td align="left" rowspan="1">MY_REG_SLAVEID</td>
+            <td class="fixWidth" align="center" rowspan="1">板卡识别号 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Slaveid</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >板卡识别号</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x8</td>
+            <td align="left" rowspan="1">MY_REG_VERSION</td>
+            <td class="fixWidth" align="center" rowspan="1">软件版本号 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >VERSION</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >软件版本号</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="8">0xc</td>
+            <td align="left" rowspan="8">MY_REG_ENCODER_ZEROSINGLE</td>
+            <td class="fixWidth" align="center" rowspan="8">4路增量式光栅尺零位信号 </td>
+            <td align="center" rowspan="8">32</td>
+            <td class="reserved" >[31:25]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">7'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[24]</td>
+            <td class="" >Encoder4_ZeroSingle</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >Encoder4零位信号，LE_R_I4</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[23:17]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">7'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[16]</td>
+            <td class="" >Encoder3_ZeroSingle</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >Encoder3零位信号，LE_R_I3</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[15:9]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">7'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[8]</td>
+            <td class="" >Encoder2_ZeroSingle</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >Encoder2零位信号，LE_R_I2</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[7:1]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">7'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[0]</td>
+            <td class="" >Encoder1_ZeroSingle</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >Encoder1零位信号，LE_R_I1</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x10</td>
+            <td align="left" rowspan="1">MY_REG_ENCODER1_POS</td>
+            <td class="fixWidth" align="center" rowspan="1">Encoder1增量式光栅尺位置信号 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Encoder1_Pos</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >Encoder1增量式光栅尺位置信号</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x14</td>
+            <td align="left" rowspan="1">MY_REG_ENCODER2_POS</td>
+            <td class="fixWidth" align="center" rowspan="1">Encoder2增量式光栅尺位置信号 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Encoder2_Pos</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >Encoder2增量式光栅尺位置信号</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x18</td>
+            <td align="left" rowspan="1">MY_REG_ENCODER3_POS</td>
+            <td class="fixWidth" align="center" rowspan="1">Encoder3增量式光栅尺位置信号 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Encoder3_Pos</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >Encoder3增量式光栅尺位置信号</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x1c</td>
+            <td align="left" rowspan="1">MY_REG_ENCODER4_POS</td>
+            <td class="fixWidth" align="center" rowspan="1">Encoder4增量式光栅尺位置信号 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Encoder4_Pos</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >Encoder4增量式光栅尺位置信号</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="8">0x20</td>
+            <td align="left" rowspan="8">MY_REG_ENCODER_POS_CLR</td>
+            <td class="fixWidth" align="center" rowspan="8">4路增量式光栅尺位置清零控制信号 </td>
+            <td align="center" rowspan="8">32</td>
+            <td class="reserved" >[31:25]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">7'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[24]</td>
+            <td class="" >Encoder4_Pos_Clr</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >Encoder4位置清零</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[23:17]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">7'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[16]</td>
+            <td class="" >Encoder3_Pos_Clr</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >Encoder3位置清零</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[15:9]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">7'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[8]</td>
+            <td class="" >Encoder2_Pos_Clr</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >Encoder2位置清零</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[7:1]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">7'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[0]</td>
+            <td class="" >Encoder1_Pos_Clr</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >Encoder1位置清零</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x24</td>
+            <td align="left" rowspan="1">MY_REG_ENCODER1_LOCK_POS</td>
+            <td class="fixWidth" align="center" rowspan="1">Encoder1增量式光栅尺触发INDEX位时的位置值 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Encoder1_Lock_Pos</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >Encoder1增量式光栅尺触发INDEX位时的位置值</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x28</td>
+            <td align="left" rowspan="1">MY_REG_ENCODER2_LOCK_POS</td>
+            <td class="fixWidth" align="center" rowspan="1">Encoder2增量式光栅尺触发INDEX位时的位置值 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Encoder2_Lock_Pos</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >Encoder2增量式光栅尺触发INDEX位时的位置值</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x2c</td>
+            <td align="left" rowspan="1">MY_REG_ENCODER3_LOCK_POS</td>
+            <td class="fixWidth" align="center" rowspan="1">Encoder3增量式光栅尺触发INDEX位时的位置值 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Encoder3_Lock_Pos</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >Encoder3增量式光栅尺触发INDEX位时的位置值</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x30</td>
+            <td align="left" rowspan="1">MY_REG_ENCODER4_LOCK_POS</td>
+            <td class="fixWidth" align="center" rowspan="1">Encoder4增量式光栅尺触发INDEX位时的位置值 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Encoder4_Lock_Pos</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >Encoder4增量式光栅尺触发INDEX位时的位置值</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x34</td>
+            <td align="left" rowspan="1">MY_REG_RESERVE1</td>
+            <td class="fixWidth" align="center" rowspan="1">Reserve </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Reserve1</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">32'h00000001</td>
+            <td class=" fixWidth2" >Reserve</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x38</td>
+            <td align="left" rowspan="1">MY_REG_RESERVE2</td>
+            <td class="fixWidth" align="center" rowspan="1">Reserve </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Reserve2</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">32'h00000002</td>
+            <td class=" fixWidth2" >Reserve</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x3c</td>
+            <td align="left" rowspan="1">MY_REG_RESERVE3</td>
+            <td class="fixWidth" align="center" rowspan="1">Reserve </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Reserve3</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">32'h00000003</td>
+            <td class=" fixWidth2" >Reserve</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x40</td>
+            <td align="left" rowspan="1">MY_REG_RESERVE4</td>
+            <td class="fixWidth" align="center" rowspan="1">Reserve </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Reserve4</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">32'h00000004</td>
+            <td class=" fixWidth2" >Reserve</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x44</td>
+            <td align="left" rowspan="1">MY_REG_BISSC1_POS</td>
+            <td class="fixWidth" align="center" rowspan="1">BissC1绝对式光栅尺位置信号 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >BissC1_Pos</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >BissC1绝对式光栅尺位置信号</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x48</td>
+            <td align="left" rowspan="1">MY_REG_BISSC2_POS</td>
+            <td class="fixWidth" align="center" rowspan="1">BissC2绝对式光栅尺位置信号 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >BissC2_Pos</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >BissC2绝对式光栅尺位置信号</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x4c</td>
+            <td align="left" rowspan="1">MY_REG_BISSC3_POS</td>
+            <td class="fixWidth" align="center" rowspan="1">BissC3绝对式光栅尺位置信号 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >BissC3_Pos</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >BissC3绝对式光栅尺位置信号</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x50</td>
+            <td align="left" rowspan="1">MY_REG_BISSC4_POS</td>
+            <td class="fixWidth" align="center" rowspan="1">BissC4绝对式光栅尺位置信号 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >BissC4_Pos</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >BissC4绝对式光栅尺位置信号</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="16">0x54</td>
+            <td align="left" rowspan="16">MY_REG_TTL_SINGLE</td>
+            <td class="fixWidth" align="center" rowspan="16">8路外部输入TTL信号（例如：PA FAULT输入，限位传感器输入），M_Fault_TTL </td>
+            <td align="center" rowspan="16">32</td>
+            <td class="reserved" >[31:29]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">3'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[28]</td>
+            <td class="" >TTL8_Single</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部TTL8输入信号，M_Fault_TTL8</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[27:25]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">3'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[24]</td>
+            <td class="" >TTL7_Single</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部TTL7输入信号，M_Fault_TTL7</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[23:21]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">3'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[20]</td>
+            <td class="" >TTL6_Single</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部TTL6输入信号，M_Fault_TTL6</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[19:17]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">3'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[16]</td>
+            <td class="" >TTL5_Single</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部TTL5输入信号，M_Fault_TTL5</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[15:13]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">3'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[12]</td>
+            <td class="" >TTL4_Single</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部TTL4输入信号，M_Fault_TTL4</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[11:9]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">3'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[8]</td>
+            <td class="" >TTL3_Single</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部TTL3输入信号，M_Fault_TTL3</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[7:5]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">3'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[4]</td>
+            <td class="" >TTL2_Single</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部TTL2输入信号，M_Fault_TTL2</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[3:1]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">3'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[0]</td>
+            <td class="" >TTL1_Single</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部TTL1输入信号，M_Fault_TTL1</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="32">0x58</td>
+            <td align="left" rowspan="32">MY_REG_OPT_SINGLE</td>
+            <td class="fixWidth" align="center" rowspan="32">16路外部输入光耦信号），FPGA_DI(FPGA_B34_IO_IN) </td>
+            <td align="center" rowspan="32">32</td>
+            <td class="reserved" >[31]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[30]</td>
+            <td class="" >Opt16_Single</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦16输入信号，FPGA_DI16</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[29]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[28]</td>
+            <td class="" >Opt15_Single</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦15输入信号，FPGA_DI15</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[27]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[26]</td>
+            <td class="" >Opt14_Single</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦14输入信号，FPGA_DI14</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[25]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[24]</td>
+            <td class="" >Opt13_Single</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦13输入信号，FPGA_DI13</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[23]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[22]</td>
+            <td class="" >Opt12_Single</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦12输入信号，FPGA_DI12</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[21]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[20]</td>
+            <td class="" >Opt11_Single</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦11输入信号，FPGA_DI11</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[19]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[18]</td>
+            <td class="" >Opt10_Single</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦10输入信号，FPGA_DI10</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[17]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[16]</td>
+            <td class="" >Opt9_Single</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦9输入信号，FPGA_DI9</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[15]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[14]</td>
+            <td class="" >Opt8_Single</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦8输入信号，FPGA_DI8</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[13]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[12]</td>
+            <td class="" >Opt7_Single</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦7输入信号，FPGA_DI7</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[11]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[10]</td>
+            <td class="" >Opt6_Single</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦6输入信号，FPGA_DI6</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[9]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[8]</td>
+            <td class="" >Opt5_Single</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦5输入信号，FPGA_DI5</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[7]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[6]</td>
+            <td class="" >Opt4_Single</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦4输入信号，FPGA_DI4</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[5]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[4]</td>
+            <td class="" >Opt3_Single</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦3输入信号，FPGA_DI3</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[3]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[2]</td>
+            <td class="" >Opt2_Single</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦2输入信号，FPGA_DI2</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[1]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[0]</td>
+            <td class="" >Opt1_Single</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦1输入信号，FPGA_DI1</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x5c</td>
+            <td align="left" rowspan="1">MY_REG_RESERVE5</td>
+            <td class="fixWidth" align="center" rowspan="1">Reserve </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Reserve5</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">32'h00000001</td>
+            <td class=" fixWidth2" >Reserve</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x60</td>
+            <td align="left" rowspan="1">MY_REG_RESERVE6</td>
+            <td class="fixWidth" align="center" rowspan="1">Reserve </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Reserve6</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">32'h00000002</td>
+            <td class=" fixWidth2" >Reserve</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x64</td>
+            <td align="left" rowspan="1">MY_REG_RESERVE7</td>
+            <td class="fixWidth" align="center" rowspan="1">Reserve </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Reserve7</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">32'h00000003</td>
+            <td class=" fixWidth2" >Reserve</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x68</td>
+            <td align="left" rowspan="1">MY_REG_RESERVE8</td>
+            <td class="fixWidth" align="center" rowspan="1">Reserve </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Reserve8</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">32'h00000004</td>
+            <td class=" fixWidth2" >Reserve</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="2">0x6c</td>
+            <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP12</td>
+            <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U6） </td>
+            <td align="center" rowspan="2">32</td>
+            <td class="" >[31:16]</td>
+            <td class="" >AD7606_Datatemp2</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >AD7606（U6）数据通道2输入</td>
+          </tr>          <tr align="left">
+            <td class="" >[15:0]</td>
+            <td class="" >AD7606_Datatemp1</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >AD7606（U6）数据通道1输入</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="2">0x70</td>
+            <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP34</td>
+            <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U6） </td>
+            <td align="center" rowspan="2">32</td>
+            <td class="" >[31:16]</td>
+            <td class="" >AD7606_Datatemp4</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >AD7606（U6）数据通道4输入</td>
+          </tr>          <tr align="left">
+            <td class="" >[15:0]</td>
+            <td class="" >AD7606_Datatemp3</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >AD7606（U6）数据通道3输入</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="2">0x74</td>
+            <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP56</td>
+            <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U6） </td>
+            <td align="center" rowspan="2">32</td>
+            <td class="" >[31:16]</td>
+            <td class="" >AD7606_Datatemp6</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >AD7606（U6）数据通道6输入</td>
+          </tr>          <tr align="left">
+            <td class="" >[15:0]</td>
+            <td class="" >AD7606_Datatemp5</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >AD7606（U6）数据通道5输入</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="2">0x78</td>
+            <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP78</td>
+            <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U6） </td>
+            <td align="center" rowspan="2">32</td>
+            <td class="" >[31:16]</td>
+            <td class="" >AD7606_Datatemp8</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >AD7606（U6）数据通道8输入</td>
+          </tr>          <tr align="left">
+            <td class="" >[15:0]</td>
+            <td class="" >AD7606_Datatemp7</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >AD7606（U6）数据通道7输入</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="2">0x7c</td>
+            <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP910</td>
+            <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U7） </td>
+            <td align="center" rowspan="2">32</td>
+            <td class="" >[31:16]</td>
+            <td class="" >AD7606_Datatemp10</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >AD7606（U7）数据通道2输入</td>
+          </tr>          <tr align="left">
+            <td class="" >[15:0]</td>
+            <td class="" >AD7606_Datatemp9</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >AD7606（U7）数据通道1输入</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="2">0x80</td>
+            <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP1112</td>
+            <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U7） </td>
+            <td align="center" rowspan="2">32</td>
+            <td class="" >[31:16]</td>
+            <td class="" >AD7606_Datatemp12</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >AD7606（U7）数据通道4输入</td>
+          </tr>          <tr align="left">
+            <td class="" >[15:0]</td>
+            <td class="" >AD7606_Datatemp11</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >AD7606（U7）数据通道3输入</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="2">0x84</td>
+            <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP1314</td>
+            <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U7） </td>
+            <td align="center" rowspan="2">32</td>
+            <td class="" >[31:16]</td>
+            <td class="" >AD7606_Datatemp14</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >AD7606（U7）数据通道6输入</td>
+          </tr>          <tr align="left">
+            <td class="" >[15:0]</td>
+            <td class="" >AD7606_Datatemp13</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >AD7606（U7）数据通道5输入</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="2">0x88</td>
+            <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP1516</td>
+            <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U7） </td>
+            <td align="center" rowspan="2">32</td>
+            <td class="" >[31:16]</td>
+            <td class="" >AD7606_Datatemp16</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >AD7606（U7）数据通道8输入</td>
+          </tr>          <tr align="left">
+            <td class="" >[15:0]</td>
+            <td class="" >AD7606_Datatemp15</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">16'b0</td>
+            <td class=" fixWidth2" >AD7606（U7）数据通道7输入</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x8c</td>
+            <td align="left" rowspan="1">MY_REG_RESERVE9</td>
+            <td class="fixWidth" align="center" rowspan="1">Reserve </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Reserve9</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">32'h00000001</td>
+            <td class=" fixWidth2" >Reserve</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x90</td>
+            <td align="left" rowspan="1">MY_REG_RESERVE10</td>
+            <td class="fixWidth" align="center" rowspan="1">Reserve </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Reserve10</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">32'h00000002</td>
+            <td class=" fixWidth2" >Reserve</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x94</td>
+            <td align="left" rowspan="1">MY_REG_RESERVE11</td>
+            <td class="fixWidth" align="center" rowspan="1">Reserve </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Reserve11</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">32'h00000003</td>
+            <td class=" fixWidth2" >Reserve</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x98</td>
+            <td align="left" rowspan="1">MY_REG_RESERVE12</td>
+            <td class="fixWidth" align="center" rowspan="1">Reserve </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Reserve12</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">32'h00000004</td>
+            <td class=" fixWidth2" >Reserve</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="2">0x9c</td>
+            <td align="left" rowspan="2">MY_REG_AD5544_DATATEMP12</td>
+            <td class="fixWidth" align="center" rowspan="2">AD5544(U73)DA数据输出 </td>
+            <td align="center" rowspan="2">32</td>
+            <td class="" >[31:16]</td>
+            <td class="" >AD5544_Datatemp2</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">16'h8000</td>
+            <td class=" fixWidth2" >AD5544(U73)DA数据通道2输出</td>
+          </tr>          <tr align="left">
+            <td class="" >[15:0]</td>
+            <td class="" >AD5544_Datatemp1</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">16'h8000</td>
+            <td class=" fixWidth2" >AD5544(U73)DA数据通道1输出</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="2">0xa0</td>
+            <td align="left" rowspan="2">MY_REG_AD5544_DATATEMP34</td>
+            <td class="fixWidth" align="center" rowspan="2">AD5544(U73)DA数据输出 </td>
+            <td align="center" rowspan="2">32</td>
+            <td class="" >[31:16]</td>
+            <td class="" >AD5544_Datatemp4</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">16'h8000</td>
+            <td class=" fixWidth2" >AD5544(U73)DA数据通道4输出</td>
+          </tr>          <tr align="left">
+            <td class="" >[15:0]</td>
+            <td class="" >AD5544_Datatemp3</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">16'h8000</td>
+            <td class=" fixWidth2" >AD5544(U73)DA数据通道3输出</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="2">0xa4</td>
+            <td align="left" rowspan="2">MY_REG_AD5544_DATATEMP56</td>
+            <td class="fixWidth" align="center" rowspan="2">AD5544(U83)DA数据输出 </td>
+            <td align="center" rowspan="2">32</td>
+            <td class="" >[31:16]</td>
+            <td class="" >AD5544_Datatemp6</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">16'h8000</td>
+            <td class=" fixWidth2" >AD5544(U83)DA数据通道2输出</td>
+          </tr>          <tr align="left">
+            <td class="" >[15:0]</td>
+            <td class="" >AD5544_Datatemp5</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">16'h8000</td>
+            <td class=" fixWidth2" >AD5544(U83)DA数据通道1输出</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="2">0xa8</td>
+            <td align="left" rowspan="2">MY_REG_AD5544_DATATEMP78</td>
+            <td class="fixWidth" align="center" rowspan="2">AD5544(U83)DA数据输出 </td>
+            <td align="center" rowspan="2">32</td>
+            <td class="" >[31:16]</td>
+            <td class="" >AD5544_Datatemp8</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">16'h8000</td>
+            <td class=" fixWidth2" >AD5544(U83)DA数据通道4输出</td>
+          </tr>          <tr align="left">
+            <td class="" >[15:0]</td>
+            <td class="" >AD5544_Datatemp7</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">16'h8000</td>
+            <td class=" fixWidth2" >AD5544(U83)DA数据通道3输出</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="2">0xac</td>
+            <td align="left" rowspan="2">MY_REG_AD5544_DATATEMP910</td>
+            <td class="fixWidth" align="center" rowspan="2">AD5544(U93)DA数据输出 </td>
+            <td align="center" rowspan="2">32</td>
+            <td class="" >[31:16]</td>
+            <td class="" >AD5544_Datatemp10</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">16'h8000</td>
+            <td class=" fixWidth2" >AD5544(U93)DA数据通道2输出</td>
+          </tr>          <tr align="left">
+            <td class="" >[15:0]</td>
+            <td class="" >AD5544_Datatemp9</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">16'h8000</td>
+            <td class=" fixWidth2" >AD5544(U93)DA数据通道1输出</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="2">0xb0</td>
+            <td align="left" rowspan="2">MY_REG_AD5544_DATATEMP1112</td>
+            <td class="fixWidth" align="center" rowspan="2">AD5544(U93)DA数据输出 </td>
+            <td align="center" rowspan="2">32</td>
+            <td class="" >[31:16]</td>
+            <td class="" >AD5544_Datatemp12</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">16'h8000</td>
+            <td class=" fixWidth2" >AD5544(U93)DA数据通道4输出</td>
+          </tr>          <tr align="left">
+            <td class="" >[15:0]</td>
+            <td class="" >AD5544_Datatemp11</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">16'h8000</td>
+            <td class=" fixWidth2" >AD5544(U93)DA数据通道3输出</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="16">0xb4</td>
+            <td align="left" rowspan="16">MY_REG_M_EN_TTL</td>
+            <td class="fixWidth" align="center" rowspan="16">8路外部输出TTL信号（例如：PA 使能），M_EN_TTL </td>
+            <td align="center" rowspan="16">32</td>
+            <td class="reserved" >[31:29]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">3'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[28]</td>
+            <td class="" >M_EN_TTL8</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部TTL8输出信号，M_EN_TTL8</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[27:25]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">3'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[24]</td>
+            <td class="" >M_EN_TTL7</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部TTL7输出信号，M_EN_TTL7</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[23:21]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">3'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[20]</td>
+            <td class="" >M_EN_TTL6</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部TTL6输出信号，M_EN_TTL6</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[19:17]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">3'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[16]</td>
+            <td class="" >M_EN_TTL5</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部TTL5输出信号，M_EN_TTL5</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[15:13]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">3'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[12]</td>
+            <td class="" >M_EN_TTL4</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部TTL4输出信号，M_EN_TTL4</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[11:9]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">3'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[8]</td>
+            <td class="" >M_EN_TTL3</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部TTL3输出信号，M_EN_TTL3</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[7:5]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">3'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[4]</td>
+            <td class="" >M_EN_TTL2</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部TTL2输出信号，M_EN_TTL2</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[3:1]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">3'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[0]</td>
+            <td class="" >M_EN_TTL1</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部TTL1输出信号，M_EN_TTL1</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="32">0xb8</td>
+            <td align="left" rowspan="32">MY_REG_FPGA_DO</td>
+            <td class="fixWidth" align="center" rowspan="32">16路外部输出光耦信号），FPGA_DO(FPGA_B33_IO_OUT) </td>
+            <td align="center" rowspan="32">32</td>
+            <td class="reserved" >[31]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[30]</td>
+            <td class="" >FPGA_DO_15</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦16输入信号，FPGA_DO16</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[29]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[28]</td>
+            <td class="" >FPGA_DO_14</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦15输入信号，FPGA_DO15</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[27]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[26]</td>
+            <td class="" >FPGA_DO_13</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦14输入信号，FPGA_DO14</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[25]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[24]</td>
+            <td class="" >FPGA_DO_12</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦13输入信号，FPGA_DO13</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[23]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[22]</td>
+            <td class="" >FPGA_DO_11</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦12输入信号，FPGA_DO12</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[21]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[20]</td>
+            <td class="" >FPGA_DO_10</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦11输入信号，FPGA_DO11</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[19]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[18]</td>
+            <td class="" >FPGA_DO_9</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦10输入信号，FPGA_DO10</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[17]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[16]</td>
+            <td class="" >FPGA_DO_8</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦9输入信号，FPGA_DO9</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[15]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[14]</td>
+            <td class="" >FPGA_DO_7</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦8输入信号，FPGA_DO8</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[13]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[12]</td>
+            <td class="" >FPGA_DO_6</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦7输入信号，FPGA_DO7</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[11]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[10]</td>
+            <td class="" >FPGA_DO_5</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦6输入信号，FPGA_DO6</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[9]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[8]</td>
+            <td class="" >FPGA_DO_4</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦5输入信号，FPGA_DO5</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[7]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[6]</td>
+            <td class="" >FPGA_DO_3</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦4输入信号，FPGA_DO4</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[5]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[4]</td>
+            <td class="" >FPGA_DO_2</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦3输入信号，FPGA_DO3</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[3]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[2]</td>
+            <td class="" >FPGA_DO_1</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦2输入信号，FPGA_DO2</td>
+          </tr>          <tr align="left">
+            <td class="reserved" >[1]</td>
+            <td class="reserved" >--</td>
+            <td class="reserved" align="center">NA</td>
+            <td class="reserved" align="right">1'b0</td>
+            <td class="reserved fixWidth2" >Reserved</td>
+          </tr>          <tr align="left">
+            <td class="" >[0]</td>
+            <td class="" >FPGA_DO_0</td>
+            <td class="" align="center">RW</td>
+            <td class="" align="right">1'b0</td>
+            <td class=" fixWidth2" >外部光耦1输入信号，FPGA_DO1</td>
+          </tr>
+      </tbody>
+  </table>
+  </div>
+  <footer align="center">
+  <div> <p class="info">Powered By <a href="https://spinalhdl.github.io/SpinalDoc-RTD/"> SpinalHDL </a> </p> </div>
+  </footer>
+  </body>
+</html>
