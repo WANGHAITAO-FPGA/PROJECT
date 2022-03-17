@@ -6,7 +6,7 @@ import spinal.lib.{Delay, StreamFifo}
 import spinal.lib.misc.Timer
 
 import scala.util.Random
-
+/*
 class gtp_tx() extends BlackBox{
   val log_rst_q = in Bool()
   val log_clk = in Bool()
@@ -25,7 +25,7 @@ class gtp_tx() extends BlackBox{
   val tx_packet_rden = out Bool()
   noIoPrefix()
   addRTLPath("D:/SCALA/SRIO/CYP1401/gtp_tx.v")
-}
+}*/
 
 case class GTP_TEST() extends Component{
   val io = new Bundle{
@@ -50,14 +50,14 @@ case class GTP_TEST() extends Component{
 
 
     val gtxtest = new gtp_tx()
-    gtxtest.log_clk := io.log_clk
-    gtxtest.log_rst_q := io.log_rst_q
+    gtxtest.io.log_clk := io.log_clk
+    gtxtest.io.log_rst_q := io.log_rst_q
 
-    gtxtest.tx_packet_gtxid := 1
-    gtxtest.tx_packet_head := 59
+    gtxtest.io.tx_packet_gtxid := 1
+    gtxtest.io.tx_packet_head := 0x013B
     //gtxtest.s_axi_tx_tkeep := 15
-    gtxtest.tx_packet_req := timer_B.io.full|Delay(timer_B.io.full,1)|Delay(timer_B.io.full,2)|Delay(timer_B.io.full,3)
-    gtxtest.tx_packet_trigger := False
+    gtxtest.io.tx_packet_req := timer_B.io.full|Delay(timer_B.io.full,1)|Delay(timer_B.io.full,2)|Delay(timer_B.io.full,3)
+    gtxtest.io.tx_packet_trigger := False
 
     /*val streamfifo = new StreamFifo(Bits(32 bits),128)
     streamfifo.io.push.payload := gtxtest.s_axi_tx_tdata
@@ -68,10 +68,10 @@ case class GTP_TEST() extends Component{
     io.s_axi_tx_tdata := streamfifo.io.pop.payload
     io.s_axi_tx_tvalid := streamfifo.io.pop.valid*/
 
-    io.s_axi_tx_tlast := gtxtest.s_axi_tx_tlast
-    io.s_axi_tx_tdata := gtxtest.s_axi_tx_tdata
-    io.s_axi_tx_tvalid := gtxtest.s_axi_tx_tvalid
-    gtxtest.s_axi_tx_tready := io.s_axi_tx_tready
+    io.s_axi_tx_tlast := gtxtest.io.s_axi_tx_tlast
+    io.s_axi_tx_tdata := gtxtest.io.s_axi_tx_tdata
+    io.s_axi_tx_tvalid := gtxtest.io.s_axi_tx_tvalid
+    gtxtest.io.s_axi_tx_tready := io.s_axi_tx_tready
 
     val meminitvalue = for(i <- 0 until 256)yield{
       val initdata = i + 256
@@ -79,7 +79,7 @@ case class GTP_TEST() extends Component{
     }
     val mem = Mem(Bits(32 bits), 256) initBigInt(meminitvalue)
     mem.addAttribute("ram_style", "block")
-    gtxtest.tx_packet_data := mem.readSync(gtxtest.tx_packet_addra.asUInt,!gtxtest.tx_packet_rden)
+    gtxtest.io.tx_packet_data := mem.readSync(gtxtest.io.tx_packet_addra.asUInt,!gtxtest.io.tx_packet_rden)
   }
 }
 
@@ -93,6 +93,7 @@ object GTP_TEST{
       var i = 0
       for(idex <- 0 until 10000){
         dut.io.s_axi_tx_tready #= Random.nextBoolean()
+        //dut.io.s_axi_tx_tready #= true
         dut.gtx_area.clockDomain.waitSampling()
         if(dut.io.s_axi_tx_tvalid.toBoolean && dut.io.s_axi_tx_tready.toBoolean){
           i = i + 1

@@ -46,6 +46,7 @@ case class CRCCombinationalIO(g: CRCCombinationalConfig) extends Bundle{
 
   val cmd = slave Flow(CRCCombinationalCmd(g))
   val crc = out Bits(g.crcWidth)
+  val nextcrc = out Bits(g.crcWidth)
 
   /** Drive IO from a bus */
   def driveFrom(busCtrl: BusSlaveFactory, baseAddress: Int = 0) = new Area {
@@ -53,6 +54,8 @@ case class CRCCombinationalIO(g: CRCCombinationalConfig) extends Bundle{
     busCtrl.driveFlow(cmd, baseAddress + 0x00)
 
     busCtrl.read(crc, baseAddress + 0x08)
+
+    busCtrl.read(nextcrc, baseAddress + 0x10)
   }
 }
 
@@ -93,6 +96,7 @@ class CRCCombinational(g: CRCCombinationalConfig) extends Component{
   val result_reflected = if(g.crcConfig.outputReflected) Reverse(crc_reg) else crc_reg
 
   io.crc := result_reflected ^ B(g.crcConfig.finalXor, crc_reg.getWidth bits)
+  io.nextcrc := next_crc
 }
 
 
@@ -214,7 +218,7 @@ object CRCCombinationalCore {
 object crc_test{
   import spinal.core.sim._
   def main(args: Array[String]): Unit = {
-    SimConfig.withWave.doSim(new CRCCombinational(CRCCombinationalConfig(CRC32.Standard, 32 bits))){dut=>
+    SimConfig.withWave.doSim(new CRCCombinational(CRCCombinationalConfig(CRC32.MPEG2, 32 bits))){dut=>
       dut.clockDomain.forkStimulus(10)
       dut.io.cmd.valid #= false
       dut.clockDomain.waitSampling(10)

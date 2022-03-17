@@ -27,6 +27,7 @@ class CRCPolynomial(
 object CRC32 {
   def Standard  = new CRCPolynomial(polynomial = p"32'x04C11DB7", initValue = BigInt("FFFFFFFF", 16), inputReflected = true,  outputReflected = true,  finalXor = BigInt("FFFFFFFF", 16))
   def XFER      = new CRCPolynomial(polynomial = p"32'x000000AF", initValue = BigInt("00000000", 16), inputReflected = false, outputReflected = false, finalXor = BigInt("00000000", 16))
+  def MPEG2     = new CRCPolynomial(polynomial = p"32'x04C11DB7", initValue = BigInt("FFFFFFFF", 16), inputReflected = false,  outputReflected = false,  finalXor = BigInt("00000000", 16))
 }
 
 
