@@ -16,7 +16,6 @@ object Mlmc_Gpio{
 }
 
 case class Mlmc300_Gpio(moduleName:String,baseaddr:Long) extends Component {
-
   val io = new Bundle {
     val apb  = slave(Apb3(Mlmc_Gpio.getApb3Config()))
     val gpioA = out Bits(12 bits)

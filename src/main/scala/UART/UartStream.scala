@@ -9,9 +9,9 @@ import spinal.lib.misc.Timer
 
 case class uartctrl_stream(txfifodepth : Int,rxfifodepth :Int,rx_waittime : Int) extends Component{
   val uartconfig = UartCtrlInitConfig(
-    baudrate = 921600,
+    baudrate = 3000000,
     dataLength = 7,  // 8 bits
-    parity = UartParityType.NONE,
+    parity = UartParityType.EVEN,
     stop = UartStopType.ONE
   )
   val io = new Bundle{

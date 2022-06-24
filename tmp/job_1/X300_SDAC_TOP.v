@@ -1,5 +1,6 @@
 // Generator : SpinalHDL v1.6.1    git head : 3bf789d53b1b5a36974196e2d591342e15ddf28c
 // Component : X300_SDAC_TOP
+// Git hash  : faa136a5cd11b0754bd45144fa843c52609e72a5
 
 `timescale 1ns/1ps 
 
@@ -464,6 +465,7 @@ module X300_SdacRegif (
   wire       [31:0]   HEADER;
   wire       [31:0]   Slaveid_1;
   wire       [31:0]   ADDR;
+  wire       [31:0]   Reserve0;
   wire       [31:0]   VERSION;
   wire       [31:0]   Reserve1;
   wire       [31:0]   Reserve2;
@@ -498,7 +500,8 @@ module X300_SdacRegif (
   assign simplebus_RDATA = busslave_readData;
   assign HEADER = 32'h0000ffbc;
   assign Slaveid_1 = slaveid;
-  assign ADDR = 32'h0000003b;
+  assign ADDR = 32'h00000037;
+  assign Reserve0 = 32'h00000001;
   assign VERSION = 32'h20220114;
   assign Reserve1 = 32'h00000001;
   assign Reserve2 = 32'h00000002;
@@ -549,118 +552,122 @@ module X300_SdacRegif (
             busslave_readError <= 1'b0;
           end
           8'h0c : begin
-            busslave_readData <= VERSION;
+            busslave_readData <= Reserve0;
             busslave_readError <= 1'b0;
           end
           8'h10 : begin
-            busslave_readData <= Reserve1;
+            busslave_readData <= VERSION;
             busslave_readError <= 1'b0;
           end
           8'h14 : begin
-            busslave_readData <= Reserve2;
+            busslave_readData <= Reserve1;
             busslave_readError <= 1'b0;
           end
           8'h18 : begin
-            busslave_readData <= Reserve3;
+            busslave_readData <= Reserve2;
             busslave_readError <= 1'b0;
           end
           8'h1c : begin
-            busslave_readData <= Reserve4;
+            busslave_readData <= Reserve3;
             busslave_readError <= 1'b0;
           end
           8'h20 : begin
-            busslave_readData <= {16'h0,AD7606_Datatemp1};
+            busslave_readData <= Reserve4;
             busslave_readError <= 1'b0;
           end
           8'h24 : begin
-            busslave_readData <= {16'h0,AD7606_Datatemp2};
+            busslave_readData <= {16'h0,AD7606_Datatemp1};
             busslave_readError <= 1'b0;
           end
           8'h28 : begin
-            busslave_readData <= {16'h0,AD7606_Datatemp3};
+            busslave_readData <= {16'h0,AD7606_Datatemp2};
             busslave_readError <= 1'b0;
           end
           8'h2c : begin
-            busslave_readData <= {16'h0,AD7606_Datatemp4};
+            busslave_readData <= {16'h0,AD7606_Datatemp3};
             busslave_readError <= 1'b0;
           end
           8'h30 : begin
-            busslave_readData <= {16'h0,AD7606_Datatemp5};
+            busslave_readData <= {16'h0,AD7606_Datatemp4};
             busslave_readError <= 1'b0;
           end
           8'h34 : begin
-            busslave_readData <= {16'h0,AD7606_Datatemp6};
+            busslave_readData <= {16'h0,AD7606_Datatemp5};
             busslave_readError <= 1'b0;
           end
           8'h38 : begin
-            busslave_readData <= {16'h0,AD7606_Datatemp7};
+            busslave_readData <= {16'h0,AD7606_Datatemp6};
             busslave_readError <= 1'b0;
           end
           8'h3c : begin
-            busslave_readData <= {16'h0,AD7606_Datatemp8};
+            busslave_readData <= {16'h0,AD7606_Datatemp7};
             busslave_readError <= 1'b0;
           end
           8'h40 : begin
-            busslave_readData <= {16'h0,AD7606_Datatemp9};
+            busslave_readData <= {16'h0,AD7606_Datatemp8};
             busslave_readError <= 1'b0;
           end
           8'h44 : begin
-            busslave_readData <= {16'h0,AD7606_Datatemp10};
+            busslave_readData <= {16'h0,AD7606_Datatemp9};
             busslave_readError <= 1'b0;
           end
           8'h48 : begin
-            busslave_readData <= {16'h0,AD7606_Datatemp11};
+            busslave_readData <= {16'h0,AD7606_Datatemp10};
             busslave_readError <= 1'b0;
           end
           8'h4c : begin
-            busslave_readData <= {16'h0,AD7606_Datatemp12};
+            busslave_readData <= {16'h0,AD7606_Datatemp11};
             busslave_readError <= 1'b0;
           end
           8'h50 : begin
-            busslave_readData <= {16'h0,AD7606_Datatemp13};
+            busslave_readData <= {16'h0,AD7606_Datatemp12};
             busslave_readError <= 1'b0;
           end
           8'h54 : begin
-            busslave_readData <= {16'h0,AD7606_Datatemp14};
+            busslave_readData <= {16'h0,AD7606_Datatemp13};
             busslave_readError <= 1'b0;
           end
           8'h58 : begin
-            busslave_readData <= {16'h0,AD7606_Datatemp15};
+            busslave_readData <= {16'h0,AD7606_Datatemp14};
             busslave_readError <= 1'b0;
           end
           8'h5c : begin
-            busslave_readData <= {16'h0,AD7606_Datatemp16};
+            busslave_readData <= {16'h0,AD7606_Datatemp15};
             busslave_readError <= 1'b0;
           end
           8'h60 : begin
-            busslave_readData <= {16'h0,AD7606_Datatemp17};
+            busslave_readData <= {16'h0,AD7606_Datatemp16};
             busslave_readError <= 1'b0;
           end
           8'h64 : begin
-            busslave_readData <= {16'h0,AD7606_Datatemp18};
+            busslave_readData <= {16'h0,AD7606_Datatemp17};
             busslave_readError <= 1'b0;
           end
           8'h68 : begin
-            busslave_readData <= {16'h0,AD7606_Datatemp19};
+            busslave_readData <= {16'h0,AD7606_Datatemp18};
             busslave_readError <= 1'b0;
           end
           8'h6c : begin
-            busslave_readData <= {16'h0,AD7606_Datatemp20};
+            busslave_readData <= {16'h0,AD7606_Datatemp19};
             busslave_readError <= 1'b0;
           end
           8'h70 : begin
-            busslave_readData <= {16'h0,AD7606_Datatemp21};
+            busslave_readData <= {16'h0,AD7606_Datatemp20};
             busslave_readError <= 1'b0;
           end
           8'h74 : begin
-            busslave_readData <= {16'h0,AD7606_Datatemp22};
+            busslave_readData <= {16'h0,AD7606_Datatemp21};
             busslave_readError <= 1'b0;
           end
           8'h78 : begin
-            busslave_readData <= {16'h0,AD7606_Datatemp23};
+            busslave_readData <= {16'h0,AD7606_Datatemp22};
             busslave_readError <= 1'b0;
           end
           8'h7c : begin
+            busslave_readData <= {16'h0,AD7606_Datatemp23};
+            busslave_readError <= 1'b0;
+          end
+          8'h80 : begin
             busslave_readData <= {16'h0,AD7606_Datatemp24};
             busslave_readError <= 1'b0;
           end
@@ -703,8 +710,8 @@ module X300_TxSimpleBus (
   wire                streamfifo_1_io_push_ready;
   wire                streamfifo_1_io_pop_valid;
   wire       [31:0]   streamfifo_1_io_pop_payload;
-  wire       [6:0]    streamfifo_1_io_occupancy;
-  wire       [6:0]    streamfifo_1_io_availability;
+  wire       [5:0]    streamfifo_1_io_occupancy;
+  wire       [5:0]    streamfifo_1_io_availability;
   reg                 RENABLE_1;
   reg        [7:0]    RADDR_1;
   reg        [31:0]   RDATA_1;
@@ -741,8 +748,8 @@ module X300_TxSimpleBus (
     .io_pop_ready       (output_ready                       ), //i
     .io_pop_payload     (streamfifo_1_io_pop_payload[31:0]  ), //o
     .io_flush           (1'b0                               ), //i
-    .io_occupancy       (streamfifo_1_io_occupancy[6:0]     ), //o
-    .io_availability    (streamfifo_1_io_availability[6:0]  ), //o
+    .io_occupancy       (streamfifo_1_io_occupancy[5:0]     ), //o
+    .io_availability    (streamfifo_1_io_availability[5:0]  ), //o
     .clk                (clk                                ), //i
     .reset              (reset                              )  //i
   );
@@ -798,7 +805,7 @@ module X300_TxSimpleBus (
   assign output_payload_fragment = streamfifo_1_io_pop_payload;
   assign output_valid = streamfifo_1_io_pop_valid;
   assign output_fire = (output_valid && output_ready);
-  assign output_payload_last = ((streamfifo_1_io_occupancy == 7'h01) && output_fire);
+  assign output_payload_last = ((streamfifo_1_io_occupancy == 6'h01) && output_fire);
   always @(*) begin
     fsm_stateNext = fsm_stateReg;
     case(fsm_stateReg)
@@ -826,7 +833,7 @@ module X300_TxSimpleBus (
     end
   end
 
-  assign when_X300_SDAC_TX_l54 = (send_length == 8'h3f);
+  assign when_X300_SDAC_TX_l54 = (send_length == 8'h3b);
   always @(posedge clk or posedge reset) begin
     if(reset) begin
       RENABLE_1 <= 1'b0;
@@ -1124,8 +1131,8 @@ module StreamFifo (
   input               io_pop_ready,
   output     [31:0]   io_pop_payload,
   input               io_flush,
-  output     [6:0]    io_occupancy,
-  output     [6:0]    io_availability,
+  output reg [5:0]    io_occupancy,
+  output reg [5:0]    io_availability,
   input               clk,
   input               reset
 );
@@ -1137,7 +1144,10 @@ module StreamFifo (
   wire       [0:0]    _zz_logic_popPtr_valueNext_1;
   wire                _zz_logic_ram_port;
   wire                _zz_io_pop_payload;
+  wire       [5:0]    _zz_io_occupancy;
   wire       [5:0]    _zz_io_availability;
+  wire       [5:0]    _zz_io_availability_1;
+  wire       [5:0]    _zz_io_availability_2;
   reg                 _zz_1;
   reg                 logic_pushPtr_willIncrement;
   reg                 logic_pushPtr_willClear;
@@ -1160,13 +1170,16 @@ module StreamFifo (
   reg                 _zz_io_pop_valid;
   wire                when_Stream_l946;
   wire       [5:0]    logic_ptrDif;
-  (* ram_style = "block" *) reg [31:0] logic_ram [0:63];
+  (* ram_style = "block" *) reg [31:0] logic_ram [0:59];
 
   assign _zz_logic_pushPtr_valueNext_1 = logic_pushPtr_willIncrement;
   assign _zz_logic_pushPtr_valueNext = {5'd0, _zz_logic_pushPtr_valueNext_1};
   assign _zz_logic_popPtr_valueNext_1 = logic_popPtr_willIncrement;
   assign _zz_logic_popPtr_valueNext = {5'd0, _zz_logic_popPtr_valueNext_1};
-  assign _zz_io_availability = (logic_popPtr_value - logic_pushPtr_value);
+  assign _zz_io_occupancy = (6'h3c + logic_ptrDif);
+  assign _zz_io_availability = (6'h3c + _zz_io_availability_1);
+  assign _zz_io_availability_1 = (logic_popPtr_value - logic_pushPtr_value);
+  assign _zz_io_availability_2 = (logic_popPtr_value - logic_pushPtr_value);
   assign _zz_io_pop_payload = 1'b1;
   always @(posedge clk) begin
     if(_zz_io_pop_payload) begin
@@ -1201,10 +1214,14 @@ module StreamFifo (
     end
   end
 
-  assign logic_pushPtr_willOverflowIfInc = (logic_pushPtr_value == 6'h3f);
+  assign logic_pushPtr_willOverflowIfInc = (logic_pushPtr_value == 6'h3b);
   assign logic_pushPtr_willOverflow = (logic_pushPtr_willOverflowIfInc && logic_pushPtr_willIncrement);
   always @(*) begin
-    logic_pushPtr_valueNext = (logic_pushPtr_value + _zz_logic_pushPtr_valueNext);
+    if(logic_pushPtr_willOverflow) begin
+      logic_pushPtr_valueNext = 6'h0;
+    end else begin
+      logic_pushPtr_valueNext = (logic_pushPtr_value + _zz_logic_pushPtr_valueNext);
+    end
     if(logic_pushPtr_willClear) begin
       logic_pushPtr_valueNext = 6'h0;
     end
@@ -1224,10 +1241,14 @@ module StreamFifo (
     end
   end
 
-  assign logic_popPtr_willOverflowIfInc = (logic_popPtr_value == 6'h3f);
+  assign logic_popPtr_willOverflowIfInc = (logic_popPtr_value == 6'h3b);
   assign logic_popPtr_willOverflow = (logic_popPtr_willOverflowIfInc && logic_popPtr_willIncrement);
   always @(*) begin
-    logic_popPtr_valueNext = (logic_popPtr_value + _zz_logic_popPtr_valueNext);
+    if(logic_popPtr_willOverflow) begin
+      logic_popPtr_valueNext = 6'h0;
+    end else begin
+      logic_popPtr_valueNext = (logic_popPtr_value + _zz_logic_popPtr_valueNext);
+    end
     if(logic_popPtr_willClear) begin
       logic_popPtr_valueNext = 6'h0;
     end
@@ -1243,8 +1264,22 @@ module StreamFifo (
   assign io_pop_payload = _zz_logic_ram_port0;
   assign when_Stream_l946 = (logic_pushing != logic_popping);
   assign logic_ptrDif = (logic_pushPtr_value - logic_popPtr_value);
-  assign io_occupancy = {(logic_risingOccupancy && logic_ptrMatch),logic_ptrDif};
-  assign io_availability = {((! logic_risingOccupancy) && logic_ptrMatch),_zz_io_availability};
+  always @(*) begin
+    if(logic_ptrMatch) begin
+      io_occupancy = (logic_risingOccupancy ? 6'h3c : 6'h0);
+    end else begin
+      io_occupancy = ((logic_popPtr_value < logic_pushPtr_value) ? logic_ptrDif : _zz_io_occupancy);
+    end
+  end
+
+  always @(*) begin
+    if(logic_ptrMatch) begin
+      io_availability = (logic_risingOccupancy ? 6'h0 : 6'h3c);
+    end else begin
+      io_availability = ((logic_popPtr_value < logic_pushPtr_value) ? _zz_io_availability : _zz_io_availability_2);
+    end
+  end
+
   always @(posedge clk or posedge reset) begin
     if(reset) begin
       logic_pushPtr_value <= 6'h0;

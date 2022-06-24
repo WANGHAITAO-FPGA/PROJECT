@@ -103,13 +103,13 @@ case class X300_SDAC_TOP(addrwidth : Int, datawidth : Int, timerl_imit: Int, sta
 }
 
 object X300_SDAC_TOP extends App{
-  SpinalVerilog(InOutWrapper(new X300_SDAC_TOP(8,32,6250,0,64,0,3,0,0,0)))
+  SpinalVerilog(InOutWrapper(new X300_SDAC_TOP(8,32,6250,0,60,0,3,0,0,0)))
 }
 
 object X300_SDAC_Sim{
   import spinal.core.sim._
   def main(args: Array[String]): Unit = {
-    SimConfig.withWave.doSim(new X300_SDAC_TOP(8,32,500,0,64,0,3,0,0,0)){dut=>
+    SimConfig.withWave.doSim(new X300_SDAC_TOP(8,32,500,0,60,0,3,0,0,0)){dut=>
       dut.sdac_area.clockDomain.forkStimulus(8)
       dut.io.output.ready #= false
       dut.io.tick #= false

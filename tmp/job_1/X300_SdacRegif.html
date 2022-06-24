@@ -156,16 +156,27 @@
           <tr class="reg" align="left">
             <td align="center" rowspan="1">0x8</td>
             <td align="left" rowspan="1">MY_REG_ADDR</td>
-            <td class="fixWidth" align="center" rowspan="1">Reserve </td>
+            <td class="fixWidth" align="center" rowspan="1">地址 </td>
             <td align="center" rowspan="1">32</td>
             <td class="" >[31:0]</td>
             <td class="" >ADDR</td>
             <td class="" align="center">RO</td>
             <td class="" align="right">32'h00000001</td>
-            <td class=" fixWidth2" >Reserve</td>
+            <td class=" fixWidth2" >地址</td>
           </tr>
           <tr class="reg" align="left">
             <td align="center" rowspan="1">0xc</td>
+            <td align="left" rowspan="1">MY_REG_RESERVE0</td>
+            <td class="fixWidth" align="center" rowspan="1">Reserve </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Reserve0</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'h00000001</td>
+            <td class=" fixWidth2" >Reserve</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x10</td>
             <td align="left" rowspan="1">MY_REG_VERSION</td>
             <td class="fixWidth" align="center" rowspan="1">软件版本号 </td>
             <td align="center" rowspan="1">32</td>
@@ -176,7 +187,7 @@
             <td class=" fixWidth2" >软件版本号</td>
           </tr>
           <tr class="reg" align="left">
-            <td align="center" rowspan="1">0x10</td>
+            <td align="center" rowspan="1">0x14</td>
             <td align="left" rowspan="1">MY_REG_RESERVE1</td>
             <td class="fixWidth" align="center" rowspan="1">Reserve </td>
             <td align="center" rowspan="1">32</td>
@@ -187,7 +198,7 @@
             <td class=" fixWidth2" >Reserve</td>
           </tr>
           <tr class="reg" align="left">
-            <td align="center" rowspan="1">0x14</td>
+            <td align="center" rowspan="1">0x18</td>
             <td align="left" rowspan="1">MY_REG_RESERVE2</td>
             <td class="fixWidth" align="center" rowspan="1">Reserve </td>
             <td align="center" rowspan="1">32</td>
@@ -198,7 +209,7 @@
             <td class=" fixWidth2" >Reserve</td>
           </tr>
           <tr class="reg" align="left">
-            <td align="center" rowspan="1">0x18</td>
+            <td align="center" rowspan="1">0x1c</td>
             <td align="left" rowspan="1">MY_REG_RESERVE3</td>
             <td class="fixWidth" align="center" rowspan="1">Reserve </td>
             <td align="center" rowspan="1">32</td>
@@ -209,7 +220,7 @@
             <td class=" fixWidth2" >Reserve</td>
           </tr>
           <tr class="reg" align="left">
-            <td align="center" rowspan="1">0x1c</td>
+            <td align="center" rowspan="1">0x20</td>
             <td align="left" rowspan="1">MY_REG_RESERVE4</td>
             <td class="fixWidth" align="center" rowspan="1">Reserve </td>
             <td align="center" rowspan="1">32</td>
@@ -220,7 +231,7 @@
             <td class=" fixWidth2" >Reserve</td>
           </tr>
           <tr class="reg" align="left">
-            <td align="center" rowspan="2">0x20</td>
+            <td align="center" rowspan="2">0x24</td>
             <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP1</td>
             <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U6） </td>
             <td align="center" rowspan="2">32</td>
@@ -237,7 +248,7 @@
             <td class=" fixWidth2" >AD7606（U6）数据通道1输入</td>
           </tr>
           <tr class="reg" align="left">
-            <td align="center" rowspan="2">0x24</td>
+            <td align="center" rowspan="2">0x28</td>
             <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP2</td>
             <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U6） </td>
             <td align="center" rowspan="2">32</td>
@@ -254,7 +265,7 @@
             <td class=" fixWidth2" >AD7606（U6）数据通道1输入</td>
           </tr>
           <tr class="reg" align="left">
-            <td align="center" rowspan="2">0x28</td>
+            <td align="center" rowspan="2">0x2c</td>
             <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP3</td>
             <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U6） </td>
             <td align="center" rowspan="2">32</td>
@@ -271,7 +282,7 @@
             <td class=" fixWidth2" >AD7606（U6）数据通道1输入</td>
           </tr>
           <tr class="reg" align="left">
-            <td align="center" rowspan="2">0x2c</td>
+            <td align="center" rowspan="2">0x30</td>
             <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP4</td>
             <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U6） </td>
             <td align="center" rowspan="2">32</td>
@@ -288,7 +299,7 @@
             <td class=" fixWidth2" >AD7606（U6）数据通道4输入</td>
           </tr>
           <tr class="reg" align="left">
-            <td align="center" rowspan="2">0x30</td>
+            <td align="center" rowspan="2">0x34</td>
             <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP5</td>
             <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U6） </td>
             <td align="center" rowspan="2">32</td>
@@ -305,7 +316,7 @@
             <td class=" fixWidth2" >AD7606（U6）数据通道4输入</td>
           </tr>
           <tr class="reg" align="left">
-            <td align="center" rowspan="2">0x34</td>
+            <td align="center" rowspan="2">0x38</td>
             <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP6</td>
             <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U6） </td>
             <td align="center" rowspan="2">32</td>
@@ -322,7 +333,7 @@
             <td class=" fixWidth2" >AD7606（U6）数据通道4输入</td>
           </tr>
           <tr class="reg" align="left">
-            <td align="center" rowspan="2">0x38</td>
+            <td align="center" rowspan="2">0x3c</td>
             <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP7</td>
             <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U6） </td>
             <td align="center" rowspan="2">32</td>
@@ -339,7 +350,7 @@
             <td class=" fixWidth2" >AD7606（U6）数据通道4输入</td>
           </tr>
           <tr class="reg" align="left">
-            <td align="center" rowspan="2">0x3c</td>
+            <td align="center" rowspan="2">0x40</td>
             <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP8</td>
             <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U6） </td>
             <td align="center" rowspan="2">32</td>
@@ -356,7 +367,7 @@
             <td class=" fixWidth2" >AD7606（U6）数据通道4输入</td>
           </tr>
           <tr class="reg" align="left">
-            <td align="center" rowspan="2">0x40</td>
+            <td align="center" rowspan="2">0x44</td>
             <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP9</td>
             <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U7） </td>
             <td align="center" rowspan="2">32</td>
@@ -373,7 +384,7 @@
             <td class=" fixWidth2" >AD7606（U7）数据通道1输入</td>
           </tr>
           <tr class="reg" align="left">
-            <td align="center" rowspan="2">0x44</td>
+            <td align="center" rowspan="2">0x48</td>
             <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP10</td>
             <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U7） </td>
             <td align="center" rowspan="2">32</td>
@@ -390,7 +401,7 @@
             <td class=" fixWidth2" >AD7606（U7）数据通道1输入</td>
           </tr>
           <tr class="reg" align="left">
-            <td align="center" rowspan="2">0x48</td>
+            <td align="center" rowspan="2">0x4c</td>
             <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP11</td>
             <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U7） </td>
             <td align="center" rowspan="2">32</td>
@@ -407,7 +418,7 @@
             <td class=" fixWidth2" >AD7606（U7）数据通道1输入</td>
           </tr>
           <tr class="reg" align="left">
-            <td align="center" rowspan="2">0x4c</td>
+            <td align="center" rowspan="2">0x50</td>
             <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP12</td>
             <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U7） </td>
             <td align="center" rowspan="2">32</td>
@@ -424,7 +435,7 @@
             <td class=" fixWidth2" >AD7606（U7）数据通道1输入</td>
           </tr>
           <tr class="reg" align="left">
-            <td align="center" rowspan="2">0x50</td>
+            <td align="center" rowspan="2">0x54</td>
             <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP13</td>
             <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U7） </td>
             <td align="center" rowspan="2">32</td>
@@ -441,7 +452,7 @@
             <td class=" fixWidth2" >AD7606（U7）数据通道1输入</td>
           </tr>
           <tr class="reg" align="left">
-            <td align="center" rowspan="2">0x54</td>
+            <td align="center" rowspan="2">0x58</td>
             <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP14</td>
             <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U7） </td>
             <td align="center" rowspan="2">32</td>
@@ -458,7 +469,7 @@
             <td class=" fixWidth2" >AD7606（U7）数据通道1输入</td>
           </tr>
           <tr class="reg" align="left">
-            <td align="center" rowspan="2">0x58</td>
+            <td align="center" rowspan="2">0x5c</td>
             <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP15</td>
             <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U7） </td>
             <td align="center" rowspan="2">32</td>
@@ -475,7 +486,7 @@
             <td class=" fixWidth2" >AD7606（U7）数据通道1输入</td>
           </tr>
           <tr class="reg" align="left">
-            <td align="center" rowspan="2">0x5c</td>
+            <td align="center" rowspan="2">0x60</td>
             <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP16</td>
             <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U7） </td>
             <td align="center" rowspan="2">32</td>
@@ -492,7 +503,7 @@
             <td class=" fixWidth2" >AD7606（U7）数据通道1输入</td>
           </tr>
           <tr class="reg" align="left">
-            <td align="center" rowspan="2">0x60</td>
+            <td align="center" rowspan="2">0x64</td>
             <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP17</td>
             <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U8） </td>
             <td align="center" rowspan="2">32</td>
@@ -509,7 +520,7 @@
             <td class=" fixWidth2" >AD7606（U7）数据通道1输入</td>
           </tr>
           <tr class="reg" align="left">
-            <td align="center" rowspan="2">0x64</td>
+            <td align="center" rowspan="2">0x68</td>
             <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP18</td>
             <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U8） </td>
             <td align="center" rowspan="2">32</td>
@@ -526,7 +537,7 @@
             <td class=" fixWidth2" >AD7606（U7）数据通道1输入</td>
           </tr>
           <tr class="reg" align="left">
-            <td align="center" rowspan="2">0x68</td>
+            <td align="center" rowspan="2">0x6c</td>
             <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP19</td>
             <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U8） </td>
             <td align="center" rowspan="2">32</td>
@@ -543,7 +554,7 @@
             <td class=" fixWidth2" >AD7606（U7）数据通道1输入</td>
           </tr>
           <tr class="reg" align="left">
-            <td align="center" rowspan="2">0x6c</td>
+            <td align="center" rowspan="2">0x70</td>
             <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP20</td>
             <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U8） </td>
             <td align="center" rowspan="2">32</td>
@@ -560,7 +571,7 @@
             <td class=" fixWidth2" >AD7606（U7）数据通道1输入</td>
           </tr>
           <tr class="reg" align="left">
-            <td align="center" rowspan="2">0x70</td>
+            <td align="center" rowspan="2">0x74</td>
             <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP21</td>
             <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U8） </td>
             <td align="center" rowspan="2">32</td>
@@ -577,7 +588,7 @@
             <td class=" fixWidth2" >AD7606（U7）数据通道1输入</td>
           </tr>
           <tr class="reg" align="left">
-            <td align="center" rowspan="2">0x74</td>
+            <td align="center" rowspan="2">0x78</td>
             <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP22</td>
             <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U8） </td>
             <td align="center" rowspan="2">32</td>
@@ -594,7 +605,7 @@
             <td class=" fixWidth2" >AD7606（U7）数据通道1输入</td>
           </tr>
           <tr class="reg" align="left">
-            <td align="center" rowspan="2">0x78</td>
+            <td align="center" rowspan="2">0x7c</td>
             <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP23</td>
             <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U8） </td>
             <td align="center" rowspan="2">32</td>
@@ -611,7 +622,7 @@
             <td class=" fixWidth2" >AD7606（U7）数据通道1输入</td>
           </tr>
           <tr class="reg" align="left">
-            <td align="center" rowspan="2">0x7c</td>
+            <td align="center" rowspan="2">0x80</td>
             <td align="left" rowspan="2">MY_REG_AD7606_DATATEMP24</td>
             <td class="fixWidth" align="center" rowspan="2">AD7606数据输入（U8） </td>
             <td align="center" rowspan="2">32</td>

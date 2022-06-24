@@ -11,7 +11,8 @@ case class Encoder_Clr() extends Component{
   noIoPrefix()
   val encoder_clr_out = Reg(Bool()) init False  addTag(crossClockDomain)
 
-  val encoder_clr_in = io.encoder_clr_in addTag(crossClockDomain)
+  val encoder_clr_in = Reg(Bool()) init False addTag(crossClockDomain)
+  encoder_clr_in := io.encoder_clr_in
 
   when(encoder_clr_in.rise()){
     encoder_clr_out := True

@@ -5,6 +5,8 @@ import spinal.core._
 import spinal.lib.bus.regif.AccessType.{RO, RW}
 import spinal.lib.{Delay, slave}
 
+import java.time.LocalDate
+
 case class Mdcb_Regif(addrwidth : Int, datawidth : Int, ad5544_num : Int, ad7606_num : Int, bissc_num : Int, endcoder_num : Int) extends Component{
   val io = new Bundle{
     val simplebus = slave(SimpleBus(SimpleBusConfig(addrwidth,datawidth)))
@@ -38,7 +40,7 @@ case class Mdcb_Regif(addrwidth : Int, datawidth : Int, ad5544_num : Int, ad7606
 
   val My_Reg_VERSION = busslave.newReg(doc="软件版本号")
   val VERSION = My_Reg_VERSION.field(32 bits,RO,0,"软件版本号")
-  VERSION := 0x20220114
+  VERSION := LocalDate.now().getYear<<16 | LocalDate.now().getMonthValue<<8 | LocalDate.now().getDayOfMonth
 
   val My_Reg_BissC1_Pos = busslave.newReg(doc="BissC1绝对式光栅尺位置信号")
   val BissC1_Pos = My_Reg_BissC1_Pos.field(32 bits,RO,0,"X1光栅尺,BissC1绝对式光栅尺位置信号(预留)")
@@ -221,7 +223,7 @@ case class Mdcb_Regif(addrwidth : Int, datawidth : Int, ad5544_num : Int, ad7606
   val AD5544_Datatemp4 = My_Reg_AD5544_Datatemp34.fieldAt(16,bc = 16 bits,RW,0x8000,"AD5544(U73)DA数据通道4输出,X2电机设定值-相B")
   io.AD5544_DATA(0)(3) := AD5544_Datatemp4
 
-  val AD5544_Triger1_Temp =  My_Reg_AD5544_Datatemp12.hitDoWrite || My_Reg_AD5544_Datatemp34.hitDoWrite
+  val AD5544_Triger1_Temp =  My_Reg_AD5544_Datatemp12.hitDoWrite | My_Reg_AD5544_Datatemp34.hitDoWrite
   io.AD5544_TRIGER(0) := (AD5544_Triger1_Temp|Delay(AD5544_Triger1_Temp,1)|Delay(AD5544_Triger1_Temp,2)|Delay(AD5544_Triger1_Temp,3))
 
   val My_Reg_AD5544_Datatemp56 = busslave.newReg(doc="AD5544(U83)DA数据输出")
@@ -236,7 +238,7 @@ case class Mdcb_Regif(addrwidth : Int, datawidth : Int, ad5544_num : Int, ad7606
   val AD5544_Datatemp8 = My_Reg_AD5544_Datatemp78.fieldAt(16,bc = 16 bits,RW,0x8000,"AD5544(U83)DA数据通道4输出,Y2电机设定值-相B")
   io.AD5544_DATA(1)(3) := AD5544_Datatemp8
 
-  val AD5544_Triger2_Temp =  My_Reg_AD5544_Datatemp56.hitDoWrite || My_Reg_AD5544_Datatemp78.hitDoWrite
+  val AD5544_Triger2_Temp =  My_Reg_AD5544_Datatemp56.hitDoWrite | My_Reg_AD5544_Datatemp78.hitDoWrite
   io.AD5544_TRIGER(1) := (AD5544_Triger2_Temp|Delay(AD5544_Triger2_Temp,1)|Delay(AD5544_Triger2_Temp,2)|Delay(AD5544_Triger2_Temp,3))
 
   val My_Reg_AD5544_Datatemp910 = busslave.newReg(doc="AD5544(U93)DA数据输出")
@@ -250,7 +252,7 @@ case class Mdcb_Regif(addrwidth : Int, datawidth : Int, ad5544_num : Int, ad7606
   io.AD5544_DATA(2)(2) := AD5544_Datatemp11
   val AD5544_Datatemp12 = My_Reg_AD5544_Datatemp1112.fieldAt(16,bc = 16 bits,RW,0x8000,"AD5544(U93)DA数据通道4输出,预留")
   io.AD5544_DATA(2)(3) := AD5544_Datatemp12
-  val AD5544_Triger3_Temp =  My_Reg_AD5544_Datatemp910.hitDoWrite || My_Reg_AD5544_Datatemp1112.hitDoWrite
+  val AD5544_Triger3_Temp =  My_Reg_AD5544_Datatemp910.hitDoWrite | My_Reg_AD5544_Datatemp1112.hitDoWrite
   io.AD5544_TRIGER(2) := (AD5544_Triger3_Temp|Delay(AD5544_Triger3_Temp,1)|Delay(AD5544_Triger3_Temp,2)|Delay(AD5544_Triger3_Temp,3))
 
   val My_Reg_M_EN_TTL = busslave.newReg(doc="4路外部输出TTL信号，电机控制PA寄存器")

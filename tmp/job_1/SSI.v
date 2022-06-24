@@ -1,10 +1,12 @@
 // Generator : SpinalHDL v1.6.1    git head : 3bf789d53b1b5a36974196e2d591342e15ddf28c
 // Component : SSI
+// Git hash  : faa136a5cd11b0754bd45144fa843c52609e72a5
 
 `timescale 1ns/1ps 
 
 module SSI (
   output              ssi_clk,
+  output              ssi_ss,
   input               ssi_data,
   input               ssi_en,
   input               sample,
@@ -24,6 +26,7 @@ module SSI (
   reg                 timer_reset;
   wire                timer_ssi_clkToogleHit;
   reg                 ssi_clk_1;
+  reg                 ss;
   reg        [31:0]   buffer_1;
   reg        [31:0]   postion_1;
   wire                fsm_wantExit;
@@ -32,9 +35,9 @@ module SSI (
   reg        [9:0]    fsm_counter;
   reg        [2:0]    fsm_stateReg;
   reg        [2:0]    fsm_stateNext;
-  wire                when_SSI_l70;
-  wire                when_SSI_l73;
-  wire                when_SSI_l94;
+  wire                when_SSI_l75;
+  wire                when_SSI_l78;
+  wire                when_SSI_l100;
   `ifndef SYNTHESIS
   reg [87:0] fsm_stateReg_string;
   reg [87:0] fsm_stateNext_string;
@@ -121,6 +124,7 @@ module SSI (
   assign fsm_wantKill = 1'b0;
   assign ssi_clk = ssi_clk_1;
   assign postion = postion_1;
+  assign ssi_ss = ss;
   always @(*) begin
     fsm_stateNext = fsm_stateReg;
     case(fsm_stateReg)
@@ -136,7 +140,7 @@ module SSI (
       end
       fsm_enumDef_Get_Data : begin
         if(timer_ssi_clkToogleHit) begin
-          if(when_SSI_l73) begin
+          if(when_SSI_l78) begin
             fsm_stateNext = fsm_enumDef_Wait_State;
           end
         end
@@ -147,7 +151,7 @@ module SSI (
         end
       end
       fsm_enumDef_Wait_Time : begin
-        if(when_SSI_l94) begin
+        if(when_SSI_l100) begin
           fsm_stateNext = fsm_enumDef_Wait_Start;
         end
       end
@@ -162,9 +166,9 @@ module SSI (
     end
   end
 
-  assign when_SSI_l70 = fsm_counter[0];
-  assign when_SSI_l73 = (fsm_counter == 10'h03f);
-  assign when_SSI_l94 = (fsm_counter == 10'h1f4);
+  assign when_SSI_l75 = fsm_counter[0];
+  assign when_SSI_l78 = (fsm_counter == 10'h03f);
+  assign when_SSI_l100 = (fsm_counter == 10'h1f4);
   always @(posedge clk) begin
     timer_counter <= (timer_counter + 3'b001);
     if(timer_reset) begin
@@ -175,6 +179,7 @@ module SSI (
   always @(posedge clk or posedge reset) begin
     if(reset) begin
       ssi_clk_1 <= 1'b1;
+      ss <= 1'b1;
       buffer_1 <= 32'h0;
       postion_1 <= 32'h0;
       fsm_counter <= 10'h0;
@@ -187,6 +192,9 @@ module SSI (
             ssi_clk_1 <= 1'b1;
             fsm_counter <= 10'h0;
             buffer_1 <= 32'h0;
+            ss <= 1'b0;
+          end else begin
+            ss <= 1'b1;
           end
         end
         fsm_enumDef_Dummy_State : begin
@@ -198,10 +206,10 @@ module SSI (
           if(timer_ssi_clkToogleHit) begin
             fsm_counter <= (fsm_counter + 10'h001);
             ssi_clk_1 <= (! ssi_clk_1);
-            if(when_SSI_l70) begin
+            if(when_SSI_l75) begin
               buffer_1 <= _zz_buffer_1[31:0];
             end
-            if(when_SSI_l73) begin
+            if(when_SSI_l78) begin
               fsm_counter <= 10'h0;
             end
           end
@@ -215,7 +223,8 @@ module SSI (
         fsm_enumDef_Wait_Time : begin
           ssi_clk_1 <= 1'b1;
           fsm_counter <= (fsm_counter + 10'h001);
-          if(when_SSI_l94) begin
+          ss <= 1'b1;
+          if(when_SSI_l100) begin
             fsm_counter <= 10'h0;
           end
         end

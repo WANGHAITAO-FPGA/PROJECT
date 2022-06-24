@@ -55,7 +55,7 @@ class Emif_Apb(sramLayout : SramLayout) extends Component {
   }otherwise{
     rd_data_temp := rd_data_temp
   }
-  rd_data_temp.addAttribute("MARK_DEBUG","TRUE")
+//  rd_data_temp.addAttribute("MARK_DEBUG","TRUE")
 
   io.emif.emif_data.writeEnable := !io.emif.emif_oe
   //io.emif.emif_data.write := RegNextWhen(rd_data_temp,!io.emif.emif_oe)
@@ -73,10 +73,12 @@ class Phpa_Top(sramLayout : SramLayout) extends Component {
     val ad5544_C = master(Ad5544Interface())
     val biss_c = master(BissCInterface())
     val ad7606 = master(Ad7606Interface())
+    val encoderinterface = master(EncoderInterface())
     val clk = in Bool()
     val reset = in Bool()
     val led = out Bool()
     val gtxuser_clk = in Bool()
+    val clk_160M = in Bool()
     val axiw = master(Stream(Fragment(Bits(32 bits))))
     val axir = slave (Stream(Fragment(Bits(32 bits))))
   }
@@ -94,8 +96,8 @@ class Phpa_Top(sramLayout : SramLayout) extends Component {
   val area = new ClockingArea(systemClockDomain){
     val emif_interface = new Emif_Apb(sramLayout)
     io.emif <> emif_interface.io.emif
-    emif_interface.io.apb.addAttribute("MARK_DEBUG","TRUE")
-    emif_interface.io.emif.addAttribute("MARK_DEBUG","TRUE")
+//    emif_interface.io.apb.addAttribute("MARK_DEBUG","TRUE")
+//    emif_interface.io.emif.addAttribute("MARK_DEBUG","TRUE")
 
     //val ad5544_temp = Reg(Bool()) init False
 
@@ -155,18 +157,36 @@ class Phpa_Top(sramLayout : SramLayout) extends Component {
     io.reset <> ad7606_ctrl.io.reset
     apbMapping += ad7606_ctrl.io.apb -> (0x000500, 256 Bytes)
 
+    val encoder_fpga = new Encoder_Top(true)
+    encoder_fpga.io.encoderinterface <> io.encoderinterface
+    encoder_fpga.io.clk := io.clk
+    encoder_fpga.io.reset := io.reset
+    encoder_fpga.io.clk_160M := io.clk_160M
+
+    val hssl_ctrl = new Apb_Hssl("Apb_Hssl",0x000700)
+    hssl_ctrl.io.output >> io.axiw
+    hssl_ctrl.io.input << io.axir
+    hssl_ctrl.io.hssl_clk := io.gtxuser_clk
+    hssl_ctrl.io.hssl_reset := io.reset
+    hssl_ctrl.io.encoder_value := encoder_fpga.io.encoder_position_out
+
+    apbMapping += hssl_ctrl.io.apb -> (0x000700, 256 Bytes)
+
+
     //ad7606_ctrl.io.ad7606Interface.addAttribute("MARK_DEBUG","TRUE")
-    val gtx_ctrl = new Apb3_Gtx(axiclkdomain,256,256)
-    gtx_ctrl.io.axiw <> io.axiw
-    gtx_ctrl.io.axir <> io.axir
+//    val gtx_ctrl = new Apb3_Gtx(axiclkdomain,256,256)
+//    gtx_ctrl.io.axiw <> io.axiw
+//    gtx_ctrl.io.axir <> io.axir
     /*gtx_ctrl.io.axir.payload.fragment := gtx_ctrl.io.axiw.payload.fragment
     gtx_ctrl.io.axir.valid := gtx_ctrl.io.axiw.valid
     gtx_ctrl.io.axir.payload.last := gtx_ctrl.io.axiw.payload.last
     gtx_ctrl.io.axiw.ready := True*/
 
-    apbMapping += gtx_ctrl.io.apb -> (0x000700, 256 Bytes)
+    //apbMapping += gtx_ctrl.io.apb -> (0x000700, 256 Bytes)
     //io.axiw.addAttribute("MARK_DEBUG","TRUE")
     //io.axir.addAttribute("MARK_DEBUG","TRUE")
+
+
 
     val apbDecoder = Apb3Decoder(
       master = emif_interface.io.apb,
@@ -189,17 +209,16 @@ class Phpa_Top(sramLayout : SramLayout) extends Component {
 }
 
 
-
-/*
 object Phpa_Top_Test extends App {
   SpinalConfig(
     //oneFilePerComponent = true,
-    defaultClockDomainFrequency=FixedFrequency(100 MHz),
+    defaultClockDomainFrequency = FixedFrequency(100 MHz),
     headerWithDate = true,
     mergeAsyncProcess = true
 
-  ).generateVerilog(InOutWrapper(new Phpa_Top(SramLayout(19,16))))
-*/
+  ).generateVerilog(InOutWrapper(new Phpa_Top(SramLayout(19, 16))))
+}
+
 
 /*
 object Phpa_Top_Test {

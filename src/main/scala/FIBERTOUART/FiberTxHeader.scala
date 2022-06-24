@@ -7,9 +7,10 @@ case class FiberTxHeader(dataWidth : Int) extends Component{
   val io = new Bundle{
     val input = slave(Stream(Fragment(Bits(dataWidth bits))))
     val output = master(Stream(Fragment(Bits(dataWidth bits))))
+    val slave_id = in Bits(dataWidth bits)
   }
 
-  val header = B"x00F1F2F300000001"
+  val header = B"x00F1F2F3"##io.slave_id
   val headerWords = 64/dataWidth
   val state = Reg(UInt(log2Up(headerWords + 1) bits)) init(0)
   io.output.valid := io.input.valid

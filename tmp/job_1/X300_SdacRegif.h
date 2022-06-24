@@ -1,35 +1,36 @@
 #define MY_REG_HEADER            = 0x0
 #define MY_REG_SLAVEID           = 0x4
 #define MY_REG_ADDR              = 0x8
-#define MY_REG_VERSION           = 0xc
-#define MY_REG_RESERVE1          = 0x10
-#define MY_REG_RESERVE2          = 0x14
-#define MY_REG_RESERVE3          = 0x18
-#define MY_REG_RESERVE4          = 0x1c
-#define MY_REG_AD7606_DATATEMP1  = 0x20
-#define MY_REG_AD7606_DATATEMP2  = 0x24
-#define MY_REG_AD7606_DATATEMP3  = 0x28
-#define MY_REG_AD7606_DATATEMP4  = 0x2c
-#define MY_REG_AD7606_DATATEMP5  = 0x30
-#define MY_REG_AD7606_DATATEMP6  = 0x34
-#define MY_REG_AD7606_DATATEMP7  = 0x38
-#define MY_REG_AD7606_DATATEMP8  = 0x3c
-#define MY_REG_AD7606_DATATEMP9  = 0x40
-#define MY_REG_AD7606_DATATEMP10 = 0x44
-#define MY_REG_AD7606_DATATEMP11 = 0x48
-#define MY_REG_AD7606_DATATEMP12 = 0x4c
-#define MY_REG_AD7606_DATATEMP13 = 0x50
-#define MY_REG_AD7606_DATATEMP14 = 0x54
-#define MY_REG_AD7606_DATATEMP15 = 0x58
-#define MY_REG_AD7606_DATATEMP16 = 0x5c
-#define MY_REG_AD7606_DATATEMP17 = 0x60
-#define MY_REG_AD7606_DATATEMP18 = 0x64
-#define MY_REG_AD7606_DATATEMP19 = 0x68
-#define MY_REG_AD7606_DATATEMP20 = 0x6c
-#define MY_REG_AD7606_DATATEMP21 = 0x70
-#define MY_REG_AD7606_DATATEMP22 = 0x74
-#define MY_REG_AD7606_DATATEMP23 = 0x78
-#define MY_REG_AD7606_DATATEMP24 = 0x7c
+#define MY_REG_RESERVE0          = 0xc
+#define MY_REG_VERSION           = 0x10
+#define MY_REG_RESERVE1          = 0x14
+#define MY_REG_RESERVE2          = 0x18
+#define MY_REG_RESERVE3          = 0x1c
+#define MY_REG_RESERVE4          = 0x20
+#define MY_REG_AD7606_DATATEMP1  = 0x24
+#define MY_REG_AD7606_DATATEMP2  = 0x28
+#define MY_REG_AD7606_DATATEMP3  = 0x2c
+#define MY_REG_AD7606_DATATEMP4  = 0x30
+#define MY_REG_AD7606_DATATEMP5  = 0x34
+#define MY_REG_AD7606_DATATEMP6  = 0x38
+#define MY_REG_AD7606_DATATEMP7  = 0x3c
+#define MY_REG_AD7606_DATATEMP8  = 0x40
+#define MY_REG_AD7606_DATATEMP9  = 0x44
+#define MY_REG_AD7606_DATATEMP10 = 0x48
+#define MY_REG_AD7606_DATATEMP11 = 0x4c
+#define MY_REG_AD7606_DATATEMP12 = 0x50
+#define MY_REG_AD7606_DATATEMP13 = 0x54
+#define MY_REG_AD7606_DATATEMP14 = 0x58
+#define MY_REG_AD7606_DATATEMP15 = 0x5c
+#define MY_REG_AD7606_DATATEMP16 = 0x60
+#define MY_REG_AD7606_DATATEMP17 = 0x64
+#define MY_REG_AD7606_DATATEMP18 = 0x68
+#define MY_REG_AD7606_DATATEMP19 = 0x6c
+#define MY_REG_AD7606_DATATEMP20 = 0x70
+#define MY_REG_AD7606_DATATEMP21 = 0x74
+#define MY_REG_AD7606_DATATEMP22 = 0x78
+#define MY_REG_AD7606_DATATEMP23 = 0x7c
+#define MY_REG_AD7606_DATATEMP24 = 0x80
 #define MY_REG_TAIL              = 0xfc
 
 
@@ -53,6 +54,13 @@ typedef union{
         uint32_t ADDR:32;
     } reg;
 } my_reg_addr_t
+
+typedef union{
+    uint32_t val;
+    struct{
+        uint32_t Reserve0:32;
+    } reg;
+} my_reg_reserve0_t
 
 typedef union{
     uint32_t val;

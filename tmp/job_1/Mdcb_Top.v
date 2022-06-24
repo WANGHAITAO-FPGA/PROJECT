@@ -1,5 +1,6 @@
 // Generator : SpinalHDL v1.6.1    git head : 3bf789d53b1b5a36974196e2d591342e15ddf28c
 // Component : Mdcb_Top
+// Git hash  : faa136a5cd11b0754bd45144fa843c52609e72a5
 
 `timescale 1ns/1ps 
 
@@ -76,8 +77,24 @@ module Mdcb_Top (
   output     [15:0]   FPGA_DO,
   input               clk,
   input               reset,
+  input               clk_80M,
   input               clk_160M,
-  input      [31:0]   slaveid
+  input      [31:0]   slaveid,
+  output     [15:0]   AD5544_DATA_0_0,
+  output     [15:0]   AD5544_DATA_0_1,
+  output     [15:0]   AD5544_DATA_0_2,
+  output     [15:0]   AD5544_DATA_0_3,
+  output     [15:0]   AD5544_DATA_1_0,
+  output     [15:0]   AD5544_DATA_1_1,
+  output     [15:0]   AD5544_DATA_1_2,
+  output     [15:0]   AD5544_DATA_1_3,
+  output     [15:0]   AD5544_DATA_2_0,
+  output     [15:0]   AD5544_DATA_2_1,
+  output     [15:0]   AD5544_DATA_2_2,
+  output     [15:0]   AD5544_DATA_2_3,
+  output              AD5544_TRIGER_0,
+  output              AD5544_TRIGER_1,
+  output              AD5544_TRIGER_2
 );
 
   wire       [15:0]   mdcb_area_mdcbregif_AD7606_DATA_0_0;
@@ -104,35 +121,35 @@ module Mdcb_Top (
   wire       [0:0]    mdcb_area_mdcbregif_Encoder_Zero_Keep_1;
   wire       [0:0]    mdcb_area_mdcbregif_Encoder_Zero_Keep_2;
   wire       [0:0]    mdcb_area_mdcbregif_Encoder_Zero_Keep_3;
-  wire       [15:0]   mdcb_area_ad5544_0_AD5544_DATA_IN1;
-  wire       [15:0]   mdcb_area_ad5544_0_AD5544_DATA_IN2;
-  wire       [15:0]   mdcb_area_ad5544_0_AD5544_DATA_IN3;
-  wire       [15:0]   mdcb_area_ad5544_0_AD5544_DATA_IN4;
-  wire       [15:0]   mdcb_area_ad5544_1_AD5544_DATA_IN1;
-  wire       [15:0]   mdcb_area_ad5544_1_AD5544_DATA_IN2;
-  wire       [15:0]   mdcb_area_ad5544_1_AD5544_DATA_IN3;
-  wire       [15:0]   mdcb_area_ad5544_1_AD5544_DATA_IN4;
-  wire       [15:0]   mdcb_area_ad5544_2_AD5544_DATA_IN1;
-  wire       [15:0]   mdcb_area_ad5544_2_AD5544_DATA_IN2;
-  wire       [15:0]   mdcb_area_ad5544_2_AD5544_DATA_IN3;
-  wire       [15:0]   mdcb_area_ad5544_2_AD5544_DATA_IN4;
-  wire                mdcb_area_encoder_0_encoder_clr_in;
-  wire                mdcb_area_encoder_1_encoder_clr_in;
-  wire                mdcb_area_encoder_2_encoder_clr_in;
-  wire                mdcb_area_encoder_3_encoder_clr_in;
+  wire       [15:0]   mdcb_area_adda_area_ad5544_0_AD5544_DATA_IN1;
+  wire       [15:0]   mdcb_area_adda_area_ad5544_0_AD5544_DATA_IN2;
+  wire       [15:0]   mdcb_area_adda_area_ad5544_0_AD5544_DATA_IN3;
+  wire       [15:0]   mdcb_area_adda_area_ad5544_0_AD5544_DATA_IN4;
+  wire       [15:0]   mdcb_area_adda_area_ad5544_1_AD5544_DATA_IN1;
+  wire       [15:0]   mdcb_area_adda_area_ad5544_1_AD5544_DATA_IN2;
+  wire       [15:0]   mdcb_area_adda_area_ad5544_1_AD5544_DATA_IN3;
+  wire       [15:0]   mdcb_area_adda_area_ad5544_1_AD5544_DATA_IN4;
+  wire       [15:0]   mdcb_area_adda_area_ad5544_2_AD5544_DATA_IN1;
+  wire       [15:0]   mdcb_area_adda_area_ad5544_2_AD5544_DATA_IN2;
+  wire       [15:0]   mdcb_area_adda_area_ad5544_2_AD5544_DATA_IN3;
+  wire       [15:0]   mdcb_area_adda_area_ad5544_2_AD5544_DATA_IN4;
+  wire                mdcb_area_adda_area_encoder_0_encoder_clr_in;
+  wire                mdcb_area_adda_area_encoder_1_encoder_clr_in;
+  wire                mdcb_area_adda_area_encoder_2_encoder_clr_in;
+  wire                mdcb_area_adda_area_encoder_3_encoder_clr_in;
   wire                mdcb_area_mdcbRxPreamble_input_ready;
   wire                mdcb_area_mdcbRxPreamble_output_valid;
   wire                mdcb_area_mdcbRxPreamble_output_payload_last;
   wire       [31:0]   mdcb_area_mdcbRxPreamble_output_payload_fragment;
   wire                mdcb_area_mdcbrxsimplebus_input_ready;
-  wire       [7:0]    mdcb_area_mdcbrxsimplebus_waddr;
+  wire       [8:0]    mdcb_area_mdcbrxsimplebus_waddr;
   wire       [31:0]   mdcb_area_mdcbrxsimplebus_wdata;
   wire                mdcb_area_mdcbrxsimplebus_wenable;
   wire                mdcb_area_mdcbtxsimplebus_output_valid;
   wire                mdcb_area_mdcbtxsimplebus_output_payload_last;
   wire       [31:0]   mdcb_area_mdcbtxsimplebus_output_payload_fragment;
   wire                mdcb_area_mdcbtxsimplebus_RENABLE;
-  wire       [7:0]    mdcb_area_mdcbtxsimplebus_RADDR;
+  wire       [8:0]    mdcb_area_mdcbtxsimplebus_RADDR;
   wire       [31:0]   mdcb_area_mdcbregif_simplebus_RDATA;
   wire       [7:0]    mdcb_area_mdcbregif_M_EN_TTL;
   wire       [15:0]   mdcb_area_mdcbregif_FPGA_DO;
@@ -155,92 +172,92 @@ module Mdcb_Top (
   wire       [0:0]    mdcb_area_mdcbregif_Encoder_Clr_1_1;
   wire       [0:0]    mdcb_area_mdcbregif_Encoder_Clr_2_1;
   wire       [0:0]    mdcb_area_mdcbregif_Encoder_Clr_3_1;
-  wire                mdcb_area_ad5544_0_AD5544_CS;
-  wire                mdcb_area_ad5544_0_AD5544_LDAC;
-  wire                mdcb_area_ad5544_0_AD5544_MSB;
-  wire                mdcb_area_ad5544_0_AD5544_RS;
-  wire                mdcb_area_ad5544_0_AD5544_SCLK;
-  wire                mdcb_area_ad5544_0_AD5544_SDIN;
-  wire                mdcb_area_ad5544_1_AD5544_CS;
-  wire                mdcb_area_ad5544_1_AD5544_LDAC;
-  wire                mdcb_area_ad5544_1_AD5544_MSB;
-  wire                mdcb_area_ad5544_1_AD5544_RS;
-  wire                mdcb_area_ad5544_1_AD5544_SCLK;
-  wire                mdcb_area_ad5544_1_AD5544_SDIN;
-  wire                mdcb_area_ad5544_2_AD5544_CS;
-  wire                mdcb_area_ad5544_2_AD5544_LDAC;
-  wire                mdcb_area_ad5544_2_AD5544_MSB;
-  wire                mdcb_area_ad5544_2_AD5544_RS;
-  wire                mdcb_area_ad5544_2_AD5544_SCLK;
-  wire                mdcb_area_ad5544_2_AD5544_SDIN;
-  wire       [2:0]    mdcb_area_ad7606_0_ad_os;
-  wire                mdcb_area_ad7606_0_ad_cs;
-  wire                mdcb_area_ad7606_0_ad_rd;
-  wire                mdcb_area_ad7606_0_ad_reset;
-  wire                mdcb_area_ad7606_0_ad_convsta;
-  wire                mdcb_area_ad7606_0_ad_convstb;
-  wire                mdcb_area_ad7606_0_ad_range;
-  wire       [15:0]   mdcb_area_ad7606_0_ad_ch1_o;
-  wire       [15:0]   mdcb_area_ad7606_0_ad_ch2_o;
-  wire       [15:0]   mdcb_area_ad7606_0_ad_ch3_o;
-  wire       [15:0]   mdcb_area_ad7606_0_ad_ch4_o;
-  wire       [15:0]   mdcb_area_ad7606_0_ad_ch5_o;
-  wire       [15:0]   mdcb_area_ad7606_0_ad_ch6_o;
-  wire       [15:0]   mdcb_area_ad7606_0_ad_ch7_o;
-  wire       [15:0]   mdcb_area_ad7606_0_ad_ch8_o;
-  wire                mdcb_area_ad7606_0_ad_data_valid_o;
-  wire       [2:0]    mdcb_area_ad7606_1_ad_os;
-  wire                mdcb_area_ad7606_1_ad_cs;
-  wire                mdcb_area_ad7606_1_ad_rd;
-  wire                mdcb_area_ad7606_1_ad_reset;
-  wire                mdcb_area_ad7606_1_ad_convsta;
-  wire                mdcb_area_ad7606_1_ad_convstb;
-  wire                mdcb_area_ad7606_1_ad_range;
-  wire       [15:0]   mdcb_area_ad7606_1_ad_ch1_o;
-  wire       [15:0]   mdcb_area_ad7606_1_ad_ch2_o;
-  wire       [15:0]   mdcb_area_ad7606_1_ad_ch3_o;
-  wire       [15:0]   mdcb_area_ad7606_1_ad_ch4_o;
-  wire       [15:0]   mdcb_area_ad7606_1_ad_ch5_o;
-  wire       [15:0]   mdcb_area_ad7606_1_ad_ch6_o;
-  wire       [15:0]   mdcb_area_ad7606_1_ad_ch7_o;
-  wire       [15:0]   mdcb_area_ad7606_1_ad_ch8_o;
-  wire                mdcb_area_ad7606_1_ad_data_valid_o;
-  wire                mdcb_area_bissc_0_enc_clk;
-  wire       [40:0]   mdcb_area_bissc_0_enc_position_all;
-  wire       [31:0]   mdcb_area_bissc_0_enc_position_out;
-  wire                mdcb_area_bissc_0_erro_flag;
-  wire                mdcb_area_bissc_0_warn_flag;
-  wire                mdcb_area_bissc_0_crc_flag;
-  wire                mdcb_area_bissc_1_enc_clk;
-  wire       [40:0]   mdcb_area_bissc_1_enc_position_all;
-  wire       [31:0]   mdcb_area_bissc_1_enc_position_out;
-  wire                mdcb_area_bissc_1_erro_flag;
-  wire                mdcb_area_bissc_1_warn_flag;
-  wire                mdcb_area_bissc_1_crc_flag;
-  wire                mdcb_area_bissc_2_enc_clk;
-  wire       [40:0]   mdcb_area_bissc_2_enc_position_all;
-  wire       [31:0]   mdcb_area_bissc_2_enc_position_out;
-  wire                mdcb_area_bissc_2_erro_flag;
-  wire                mdcb_area_bissc_2_warn_flag;
-  wire                mdcb_area_bissc_2_crc_flag;
-  wire                mdcb_area_bissc_3_enc_clk;
-  wire       [40:0]   mdcb_area_bissc_3_enc_position_all;
-  wire       [31:0]   mdcb_area_bissc_3_enc_position_out;
-  wire                mdcb_area_bissc_3_erro_flag;
-  wire                mdcb_area_bissc_3_warn_flag;
-  wire                mdcb_area_bissc_3_crc_flag;
-  wire       [31:0]   mdcb_area_encoder_0_encoder_position_out;
-  wire                mdcb_area_encoder_0_encoder_iphase_out;
-  wire       [31:0]   mdcb_area_encoder_0_encoder_lock_pos;
-  wire       [31:0]   mdcb_area_encoder_1_encoder_position_out;
-  wire                mdcb_area_encoder_1_encoder_iphase_out;
-  wire       [31:0]   mdcb_area_encoder_1_encoder_lock_pos;
-  wire       [31:0]   mdcb_area_encoder_2_encoder_position_out;
-  wire                mdcb_area_encoder_2_encoder_iphase_out;
-  wire       [31:0]   mdcb_area_encoder_2_encoder_lock_pos;
-  wire       [31:0]   mdcb_area_encoder_3_encoder_position_out;
-  wire                mdcb_area_encoder_3_encoder_iphase_out;
-  wire       [31:0]   mdcb_area_encoder_3_encoder_lock_pos;
+  wire                mdcb_area_adda_area_ad5544_0_AD5544_CS;
+  wire                mdcb_area_adda_area_ad5544_0_AD5544_LDAC;
+  wire                mdcb_area_adda_area_ad5544_0_AD5544_MSB;
+  wire                mdcb_area_adda_area_ad5544_0_AD5544_RS;
+  wire                mdcb_area_adda_area_ad5544_0_AD5544_SCLK;
+  wire                mdcb_area_adda_area_ad5544_0_AD5544_SDIN;
+  wire                mdcb_area_adda_area_ad5544_1_AD5544_CS;
+  wire                mdcb_area_adda_area_ad5544_1_AD5544_LDAC;
+  wire                mdcb_area_adda_area_ad5544_1_AD5544_MSB;
+  wire                mdcb_area_adda_area_ad5544_1_AD5544_RS;
+  wire                mdcb_area_adda_area_ad5544_1_AD5544_SCLK;
+  wire                mdcb_area_adda_area_ad5544_1_AD5544_SDIN;
+  wire                mdcb_area_adda_area_ad5544_2_AD5544_CS;
+  wire                mdcb_area_adda_area_ad5544_2_AD5544_LDAC;
+  wire                mdcb_area_adda_area_ad5544_2_AD5544_MSB;
+  wire                mdcb_area_adda_area_ad5544_2_AD5544_RS;
+  wire                mdcb_area_adda_area_ad5544_2_AD5544_SCLK;
+  wire                mdcb_area_adda_area_ad5544_2_AD5544_SDIN;
+  wire       [2:0]    mdcb_area_adda_area_ad7606_0_ad_os;
+  wire                mdcb_area_adda_area_ad7606_0_ad_cs;
+  wire                mdcb_area_adda_area_ad7606_0_ad_rd;
+  wire                mdcb_area_adda_area_ad7606_0_ad_reset;
+  wire                mdcb_area_adda_area_ad7606_0_ad_convsta;
+  wire                mdcb_area_adda_area_ad7606_0_ad_convstb;
+  wire                mdcb_area_adda_area_ad7606_0_ad_range;
+  wire       [15:0]   mdcb_area_adda_area_ad7606_0_ad_ch1_o;
+  wire       [15:0]   mdcb_area_adda_area_ad7606_0_ad_ch2_o;
+  wire       [15:0]   mdcb_area_adda_area_ad7606_0_ad_ch3_o;
+  wire       [15:0]   mdcb_area_adda_area_ad7606_0_ad_ch4_o;
+  wire       [15:0]   mdcb_area_adda_area_ad7606_0_ad_ch5_o;
+  wire       [15:0]   mdcb_area_adda_area_ad7606_0_ad_ch6_o;
+  wire       [15:0]   mdcb_area_adda_area_ad7606_0_ad_ch7_o;
+  wire       [15:0]   mdcb_area_adda_area_ad7606_0_ad_ch8_o;
+  wire                mdcb_area_adda_area_ad7606_0_ad_data_valid_o;
+  wire       [2:0]    mdcb_area_adda_area_ad7606_1_ad_os;
+  wire                mdcb_area_adda_area_ad7606_1_ad_cs;
+  wire                mdcb_area_adda_area_ad7606_1_ad_rd;
+  wire                mdcb_area_adda_area_ad7606_1_ad_reset;
+  wire                mdcb_area_adda_area_ad7606_1_ad_convsta;
+  wire                mdcb_area_adda_area_ad7606_1_ad_convstb;
+  wire                mdcb_area_adda_area_ad7606_1_ad_range;
+  wire       [15:0]   mdcb_area_adda_area_ad7606_1_ad_ch1_o;
+  wire       [15:0]   mdcb_area_adda_area_ad7606_1_ad_ch2_o;
+  wire       [15:0]   mdcb_area_adda_area_ad7606_1_ad_ch3_o;
+  wire       [15:0]   mdcb_area_adda_area_ad7606_1_ad_ch4_o;
+  wire       [15:0]   mdcb_area_adda_area_ad7606_1_ad_ch5_o;
+  wire       [15:0]   mdcb_area_adda_area_ad7606_1_ad_ch6_o;
+  wire       [15:0]   mdcb_area_adda_area_ad7606_1_ad_ch7_o;
+  wire       [15:0]   mdcb_area_adda_area_ad7606_1_ad_ch8_o;
+  wire                mdcb_area_adda_area_ad7606_1_ad_data_valid_o;
+  wire                mdcb_area_adda_area_bissc_0_enc_clk;
+  wire       [40:0]   mdcb_area_adda_area_bissc_0_enc_position_all;
+  wire       [31:0]   mdcb_area_adda_area_bissc_0_enc_position_out;
+  wire                mdcb_area_adda_area_bissc_0_erro_flag;
+  wire                mdcb_area_adda_area_bissc_0_warn_flag;
+  wire                mdcb_area_adda_area_bissc_0_crc_flag;
+  wire                mdcb_area_adda_area_bissc_1_enc_clk;
+  wire       [40:0]   mdcb_area_adda_area_bissc_1_enc_position_all;
+  wire       [31:0]   mdcb_area_adda_area_bissc_1_enc_position_out;
+  wire                mdcb_area_adda_area_bissc_1_erro_flag;
+  wire                mdcb_area_adda_area_bissc_1_warn_flag;
+  wire                mdcb_area_adda_area_bissc_1_crc_flag;
+  wire                mdcb_area_adda_area_bissc_2_enc_clk;
+  wire       [40:0]   mdcb_area_adda_area_bissc_2_enc_position_all;
+  wire       [31:0]   mdcb_area_adda_area_bissc_2_enc_position_out;
+  wire                mdcb_area_adda_area_bissc_2_erro_flag;
+  wire                mdcb_area_adda_area_bissc_2_warn_flag;
+  wire                mdcb_area_adda_area_bissc_2_crc_flag;
+  wire                mdcb_area_adda_area_bissc_3_enc_clk;
+  wire       [40:0]   mdcb_area_adda_area_bissc_3_enc_position_all;
+  wire       [31:0]   mdcb_area_adda_area_bissc_3_enc_position_out;
+  wire                mdcb_area_adda_area_bissc_3_erro_flag;
+  wire                mdcb_area_adda_area_bissc_3_warn_flag;
+  wire                mdcb_area_adda_area_bissc_3_crc_flag;
+  wire       [31:0]   mdcb_area_adda_area_encoder_0_encoder_position_out;
+  wire                mdcb_area_adda_area_encoder_0_encoder_iphase_out;
+  wire       [31:0]   mdcb_area_adda_area_encoder_0_encoder_lock_pos;
+  wire       [31:0]   mdcb_area_adda_area_encoder_1_encoder_position_out;
+  wire                mdcb_area_adda_area_encoder_1_encoder_iphase_out;
+  wire       [31:0]   mdcb_area_adda_area_encoder_1_encoder_lock_pos;
+  wire       [31:0]   mdcb_area_adda_area_encoder_2_encoder_position_out;
+  wire                mdcb_area_adda_area_encoder_2_encoder_iphase_out;
+  wire       [31:0]   mdcb_area_adda_area_encoder_2_encoder_lock_pos;
+  wire       [31:0]   mdcb_area_adda_area_encoder_3_encoder_position_out;
+  wire                mdcb_area_adda_area_encoder_3_encoder_iphase_out;
+  wire       [31:0]   mdcb_area_adda_area_encoder_3_encoder_lock_pos;
   wire       [7:0]    mdcb_area_mdcb_iofilter_M_Fault_TTL_Filter;
   wire       [15:0]   mdcb_area_mdcb_iofilter_FPGA_DI_Filter;
 
@@ -249,6 +266,7 @@ module Mdcb_Top (
     .input_ready                (mdcb_area_mdcbRxPreamble_input_ready                    ), //o
     .input_payload_last         (intput_payload_last                                     ), //i
     .input_payload_fragment     (intput_payload_fragment[31:0]                           ), //i
+    .slave_id                   (slaveid[31:0]                                           ), //i
     .output_valid               (mdcb_area_mdcbRxPreamble_output_valid                   ), //o
     .output_ready               (mdcb_area_mdcbrxsimplebus_input_ready                   ), //i
     .output_payload_last        (mdcb_area_mdcbRxPreamble_output_payload_last            ), //o
@@ -261,7 +279,7 @@ module Mdcb_Top (
     .input_ready               (mdcb_area_mdcbrxsimplebus_input_ready                   ), //o
     .input_payload_last        (mdcb_area_mdcbRxPreamble_output_payload_last            ), //i
     .input_payload_fragment    (mdcb_area_mdcbRxPreamble_output_payload_fragment[31:0]  ), //i
-    .waddr                     (mdcb_area_mdcbrxsimplebus_waddr[7:0]                    ), //o
+    .waddr                     (mdcb_area_mdcbrxsimplebus_waddr[8:0]                    ), //o
     .wdata                     (mdcb_area_mdcbrxsimplebus_wdata[31:0]                   ), //o
     .wenable                   (mdcb_area_mdcbrxsimplebus_wenable                       ), //o
     .clk                       (clk                                                     ), //i
@@ -273,266 +291,266 @@ module Mdcb_Top (
     .output_payload_last        (mdcb_area_mdcbtxsimplebus_output_payload_last            ), //o
     .output_payload_fragment    (mdcb_area_mdcbtxsimplebus_output_payload_fragment[31:0]  ), //o
     .RENABLE                    (mdcb_area_mdcbtxsimplebus_RENABLE                        ), //o
-    .RADDR                      (mdcb_area_mdcbtxsimplebus_RADDR[7:0]                     ), //o
+    .RADDR                      (mdcb_area_mdcbtxsimplebus_RADDR[8:0]                     ), //o
     .RDATA                      (mdcb_area_mdcbregif_simplebus_RDATA[31:0]                ), //i
     .timer_tick                 (1'b1                                                     ), //i
     .clk                        (clk                                                      ), //i
     .reset                      (reset                                                    )  //i
   );
   Mdcb_Regif mdcb_area_mdcbregif (
-    .simplebus_RADDR        (mdcb_area_mdcbtxsimplebus_RADDR[7:0]             ), //i
-    .simplebus_RDATA        (mdcb_area_mdcbregif_simplebus_RDATA[31:0]        ), //o
-    .simplebus_RENABLE      (mdcb_area_mdcbtxsimplebus_RENABLE                ), //i
-    .simplebus_WADDR        (mdcb_area_mdcbrxsimplebus_waddr[7:0]             ), //i
-    .simplebus_WDATA        (mdcb_area_mdcbrxsimplebus_wdata[31:0]            ), //i
-    .simplebus_WENABLE      (mdcb_area_mdcbrxsimplebus_wenable                ), //i
-    .slaveid                (slaveid[31:0]                                    ), //i
-    .M_Fault_TTL_Filter     (mdcb_area_mdcb_iofilter_M_Fault_TTL_Filter[7:0]  ), //i
-    .FPGA_DI_Filter         (mdcb_area_mdcb_iofilter_FPGA_DI_Filter[15:0]     ), //i
-    .M_EN_TTL               (mdcb_area_mdcbregif_M_EN_TTL[7:0]                ), //o
-    .FPGA_DO                (mdcb_area_mdcbregif_FPGA_DO[15:0]                ), //o
-    .AD5544_DATA_0_0        (mdcb_area_mdcbregif_AD5544_DATA_0_0[15:0]        ), //o
-    .AD5544_DATA_0_1        (mdcb_area_mdcbregif_AD5544_DATA_0_1[15:0]        ), //o
-    .AD5544_DATA_0_2        (mdcb_area_mdcbregif_AD5544_DATA_0_2[15:0]        ), //o
-    .AD5544_DATA_0_3        (mdcb_area_mdcbregif_AD5544_DATA_0_3[15:0]        ), //o
-    .AD5544_DATA_1_0        (mdcb_area_mdcbregif_AD5544_DATA_1_0[15:0]        ), //o
-    .AD5544_DATA_1_1        (mdcb_area_mdcbregif_AD5544_DATA_1_1[15:0]        ), //o
-    .AD5544_DATA_1_2        (mdcb_area_mdcbregif_AD5544_DATA_1_2[15:0]        ), //o
-    .AD5544_DATA_1_3        (mdcb_area_mdcbregif_AD5544_DATA_1_3[15:0]        ), //o
-    .AD5544_DATA_2_0        (mdcb_area_mdcbregif_AD5544_DATA_2_0[15:0]        ), //o
-    .AD5544_DATA_2_1        (mdcb_area_mdcbregif_AD5544_DATA_2_1[15:0]        ), //o
-    .AD5544_DATA_2_2        (mdcb_area_mdcbregif_AD5544_DATA_2_2[15:0]        ), //o
-    .AD5544_DATA_2_3        (mdcb_area_mdcbregif_AD5544_DATA_2_3[15:0]        ), //o
-    .AD5544_TRIGER_0        (mdcb_area_mdcbregif_AD5544_TRIGER_0              ), //o
-    .AD5544_TRIGER_1        (mdcb_area_mdcbregif_AD5544_TRIGER_1              ), //o
-    .AD5544_TRIGER_2        (mdcb_area_mdcbregif_AD5544_TRIGER_2              ), //o
-    .AD7606_DATA_0_0        (mdcb_area_mdcbregif_AD7606_DATA_0_0[15:0]        ), //i
-    .AD7606_DATA_0_1        (mdcb_area_mdcbregif_AD7606_DATA_0_1[15:0]        ), //i
-    .AD7606_DATA_0_2        (mdcb_area_mdcbregif_AD7606_DATA_0_2[15:0]        ), //i
-    .AD7606_DATA_0_3        (mdcb_area_mdcbregif_AD7606_DATA_0_3[15:0]        ), //i
-    .AD7606_DATA_0_4        (mdcb_area_mdcbregif_AD7606_DATA_0_4[15:0]        ), //i
-    .AD7606_DATA_0_5        (mdcb_area_mdcbregif_AD7606_DATA_0_5[15:0]        ), //i
-    .AD7606_DATA_0_6        (mdcb_area_mdcbregif_AD7606_DATA_0_6[15:0]        ), //i
-    .AD7606_DATA_0_7        (mdcb_area_mdcbregif_AD7606_DATA_0_7[15:0]        ), //i
-    .AD7606_DATA_1_0        (mdcb_area_mdcbregif_AD7606_DATA_1_0[15:0]        ), //i
-    .AD7606_DATA_1_1        (mdcb_area_mdcbregif_AD7606_DATA_1_1[15:0]        ), //i
-    .AD7606_DATA_1_2        (mdcb_area_mdcbregif_AD7606_DATA_1_2[15:0]        ), //i
-    .AD7606_DATA_1_3        (mdcb_area_mdcbregif_AD7606_DATA_1_3[15:0]        ), //i
-    .AD7606_DATA_1_4        (mdcb_area_mdcbregif_AD7606_DATA_1_4[15:0]        ), //i
-    .AD7606_DATA_1_5        (mdcb_area_mdcbregif_AD7606_DATA_1_5[15:0]        ), //i
-    .AD7606_DATA_1_6        (mdcb_area_mdcbregif_AD7606_DATA_1_6[15:0]        ), //i
-    .AD7606_DATA_1_7        (mdcb_area_mdcbregif_AD7606_DATA_1_7[15:0]        ), //i
-    .BissC_Pos_0            (mdcb_area_mdcbregif_BissC_Pos_0[31:0]            ), //i
-    .BissC_Pos_1            (mdcb_area_mdcbregif_BissC_Pos_1[31:0]            ), //i
-    .BissC_Pos_2            (mdcb_area_mdcbregif_BissC_Pos_2[31:0]            ), //i
-    .BissC_Pos_3            (mdcb_area_mdcbregif_BissC_Pos_3[31:0]            ), //i
-    .Encoder_Pos_0          (mdcb_area_encoder_0_encoder_position_out[31:0]   ), //i
-    .Encoder_Pos_1          (mdcb_area_encoder_1_encoder_position_out[31:0]   ), //i
-    .Encoder_Pos_2          (mdcb_area_encoder_2_encoder_position_out[31:0]   ), //i
-    .Encoder_Pos_3          (mdcb_area_encoder_3_encoder_position_out[31:0]   ), //i
-    .Encoder_Zero_Keep_0    (mdcb_area_mdcbregif_Encoder_Zero_Keep_0          ), //i
-    .Encoder_Zero_Keep_1    (mdcb_area_mdcbregif_Encoder_Zero_Keep_1          ), //i
-    .Encoder_Zero_Keep_2    (mdcb_area_mdcbregif_Encoder_Zero_Keep_2          ), //i
-    .Encoder_Zero_Keep_3    (mdcb_area_mdcbregif_Encoder_Zero_Keep_3          ), //i
-    .Encoder_Clr_0          (mdcb_area_mdcbregif_Encoder_Clr_0                ), //o
-    .Encoder_Clr_1_1        (mdcb_area_mdcbregif_Encoder_Clr_1_1              ), //o
-    .Encoder_Clr_2_1        (mdcb_area_mdcbregif_Encoder_Clr_2_1              ), //o
-    .Encoder_Clr_3_1        (mdcb_area_mdcbregif_Encoder_Clr_3_1              ), //o
-    .Encoder_lock_Pos_0     (mdcb_area_encoder_0_encoder_lock_pos[31:0]       ), //i
-    .Encoder_lock_Pos_1     (mdcb_area_encoder_1_encoder_lock_pos[31:0]       ), //i
-    .Encoder_lock_Pos_2     (mdcb_area_encoder_2_encoder_lock_pos[31:0]       ), //i
-    .Encoder_lock_Pos_3     (mdcb_area_encoder_3_encoder_lock_pos[31:0]       ), //i
-    .clk                    (clk                                              ), //i
-    .reset                  (reset                                            )  //i
+    .simplebus_RADDR        (mdcb_area_mdcbtxsimplebus_RADDR[8:0]                      ), //i
+    .simplebus_RDATA        (mdcb_area_mdcbregif_simplebus_RDATA[31:0]                 ), //o
+    .simplebus_RENABLE      (mdcb_area_mdcbtxsimplebus_RENABLE                         ), //i
+    .simplebus_WADDR        (mdcb_area_mdcbrxsimplebus_waddr[8:0]                      ), //i
+    .simplebus_WDATA        (mdcb_area_mdcbrxsimplebus_wdata[31:0]                     ), //i
+    .simplebus_WENABLE      (mdcb_area_mdcbrxsimplebus_wenable                         ), //i
+    .slaveid                (slaveid[31:0]                                             ), //i
+    .M_Fault_TTL_Filter     (mdcb_area_mdcb_iofilter_M_Fault_TTL_Filter[7:0]           ), //i
+    .FPGA_DI_Filter         (mdcb_area_mdcb_iofilter_FPGA_DI_Filter[15:0]              ), //i
+    .M_EN_TTL               (mdcb_area_mdcbregif_M_EN_TTL[7:0]                         ), //o
+    .FPGA_DO                (mdcb_area_mdcbregif_FPGA_DO[15:0]                         ), //o
+    .AD5544_DATA_0_0        (mdcb_area_mdcbregif_AD5544_DATA_0_0[15:0]                 ), //o
+    .AD5544_DATA_0_1        (mdcb_area_mdcbregif_AD5544_DATA_0_1[15:0]                 ), //o
+    .AD5544_DATA_0_2        (mdcb_area_mdcbregif_AD5544_DATA_0_2[15:0]                 ), //o
+    .AD5544_DATA_0_3        (mdcb_area_mdcbregif_AD5544_DATA_0_3[15:0]                 ), //o
+    .AD5544_DATA_1_0        (mdcb_area_mdcbregif_AD5544_DATA_1_0[15:0]                 ), //o
+    .AD5544_DATA_1_1        (mdcb_area_mdcbregif_AD5544_DATA_1_1[15:0]                 ), //o
+    .AD5544_DATA_1_2        (mdcb_area_mdcbregif_AD5544_DATA_1_2[15:0]                 ), //o
+    .AD5544_DATA_1_3        (mdcb_area_mdcbregif_AD5544_DATA_1_3[15:0]                 ), //o
+    .AD5544_DATA_2_0        (mdcb_area_mdcbregif_AD5544_DATA_2_0[15:0]                 ), //o
+    .AD5544_DATA_2_1        (mdcb_area_mdcbregif_AD5544_DATA_2_1[15:0]                 ), //o
+    .AD5544_DATA_2_2        (mdcb_area_mdcbregif_AD5544_DATA_2_2[15:0]                 ), //o
+    .AD5544_DATA_2_3        (mdcb_area_mdcbregif_AD5544_DATA_2_3[15:0]                 ), //o
+    .AD5544_TRIGER_0        (mdcb_area_mdcbregif_AD5544_TRIGER_0                       ), //o
+    .AD5544_TRIGER_1        (mdcb_area_mdcbregif_AD5544_TRIGER_1                       ), //o
+    .AD5544_TRIGER_2        (mdcb_area_mdcbregif_AD5544_TRIGER_2                       ), //o
+    .AD7606_DATA_0_0        (mdcb_area_mdcbregif_AD7606_DATA_0_0[15:0]                 ), //i
+    .AD7606_DATA_0_1        (mdcb_area_mdcbregif_AD7606_DATA_0_1[15:0]                 ), //i
+    .AD7606_DATA_0_2        (mdcb_area_mdcbregif_AD7606_DATA_0_2[15:0]                 ), //i
+    .AD7606_DATA_0_3        (mdcb_area_mdcbregif_AD7606_DATA_0_3[15:0]                 ), //i
+    .AD7606_DATA_0_4        (mdcb_area_mdcbregif_AD7606_DATA_0_4[15:0]                 ), //i
+    .AD7606_DATA_0_5        (mdcb_area_mdcbregif_AD7606_DATA_0_5[15:0]                 ), //i
+    .AD7606_DATA_0_6        (mdcb_area_mdcbregif_AD7606_DATA_0_6[15:0]                 ), //i
+    .AD7606_DATA_0_7        (mdcb_area_mdcbregif_AD7606_DATA_0_7[15:0]                 ), //i
+    .AD7606_DATA_1_0        (mdcb_area_mdcbregif_AD7606_DATA_1_0[15:0]                 ), //i
+    .AD7606_DATA_1_1        (mdcb_area_mdcbregif_AD7606_DATA_1_1[15:0]                 ), //i
+    .AD7606_DATA_1_2        (mdcb_area_mdcbregif_AD7606_DATA_1_2[15:0]                 ), //i
+    .AD7606_DATA_1_3        (mdcb_area_mdcbregif_AD7606_DATA_1_3[15:0]                 ), //i
+    .AD7606_DATA_1_4        (mdcb_area_mdcbregif_AD7606_DATA_1_4[15:0]                 ), //i
+    .AD7606_DATA_1_5        (mdcb_area_mdcbregif_AD7606_DATA_1_5[15:0]                 ), //i
+    .AD7606_DATA_1_6        (mdcb_area_mdcbregif_AD7606_DATA_1_6[15:0]                 ), //i
+    .AD7606_DATA_1_7        (mdcb_area_mdcbregif_AD7606_DATA_1_7[15:0]                 ), //i
+    .BissC_Pos_0            (mdcb_area_mdcbregif_BissC_Pos_0[31:0]                     ), //i
+    .BissC_Pos_1            (mdcb_area_mdcbregif_BissC_Pos_1[31:0]                     ), //i
+    .BissC_Pos_2            (mdcb_area_mdcbregif_BissC_Pos_2[31:0]                     ), //i
+    .BissC_Pos_3            (mdcb_area_mdcbregif_BissC_Pos_3[31:0]                     ), //i
+    .Encoder_Pos_0          (mdcb_area_adda_area_encoder_0_encoder_position_out[31:0]  ), //i
+    .Encoder_Pos_1          (mdcb_area_adda_area_encoder_1_encoder_position_out[31:0]  ), //i
+    .Encoder_Pos_2          (mdcb_area_adda_area_encoder_2_encoder_position_out[31:0]  ), //i
+    .Encoder_Pos_3          (mdcb_area_adda_area_encoder_3_encoder_position_out[31:0]  ), //i
+    .Encoder_Zero_Keep_0    (mdcb_area_mdcbregif_Encoder_Zero_Keep_0                   ), //i
+    .Encoder_Zero_Keep_1    (mdcb_area_mdcbregif_Encoder_Zero_Keep_1                   ), //i
+    .Encoder_Zero_Keep_2    (mdcb_area_mdcbregif_Encoder_Zero_Keep_2                   ), //i
+    .Encoder_Zero_Keep_3    (mdcb_area_mdcbregif_Encoder_Zero_Keep_3                   ), //i
+    .Encoder_Clr_0          (mdcb_area_mdcbregif_Encoder_Clr_0                         ), //o
+    .Encoder_Clr_1_1        (mdcb_area_mdcbregif_Encoder_Clr_1_1                       ), //o
+    .Encoder_Clr_2_1        (mdcb_area_mdcbregif_Encoder_Clr_2_1                       ), //o
+    .Encoder_Clr_3_1        (mdcb_area_mdcbregif_Encoder_Clr_3_1                       ), //o
+    .Encoder_lock_Pos_0     (mdcb_area_adda_area_encoder_0_encoder_lock_pos[31:0]      ), //i
+    .Encoder_lock_Pos_1     (mdcb_area_adda_area_encoder_1_encoder_lock_pos[31:0]      ), //i
+    .Encoder_lock_Pos_2     (mdcb_area_adda_area_encoder_2_encoder_lock_pos[31:0]      ), //i
+    .Encoder_lock_Pos_3     (mdcb_area_adda_area_encoder_3_encoder_lock_pos[31:0]      ), //i
+    .clk                    (clk                                                       ), //i
+    .reset                  (reset                                                     )  //i
   );
-  dac_ad5544 mdcb_area_ad5544_0 (
-    .clk                (clk                                       ), //i
-    .reset              (reset                                     ), //i
-    .AD5544_CS          (mdcb_area_ad5544_0_AD5544_CS              ), //o
-    .AD5544_LDAC        (mdcb_area_ad5544_0_AD5544_LDAC            ), //o
-    .AD5544_MSB         (mdcb_area_ad5544_0_AD5544_MSB             ), //o
-    .AD5544_RS          (mdcb_area_ad5544_0_AD5544_RS              ), //o
-    .AD5544_SCLK        (mdcb_area_ad5544_0_AD5544_SCLK            ), //o
-    .AD5544_SDIN        (mdcb_area_ad5544_0_AD5544_SDIN            ), //o
-    .ad5544_trig        (mdcb_area_mdcbregif_AD5544_TRIGER_0       ), //i
-    .AD5544_DATA_IN1    (mdcb_area_ad5544_0_AD5544_DATA_IN1[15:0]  ), //i
-    .AD5544_DATA_IN2    (mdcb_area_ad5544_0_AD5544_DATA_IN2[15:0]  ), //i
-    .AD5544_DATA_IN3    (mdcb_area_ad5544_0_AD5544_DATA_IN3[15:0]  ), //i
-    .AD5544_DATA_IN4    (mdcb_area_ad5544_0_AD5544_DATA_IN4[15:0]  )  //i
+  dac_ad5544 mdcb_area_adda_area_ad5544_0 (
+    .clk                (clk_80M                                             ), //i
+    .reset              (reset                                               ), //i
+    .AD5544_CS          (mdcb_area_adda_area_ad5544_0_AD5544_CS              ), //o
+    .AD5544_LDAC        (mdcb_area_adda_area_ad5544_0_AD5544_LDAC            ), //o
+    .AD5544_MSB         (mdcb_area_adda_area_ad5544_0_AD5544_MSB             ), //o
+    .AD5544_RS          (mdcb_area_adda_area_ad5544_0_AD5544_RS              ), //o
+    .AD5544_SCLK        (mdcb_area_adda_area_ad5544_0_AD5544_SCLK            ), //o
+    .AD5544_SDIN        (mdcb_area_adda_area_ad5544_0_AD5544_SDIN            ), //o
+    .ad5544_trig        (mdcb_area_mdcbregif_AD5544_TRIGER_0                 ), //i
+    .AD5544_DATA_IN1    (mdcb_area_adda_area_ad5544_0_AD5544_DATA_IN1[15:0]  ), //i
+    .AD5544_DATA_IN2    (mdcb_area_adda_area_ad5544_0_AD5544_DATA_IN2[15:0]  ), //i
+    .AD5544_DATA_IN3    (mdcb_area_adda_area_ad5544_0_AD5544_DATA_IN3[15:0]  ), //i
+    .AD5544_DATA_IN4    (mdcb_area_adda_area_ad5544_0_AD5544_DATA_IN4[15:0]  )  //i
   );
-  dac_ad5544 mdcb_area_ad5544_1 (
-    .clk                (clk                                       ), //i
-    .reset              (reset                                     ), //i
-    .AD5544_CS          (mdcb_area_ad5544_1_AD5544_CS              ), //o
-    .AD5544_LDAC        (mdcb_area_ad5544_1_AD5544_LDAC            ), //o
-    .AD5544_MSB         (mdcb_area_ad5544_1_AD5544_MSB             ), //o
-    .AD5544_RS          (mdcb_area_ad5544_1_AD5544_RS              ), //o
-    .AD5544_SCLK        (mdcb_area_ad5544_1_AD5544_SCLK            ), //o
-    .AD5544_SDIN        (mdcb_area_ad5544_1_AD5544_SDIN            ), //o
-    .ad5544_trig        (mdcb_area_mdcbregif_AD5544_TRIGER_1       ), //i
-    .AD5544_DATA_IN1    (mdcb_area_ad5544_1_AD5544_DATA_IN1[15:0]  ), //i
-    .AD5544_DATA_IN2    (mdcb_area_ad5544_1_AD5544_DATA_IN2[15:0]  ), //i
-    .AD5544_DATA_IN3    (mdcb_area_ad5544_1_AD5544_DATA_IN3[15:0]  ), //i
-    .AD5544_DATA_IN4    (mdcb_area_ad5544_1_AD5544_DATA_IN4[15:0]  )  //i
+  dac_ad5544 mdcb_area_adda_area_ad5544_1 (
+    .clk                (clk_80M                                             ), //i
+    .reset              (reset                                               ), //i
+    .AD5544_CS          (mdcb_area_adda_area_ad5544_1_AD5544_CS              ), //o
+    .AD5544_LDAC        (mdcb_area_adda_area_ad5544_1_AD5544_LDAC            ), //o
+    .AD5544_MSB         (mdcb_area_adda_area_ad5544_1_AD5544_MSB             ), //o
+    .AD5544_RS          (mdcb_area_adda_area_ad5544_1_AD5544_RS              ), //o
+    .AD5544_SCLK        (mdcb_area_adda_area_ad5544_1_AD5544_SCLK            ), //o
+    .AD5544_SDIN        (mdcb_area_adda_area_ad5544_1_AD5544_SDIN            ), //o
+    .ad5544_trig        (mdcb_area_mdcbregif_AD5544_TRIGER_1                 ), //i
+    .AD5544_DATA_IN1    (mdcb_area_adda_area_ad5544_1_AD5544_DATA_IN1[15:0]  ), //i
+    .AD5544_DATA_IN2    (mdcb_area_adda_area_ad5544_1_AD5544_DATA_IN2[15:0]  ), //i
+    .AD5544_DATA_IN3    (mdcb_area_adda_area_ad5544_1_AD5544_DATA_IN3[15:0]  ), //i
+    .AD5544_DATA_IN4    (mdcb_area_adda_area_ad5544_1_AD5544_DATA_IN4[15:0]  )  //i
   );
-  dac_ad5544 mdcb_area_ad5544_2 (
-    .clk                (clk                                       ), //i
-    .reset              (reset                                     ), //i
-    .AD5544_CS          (mdcb_area_ad5544_2_AD5544_CS              ), //o
-    .AD5544_LDAC        (mdcb_area_ad5544_2_AD5544_LDAC            ), //o
-    .AD5544_MSB         (mdcb_area_ad5544_2_AD5544_MSB             ), //o
-    .AD5544_RS          (mdcb_area_ad5544_2_AD5544_RS              ), //o
-    .AD5544_SCLK        (mdcb_area_ad5544_2_AD5544_SCLK            ), //o
-    .AD5544_SDIN        (mdcb_area_ad5544_2_AD5544_SDIN            ), //o
-    .ad5544_trig        (mdcb_area_mdcbregif_AD5544_TRIGER_2       ), //i
-    .AD5544_DATA_IN1    (mdcb_area_ad5544_2_AD5544_DATA_IN1[15:0]  ), //i
-    .AD5544_DATA_IN2    (mdcb_area_ad5544_2_AD5544_DATA_IN2[15:0]  ), //i
-    .AD5544_DATA_IN3    (mdcb_area_ad5544_2_AD5544_DATA_IN3[15:0]  ), //i
-    .AD5544_DATA_IN4    (mdcb_area_ad5544_2_AD5544_DATA_IN4[15:0]  )  //i
+  dac_ad5544 mdcb_area_adda_area_ad5544_2 (
+    .clk                (clk_80M                                             ), //i
+    .reset              (reset                                               ), //i
+    .AD5544_CS          (mdcb_area_adda_area_ad5544_2_AD5544_CS              ), //o
+    .AD5544_LDAC        (mdcb_area_adda_area_ad5544_2_AD5544_LDAC            ), //o
+    .AD5544_MSB         (mdcb_area_adda_area_ad5544_2_AD5544_MSB             ), //o
+    .AD5544_RS          (mdcb_area_adda_area_ad5544_2_AD5544_RS              ), //o
+    .AD5544_SCLK        (mdcb_area_adda_area_ad5544_2_AD5544_SCLK            ), //o
+    .AD5544_SDIN        (mdcb_area_adda_area_ad5544_2_AD5544_SDIN            ), //o
+    .ad5544_trig        (mdcb_area_mdcbregif_AD5544_TRIGER_2                 ), //i
+    .AD5544_DATA_IN1    (mdcb_area_adda_area_ad5544_2_AD5544_DATA_IN1[15:0]  ), //i
+    .AD5544_DATA_IN2    (mdcb_area_adda_area_ad5544_2_AD5544_DATA_IN2[15:0]  ), //i
+    .AD5544_DATA_IN3    (mdcb_area_adda_area_ad5544_2_AD5544_DATA_IN3[15:0]  ), //i
+    .AD5544_DATA_IN4    (mdcb_area_adda_area_ad5544_2_AD5544_DATA_IN4[15:0]  )  //i
   );
-  AD7606_DATA mdcb_area_ad7606_0 (
-    .clk                (clk                                 ), //i
-    .reset              (reset                               ), //i
-    .sample_en          (1'b1                                ), //i
-    .ad_data            (AD7606_0_ad_data[15:0]              ), //i
-    .ad_busy            (AD7606_0_ad_busy                    ), //i
-    .first_data         (AD7606_0_first_data                 ), //i
-    .ad_os              (mdcb_area_ad7606_0_ad_os[2:0]       ), //o
-    .ad_cs              (mdcb_area_ad7606_0_ad_cs            ), //o
-    .ad_rd              (mdcb_area_ad7606_0_ad_rd            ), //o
-    .ad_reset           (mdcb_area_ad7606_0_ad_reset         ), //o
-    .ad_convsta         (mdcb_area_ad7606_0_ad_convsta       ), //o
-    .ad_convstb         (mdcb_area_ad7606_0_ad_convstb       ), //o
-    .ad_range           (mdcb_area_ad7606_0_ad_range         ), //o
-    .ad_ch1_o           (mdcb_area_ad7606_0_ad_ch1_o[15:0]   ), //o
-    .ad_ch2_o           (mdcb_area_ad7606_0_ad_ch2_o[15:0]   ), //o
-    .ad_ch3_o           (mdcb_area_ad7606_0_ad_ch3_o[15:0]   ), //o
-    .ad_ch4_o           (mdcb_area_ad7606_0_ad_ch4_o[15:0]   ), //o
-    .ad_ch5_o           (mdcb_area_ad7606_0_ad_ch5_o[15:0]   ), //o
-    .ad_ch6_o           (mdcb_area_ad7606_0_ad_ch6_o[15:0]   ), //o
-    .ad_ch7_o           (mdcb_area_ad7606_0_ad_ch7_o[15:0]   ), //o
-    .ad_ch8_o           (mdcb_area_ad7606_0_ad_ch8_o[15:0]   ), //o
-    .ad_data_valid_o    (mdcb_area_ad7606_0_ad_data_valid_o  )  //o
+  AD7606_DATA mdcb_area_adda_area_ad7606_0 (
+    .clk                (clk_80M                                       ), //i
+    .reset              (reset                                         ), //i
+    .sample_en          (1'b1                                          ), //i
+    .ad_data            (AD7606_0_ad_data[15:0]                        ), //i
+    .ad_busy            (AD7606_0_ad_busy                              ), //i
+    .first_data         (AD7606_0_first_data                           ), //i
+    .ad_os              (mdcb_area_adda_area_ad7606_0_ad_os[2:0]       ), //o
+    .ad_cs              (mdcb_area_adda_area_ad7606_0_ad_cs            ), //o
+    .ad_rd              (mdcb_area_adda_area_ad7606_0_ad_rd            ), //o
+    .ad_reset           (mdcb_area_adda_area_ad7606_0_ad_reset         ), //o
+    .ad_convsta         (mdcb_area_adda_area_ad7606_0_ad_convsta       ), //o
+    .ad_convstb         (mdcb_area_adda_area_ad7606_0_ad_convstb       ), //o
+    .ad_range           (mdcb_area_adda_area_ad7606_0_ad_range         ), //o
+    .ad_ch1_o           (mdcb_area_adda_area_ad7606_0_ad_ch1_o[15:0]   ), //o
+    .ad_ch2_o           (mdcb_area_adda_area_ad7606_0_ad_ch2_o[15:0]   ), //o
+    .ad_ch3_o           (mdcb_area_adda_area_ad7606_0_ad_ch3_o[15:0]   ), //o
+    .ad_ch4_o           (mdcb_area_adda_area_ad7606_0_ad_ch4_o[15:0]   ), //o
+    .ad_ch5_o           (mdcb_area_adda_area_ad7606_0_ad_ch5_o[15:0]   ), //o
+    .ad_ch6_o           (mdcb_area_adda_area_ad7606_0_ad_ch6_o[15:0]   ), //o
+    .ad_ch7_o           (mdcb_area_adda_area_ad7606_0_ad_ch7_o[15:0]   ), //o
+    .ad_ch8_o           (mdcb_area_adda_area_ad7606_0_ad_ch8_o[15:0]   ), //o
+    .ad_data_valid_o    (mdcb_area_adda_area_ad7606_0_ad_data_valid_o  )  //o
   );
-  AD7606_DATA mdcb_area_ad7606_1 (
-    .clk                (clk                                 ), //i
-    .reset              (reset                               ), //i
-    .sample_en          (1'b1                                ), //i
-    .ad_data            (AD7606_1_ad_data[15:0]              ), //i
-    .ad_busy            (AD7606_1_ad_busy                    ), //i
-    .first_data         (AD7606_1_first_data                 ), //i
-    .ad_os              (mdcb_area_ad7606_1_ad_os[2:0]       ), //o
-    .ad_cs              (mdcb_area_ad7606_1_ad_cs            ), //o
-    .ad_rd              (mdcb_area_ad7606_1_ad_rd            ), //o
-    .ad_reset           (mdcb_area_ad7606_1_ad_reset         ), //o
-    .ad_convsta         (mdcb_area_ad7606_1_ad_convsta       ), //o
-    .ad_convstb         (mdcb_area_ad7606_1_ad_convstb       ), //o
-    .ad_range           (mdcb_area_ad7606_1_ad_range         ), //o
-    .ad_ch1_o           (mdcb_area_ad7606_1_ad_ch1_o[15:0]   ), //o
-    .ad_ch2_o           (mdcb_area_ad7606_1_ad_ch2_o[15:0]   ), //o
-    .ad_ch3_o           (mdcb_area_ad7606_1_ad_ch3_o[15:0]   ), //o
-    .ad_ch4_o           (mdcb_area_ad7606_1_ad_ch4_o[15:0]   ), //o
-    .ad_ch5_o           (mdcb_area_ad7606_1_ad_ch5_o[15:0]   ), //o
-    .ad_ch6_o           (mdcb_area_ad7606_1_ad_ch6_o[15:0]   ), //o
-    .ad_ch7_o           (mdcb_area_ad7606_1_ad_ch7_o[15:0]   ), //o
-    .ad_ch8_o           (mdcb_area_ad7606_1_ad_ch8_o[15:0]   ), //o
-    .ad_data_valid_o    (mdcb_area_ad7606_1_ad_data_valid_o  )  //o
+  AD7606_DATA mdcb_area_adda_area_ad7606_1 (
+    .clk                (clk_80M                                       ), //i
+    .reset              (reset                                         ), //i
+    .sample_en          (1'b1                                          ), //i
+    .ad_data            (AD7606_1_ad_data[15:0]                        ), //i
+    .ad_busy            (AD7606_1_ad_busy                              ), //i
+    .first_data         (AD7606_1_first_data                           ), //i
+    .ad_os              (mdcb_area_adda_area_ad7606_1_ad_os[2:0]       ), //o
+    .ad_cs              (mdcb_area_adda_area_ad7606_1_ad_cs            ), //o
+    .ad_rd              (mdcb_area_adda_area_ad7606_1_ad_rd            ), //o
+    .ad_reset           (mdcb_area_adda_area_ad7606_1_ad_reset         ), //o
+    .ad_convsta         (mdcb_area_adda_area_ad7606_1_ad_convsta       ), //o
+    .ad_convstb         (mdcb_area_adda_area_ad7606_1_ad_convstb       ), //o
+    .ad_range           (mdcb_area_adda_area_ad7606_1_ad_range         ), //o
+    .ad_ch1_o           (mdcb_area_adda_area_ad7606_1_ad_ch1_o[15:0]   ), //o
+    .ad_ch2_o           (mdcb_area_adda_area_ad7606_1_ad_ch2_o[15:0]   ), //o
+    .ad_ch3_o           (mdcb_area_adda_area_ad7606_1_ad_ch3_o[15:0]   ), //o
+    .ad_ch4_o           (mdcb_area_adda_area_ad7606_1_ad_ch4_o[15:0]   ), //o
+    .ad_ch5_o           (mdcb_area_adda_area_ad7606_1_ad_ch5_o[15:0]   ), //o
+    .ad_ch6_o           (mdcb_area_adda_area_ad7606_1_ad_ch6_o[15:0]   ), //o
+    .ad_ch7_o           (mdcb_area_adda_area_ad7606_1_ad_ch7_o[15:0]   ), //o
+    .ad_ch8_o           (mdcb_area_adda_area_ad7606_1_ad_ch8_o[15:0]   ), //o
+    .ad_data_valid_o    (mdcb_area_adda_area_ad7606_1_ad_data_valid_o  )  //o
   );
-  BISS_Position mdcb_area_bissc_0 (
-    .clk                 (clk                                       ), //i
-    .reset               (reset                                     ), //i
-    .enc_data            (BISSC_0_enc_data                          ), //i
-    .sample_en           (1'b1                                      ), //i
-    .enc_clk             (mdcb_area_bissc_0_enc_clk                 ), //o
-    .enc_position_all    (mdcb_area_bissc_0_enc_position_all[40:0]  ), //o
-    .enc_position_out    (mdcb_area_bissc_0_enc_position_out[31:0]  ), //o
-    .erro_flag           (mdcb_area_bissc_0_erro_flag               ), //o
-    .warn_flag           (mdcb_area_bissc_0_warn_flag               ), //o
-    .crc_flag            (mdcb_area_bissc_0_crc_flag                )  //o
+  BISS_Position mdcb_area_adda_area_bissc_0 (
+    .clk                 (clk_80M                                             ), //i
+    .reset               (reset                                               ), //i
+    .enc_data            (BISSC_0_enc_data                                    ), //i
+    .sample_en           (1'b1                                                ), //i
+    .enc_clk             (mdcb_area_adda_area_bissc_0_enc_clk                 ), //o
+    .enc_position_all    (mdcb_area_adda_area_bissc_0_enc_position_all[40:0]  ), //o
+    .enc_position_out    (mdcb_area_adda_area_bissc_0_enc_position_out[31:0]  ), //o
+    .erro_flag           (mdcb_area_adda_area_bissc_0_erro_flag               ), //o
+    .warn_flag           (mdcb_area_adda_area_bissc_0_warn_flag               ), //o
+    .crc_flag            (mdcb_area_adda_area_bissc_0_crc_flag                )  //o
   );
-  BISS_Position mdcb_area_bissc_1 (
-    .clk                 (clk                                       ), //i
-    .reset               (reset                                     ), //i
-    .enc_data            (BISSC_1_enc_data                          ), //i
-    .sample_en           (1'b1                                      ), //i
-    .enc_clk             (mdcb_area_bissc_1_enc_clk                 ), //o
-    .enc_position_all    (mdcb_area_bissc_1_enc_position_all[40:0]  ), //o
-    .enc_position_out    (mdcb_area_bissc_1_enc_position_out[31:0]  ), //o
-    .erro_flag           (mdcb_area_bissc_1_erro_flag               ), //o
-    .warn_flag           (mdcb_area_bissc_1_warn_flag               ), //o
-    .crc_flag            (mdcb_area_bissc_1_crc_flag                )  //o
+  BISS_Position mdcb_area_adda_area_bissc_1 (
+    .clk                 (clk_80M                                             ), //i
+    .reset               (reset                                               ), //i
+    .enc_data            (BISSC_1_enc_data                                    ), //i
+    .sample_en           (1'b1                                                ), //i
+    .enc_clk             (mdcb_area_adda_area_bissc_1_enc_clk                 ), //o
+    .enc_position_all    (mdcb_area_adda_area_bissc_1_enc_position_all[40:0]  ), //o
+    .enc_position_out    (mdcb_area_adda_area_bissc_1_enc_position_out[31:0]  ), //o
+    .erro_flag           (mdcb_area_adda_area_bissc_1_erro_flag               ), //o
+    .warn_flag           (mdcb_area_adda_area_bissc_1_warn_flag               ), //o
+    .crc_flag            (mdcb_area_adda_area_bissc_1_crc_flag                )  //o
   );
-  BISS_Position mdcb_area_bissc_2 (
-    .clk                 (clk                                       ), //i
-    .reset               (reset                                     ), //i
-    .enc_data            (BISSC_2_enc_data                          ), //i
-    .sample_en           (1'b1                                      ), //i
-    .enc_clk             (mdcb_area_bissc_2_enc_clk                 ), //o
-    .enc_position_all    (mdcb_area_bissc_2_enc_position_all[40:0]  ), //o
-    .enc_position_out    (mdcb_area_bissc_2_enc_position_out[31:0]  ), //o
-    .erro_flag           (mdcb_area_bissc_2_erro_flag               ), //o
-    .warn_flag           (mdcb_area_bissc_2_warn_flag               ), //o
-    .crc_flag            (mdcb_area_bissc_2_crc_flag                )  //o
+  BISS_Position mdcb_area_adda_area_bissc_2 (
+    .clk                 (clk_80M                                             ), //i
+    .reset               (reset                                               ), //i
+    .enc_data            (BISSC_2_enc_data                                    ), //i
+    .sample_en           (1'b1                                                ), //i
+    .enc_clk             (mdcb_area_adda_area_bissc_2_enc_clk                 ), //o
+    .enc_position_all    (mdcb_area_adda_area_bissc_2_enc_position_all[40:0]  ), //o
+    .enc_position_out    (mdcb_area_adda_area_bissc_2_enc_position_out[31:0]  ), //o
+    .erro_flag           (mdcb_area_adda_area_bissc_2_erro_flag               ), //o
+    .warn_flag           (mdcb_area_adda_area_bissc_2_warn_flag               ), //o
+    .crc_flag            (mdcb_area_adda_area_bissc_2_crc_flag                )  //o
   );
-  BISS_Position mdcb_area_bissc_3 (
-    .clk                 (clk                                       ), //i
-    .reset               (reset                                     ), //i
-    .enc_data            (BISSC_3_enc_data                          ), //i
-    .sample_en           (1'b1                                      ), //i
-    .enc_clk             (mdcb_area_bissc_3_enc_clk                 ), //o
-    .enc_position_all    (mdcb_area_bissc_3_enc_position_all[40:0]  ), //o
-    .enc_position_out    (mdcb_area_bissc_3_enc_position_out[31:0]  ), //o
-    .erro_flag           (mdcb_area_bissc_3_erro_flag               ), //o
-    .warn_flag           (mdcb_area_bissc_3_warn_flag               ), //o
-    .crc_flag            (mdcb_area_bissc_3_crc_flag                )  //o
+  BISS_Position mdcb_area_adda_area_bissc_3 (
+    .clk                 (clk_80M                                             ), //i
+    .reset               (reset                                               ), //i
+    .enc_data            (BISSC_3_enc_data                                    ), //i
+    .sample_en           (1'b1                                                ), //i
+    .enc_clk             (mdcb_area_adda_area_bissc_3_enc_clk                 ), //o
+    .enc_position_all    (mdcb_area_adda_area_bissc_3_enc_position_all[40:0]  ), //o
+    .enc_position_out    (mdcb_area_adda_area_bissc_3_enc_position_out[31:0]  ), //o
+    .erro_flag           (mdcb_area_adda_area_bissc_3_erro_flag               ), //o
+    .warn_flag           (mdcb_area_adda_area_bissc_3_warn_flag               ), //o
+    .crc_flag            (mdcb_area_adda_area_bissc_3_crc_flag                )  //o
   );
-  Encoder_Top mdcb_area_encoder_0 (
-    .clk                                (clk                                             ), //i
-    .reset                              (reset                                           ), //i
-    .clk_160M                           (clk_160M                                        ), //i
-    .encoderinterface_encoder_aphase    (ENCODER_0_encoder_aphase                        ), //i
-    .encoderinterface_encoder_bphase    (ENCODER_0_encoder_bphase                        ), //i
-    .encoderinterface_encoder_iphase    (ENCODER_0_encoder_iphase                        ), //i
-    .encoder_position_out               (mdcb_area_encoder_0_encoder_position_out[31:0]  ), //o
-    .encoder_clr_in                     (mdcb_area_encoder_0_encoder_clr_in              ), //i
-    .encoder_iphase_out                 (mdcb_area_encoder_0_encoder_iphase_out          ), //o
-    .encoder_lock_pos                   (mdcb_area_encoder_0_encoder_lock_pos[31:0]      )  //o
+  Encoder_Top mdcb_area_adda_area_encoder_0 (
+    .clk                                (clk_80M                                                   ), //i
+    .reset                              (reset                                                     ), //i
+    .clk_160M                           (clk_160M                                                  ), //i
+    .encoderinterface_encoder_aphase    (ENCODER_0_encoder_aphase                                  ), //i
+    .encoderinterface_encoder_bphase    (ENCODER_0_encoder_bphase                                  ), //i
+    .encoderinterface_encoder_iphase    (ENCODER_0_encoder_iphase                                  ), //i
+    .encoder_position_out               (mdcb_area_adda_area_encoder_0_encoder_position_out[31:0]  ), //o
+    .encoder_clr_in                     (mdcb_area_adda_area_encoder_0_encoder_clr_in              ), //i
+    .encoder_iphase_out                 (mdcb_area_adda_area_encoder_0_encoder_iphase_out          ), //o
+    .encoder_lock_pos                   (mdcb_area_adda_area_encoder_0_encoder_lock_pos[31:0]      )  //o
   );
-  Encoder_Top mdcb_area_encoder_1 (
-    .clk                                (clk                                             ), //i
-    .reset                              (reset                                           ), //i
-    .clk_160M                           (clk_160M                                        ), //i
-    .encoderinterface_encoder_aphase    (ENCODER_1_encoder_aphase                        ), //i
-    .encoderinterface_encoder_bphase    (ENCODER_1_encoder_bphase                        ), //i
-    .encoderinterface_encoder_iphase    (ENCODER_1_encoder_iphase                        ), //i
-    .encoder_position_out               (mdcb_area_encoder_1_encoder_position_out[31:0]  ), //o
-    .encoder_clr_in                     (mdcb_area_encoder_1_encoder_clr_in              ), //i
-    .encoder_iphase_out                 (mdcb_area_encoder_1_encoder_iphase_out          ), //o
-    .encoder_lock_pos                   (mdcb_area_encoder_1_encoder_lock_pos[31:0]      )  //o
+  Encoder_Top mdcb_area_adda_area_encoder_1 (
+    .clk                                (clk_80M                                                   ), //i
+    .reset                              (reset                                                     ), //i
+    .clk_160M                           (clk_160M                                                  ), //i
+    .encoderinterface_encoder_aphase    (ENCODER_1_encoder_aphase                                  ), //i
+    .encoderinterface_encoder_bphase    (ENCODER_1_encoder_bphase                                  ), //i
+    .encoderinterface_encoder_iphase    (ENCODER_1_encoder_iphase                                  ), //i
+    .encoder_position_out               (mdcb_area_adda_area_encoder_1_encoder_position_out[31:0]  ), //o
+    .encoder_clr_in                     (mdcb_area_adda_area_encoder_1_encoder_clr_in              ), //i
+    .encoder_iphase_out                 (mdcb_area_adda_area_encoder_1_encoder_iphase_out          ), //o
+    .encoder_lock_pos                   (mdcb_area_adda_area_encoder_1_encoder_lock_pos[31:0]      )  //o
   );
-  Encoder_Top mdcb_area_encoder_2 (
-    .clk                                (clk                                             ), //i
-    .reset                              (reset                                           ), //i
-    .clk_160M                           (clk_160M                                        ), //i
-    .encoderinterface_encoder_aphase    (ENCODER_2_encoder_aphase                        ), //i
-    .encoderinterface_encoder_bphase    (ENCODER_2_encoder_bphase                        ), //i
-    .encoderinterface_encoder_iphase    (ENCODER_2_encoder_iphase                        ), //i
-    .encoder_position_out               (mdcb_area_encoder_2_encoder_position_out[31:0]  ), //o
-    .encoder_clr_in                     (mdcb_area_encoder_2_encoder_clr_in              ), //i
-    .encoder_iphase_out                 (mdcb_area_encoder_2_encoder_iphase_out          ), //o
-    .encoder_lock_pos                   (mdcb_area_encoder_2_encoder_lock_pos[31:0]      )  //o
+  Encoder_Top mdcb_area_adda_area_encoder_2 (
+    .clk                                (clk_80M                                                   ), //i
+    .reset                              (reset                                                     ), //i
+    .clk_160M                           (clk_160M                                                  ), //i
+    .encoderinterface_encoder_aphase    (ENCODER_2_encoder_aphase                                  ), //i
+    .encoderinterface_encoder_bphase    (ENCODER_2_encoder_bphase                                  ), //i
+    .encoderinterface_encoder_iphase    (ENCODER_2_encoder_iphase                                  ), //i
+    .encoder_position_out               (mdcb_area_adda_area_encoder_2_encoder_position_out[31:0]  ), //o
+    .encoder_clr_in                     (mdcb_area_adda_area_encoder_2_encoder_clr_in              ), //i
+    .encoder_iphase_out                 (mdcb_area_adda_area_encoder_2_encoder_iphase_out          ), //o
+    .encoder_lock_pos                   (mdcb_area_adda_area_encoder_2_encoder_lock_pos[31:0]      )  //o
   );
-  Encoder_Top mdcb_area_encoder_3 (
-    .clk                                (clk                                             ), //i
-    .reset                              (reset                                           ), //i
-    .clk_160M                           (clk_160M                                        ), //i
-    .encoderinterface_encoder_aphase    (ENCODER_3_encoder_aphase                        ), //i
-    .encoderinterface_encoder_bphase    (ENCODER_3_encoder_bphase                        ), //i
-    .encoderinterface_encoder_iphase    (ENCODER_3_encoder_iphase                        ), //i
-    .encoder_position_out               (mdcb_area_encoder_3_encoder_position_out[31:0]  ), //o
-    .encoder_clr_in                     (mdcb_area_encoder_3_encoder_clr_in              ), //i
-    .encoder_iphase_out                 (mdcb_area_encoder_3_encoder_iphase_out          ), //o
-    .encoder_lock_pos                   (mdcb_area_encoder_3_encoder_lock_pos[31:0]      )  //o
+  Encoder_Top mdcb_area_adda_area_encoder_3 (
+    .clk                                (clk_80M                                                   ), //i
+    .reset                              (reset                                                     ), //i
+    .clk_160M                           (clk_160M                                                  ), //i
+    .encoderinterface_encoder_aphase    (ENCODER_3_encoder_aphase                                  ), //i
+    .encoderinterface_encoder_bphase    (ENCODER_3_encoder_bphase                                  ), //i
+    .encoderinterface_encoder_iphase    (ENCODER_3_encoder_iphase                                  ), //i
+    .encoder_position_out               (mdcb_area_adda_area_encoder_3_encoder_position_out[31:0]  ), //o
+    .encoder_clr_in                     (mdcb_area_adda_area_encoder_3_encoder_clr_in              ), //i
+    .encoder_iphase_out                 (mdcb_area_adda_area_encoder_3_encoder_iphase_out          ), //o
+    .encoder_lock_pos                   (mdcb_area_adda_area_encoder_3_encoder_lock_pos[31:0]      )  //o
   );
   Mdcb_Ioin_Filter mdcb_area_mdcb_iofilter (
     .M_Fault_TTL           (M_Fault_TTL[7:0]                                 ), //i
@@ -546,82 +564,97 @@ module Mdcb_Top (
   assign output_valid = mdcb_area_mdcbtxsimplebus_output_valid;
   assign output_payload_last = mdcb_area_mdcbtxsimplebus_output_payload_last;
   assign output_payload_fragment = mdcb_area_mdcbtxsimplebus_output_payload_fragment;
-  assign AD5544_0_AD5544_SCLK = mdcb_area_ad5544_0_AD5544_SCLK;
-  assign AD5544_0_AD5544_CS = mdcb_area_ad5544_0_AD5544_CS;
-  assign AD5544_0_AD5544_LDAC = mdcb_area_ad5544_0_AD5544_LDAC;
-  assign AD5544_0_AD5544_RS = mdcb_area_ad5544_0_AD5544_RS;
-  assign AD5544_0_AD5544_SDIN = mdcb_area_ad5544_0_AD5544_SDIN;
-  assign AD5544_0_AD5544_MSB = mdcb_area_ad5544_0_AD5544_MSB;
-  assign mdcb_area_ad5544_0_AD5544_DATA_IN1 = mdcb_area_mdcbregif_AD5544_DATA_0_0;
-  assign mdcb_area_ad5544_0_AD5544_DATA_IN2 = mdcb_area_mdcbregif_AD5544_DATA_0_1;
-  assign mdcb_area_ad5544_0_AD5544_DATA_IN3 = mdcb_area_mdcbregif_AD5544_DATA_0_2;
-  assign mdcb_area_ad5544_0_AD5544_DATA_IN4 = mdcb_area_mdcbregif_AD5544_DATA_0_3;
-  assign AD5544_1_AD5544_SCLK = mdcb_area_ad5544_1_AD5544_SCLK;
-  assign AD5544_1_AD5544_CS = mdcb_area_ad5544_1_AD5544_CS;
-  assign AD5544_1_AD5544_LDAC = mdcb_area_ad5544_1_AD5544_LDAC;
-  assign AD5544_1_AD5544_RS = mdcb_area_ad5544_1_AD5544_RS;
-  assign AD5544_1_AD5544_SDIN = mdcb_area_ad5544_1_AD5544_SDIN;
-  assign AD5544_1_AD5544_MSB = mdcb_area_ad5544_1_AD5544_MSB;
-  assign mdcb_area_ad5544_1_AD5544_DATA_IN1 = mdcb_area_mdcbregif_AD5544_DATA_1_0;
-  assign mdcb_area_ad5544_1_AD5544_DATA_IN2 = mdcb_area_mdcbregif_AD5544_DATA_1_1;
-  assign mdcb_area_ad5544_1_AD5544_DATA_IN3 = mdcb_area_mdcbregif_AD5544_DATA_1_2;
-  assign mdcb_area_ad5544_1_AD5544_DATA_IN4 = mdcb_area_mdcbregif_AD5544_DATA_1_3;
-  assign AD5544_2_AD5544_SCLK = mdcb_area_ad5544_2_AD5544_SCLK;
-  assign AD5544_2_AD5544_CS = mdcb_area_ad5544_2_AD5544_CS;
-  assign AD5544_2_AD5544_LDAC = mdcb_area_ad5544_2_AD5544_LDAC;
-  assign AD5544_2_AD5544_RS = mdcb_area_ad5544_2_AD5544_RS;
-  assign AD5544_2_AD5544_SDIN = mdcb_area_ad5544_2_AD5544_SDIN;
-  assign AD5544_2_AD5544_MSB = mdcb_area_ad5544_2_AD5544_MSB;
-  assign mdcb_area_ad5544_2_AD5544_DATA_IN1 = mdcb_area_mdcbregif_AD5544_DATA_2_0;
-  assign mdcb_area_ad5544_2_AD5544_DATA_IN2 = mdcb_area_mdcbregif_AD5544_DATA_2_1;
-  assign mdcb_area_ad5544_2_AD5544_DATA_IN3 = mdcb_area_mdcbregif_AD5544_DATA_2_2;
-  assign mdcb_area_ad5544_2_AD5544_DATA_IN4 = mdcb_area_mdcbregif_AD5544_DATA_2_3;
-  assign AD7606_0_ad_cs = mdcb_area_ad7606_0_ad_cs;
-  assign AD7606_0_ad_os = mdcb_area_ad7606_0_ad_os;
-  assign AD7606_0_ad_rd = mdcb_area_ad7606_0_ad_rd;
-  assign AD7606_0_ad_convsta = mdcb_area_ad7606_0_ad_convsta;
-  assign AD7606_0_ad_convstb = mdcb_area_ad7606_0_ad_convstb;
-  assign AD7606_0_ad_reset = mdcb_area_ad7606_0_ad_reset;
-  assign AD7606_0_ad_range = mdcb_area_ad7606_0_ad_range;
-  assign mdcb_area_mdcbregif_AD7606_DATA_0_0 = mdcb_area_ad7606_0_ad_ch1_o;
-  assign mdcb_area_mdcbregif_AD7606_DATA_0_1 = mdcb_area_ad7606_0_ad_ch2_o;
-  assign mdcb_area_mdcbregif_AD7606_DATA_0_2 = mdcb_area_ad7606_0_ad_ch3_o;
-  assign mdcb_area_mdcbregif_AD7606_DATA_0_3 = mdcb_area_ad7606_0_ad_ch4_o;
-  assign mdcb_area_mdcbregif_AD7606_DATA_0_4 = mdcb_area_ad7606_0_ad_ch5_o;
-  assign mdcb_area_mdcbregif_AD7606_DATA_0_5 = mdcb_area_ad7606_0_ad_ch6_o;
-  assign mdcb_area_mdcbregif_AD7606_DATA_0_6 = mdcb_area_ad7606_0_ad_ch7_o;
-  assign mdcb_area_mdcbregif_AD7606_DATA_0_7 = mdcb_area_ad7606_0_ad_ch8_o;
-  assign AD7606_1_ad_cs = mdcb_area_ad7606_1_ad_cs;
-  assign AD7606_1_ad_os = mdcb_area_ad7606_1_ad_os;
-  assign AD7606_1_ad_rd = mdcb_area_ad7606_1_ad_rd;
-  assign AD7606_1_ad_convsta = mdcb_area_ad7606_1_ad_convsta;
-  assign AD7606_1_ad_convstb = mdcb_area_ad7606_1_ad_convstb;
-  assign AD7606_1_ad_reset = mdcb_area_ad7606_1_ad_reset;
-  assign AD7606_1_ad_range = mdcb_area_ad7606_1_ad_range;
-  assign mdcb_area_mdcbregif_AD7606_DATA_1_0 = mdcb_area_ad7606_1_ad_ch1_o;
-  assign mdcb_area_mdcbregif_AD7606_DATA_1_1 = mdcb_area_ad7606_1_ad_ch2_o;
-  assign mdcb_area_mdcbregif_AD7606_DATA_1_2 = mdcb_area_ad7606_1_ad_ch3_o;
-  assign mdcb_area_mdcbregif_AD7606_DATA_1_3 = mdcb_area_ad7606_1_ad_ch4_o;
-  assign mdcb_area_mdcbregif_AD7606_DATA_1_4 = mdcb_area_ad7606_1_ad_ch5_o;
-  assign mdcb_area_mdcbregif_AD7606_DATA_1_5 = mdcb_area_ad7606_1_ad_ch6_o;
-  assign mdcb_area_mdcbregif_AD7606_DATA_1_6 = mdcb_area_ad7606_1_ad_ch7_o;
-  assign mdcb_area_mdcbregif_AD7606_DATA_1_7 = mdcb_area_ad7606_1_ad_ch8_o;
-  assign BISSC_0_enc_clk = mdcb_area_bissc_0_enc_clk;
-  assign mdcb_area_mdcbregif_BissC_Pos_0 = mdcb_area_bissc_0_enc_position_out;
-  assign BISSC_1_enc_clk = mdcb_area_bissc_1_enc_clk;
-  assign mdcb_area_mdcbregif_BissC_Pos_1 = mdcb_area_bissc_1_enc_position_out;
-  assign BISSC_2_enc_clk = mdcb_area_bissc_2_enc_clk;
-  assign mdcb_area_mdcbregif_BissC_Pos_2 = mdcb_area_bissc_2_enc_position_out;
-  assign BISSC_3_enc_clk = mdcb_area_bissc_3_enc_clk;
-  assign mdcb_area_mdcbregif_BissC_Pos_3 = mdcb_area_bissc_3_enc_position_out;
-  assign mdcb_area_encoder_0_encoder_clr_in = mdcb_area_mdcbregif_Encoder_Clr_0[0];
-  assign mdcb_area_mdcbregif_Encoder_Zero_Keep_0 = mdcb_area_encoder_0_encoder_iphase_out;
-  assign mdcb_area_encoder_1_encoder_clr_in = mdcb_area_mdcbregif_Encoder_Clr_1_1[0];
-  assign mdcb_area_mdcbregif_Encoder_Zero_Keep_1 = mdcb_area_encoder_1_encoder_iphase_out;
-  assign mdcb_area_encoder_2_encoder_clr_in = mdcb_area_mdcbregif_Encoder_Clr_2_1[0];
-  assign mdcb_area_mdcbregif_Encoder_Zero_Keep_2 = mdcb_area_encoder_2_encoder_iphase_out;
-  assign mdcb_area_encoder_3_encoder_clr_in = mdcb_area_mdcbregif_Encoder_Clr_3_1[0];
-  assign mdcb_area_mdcbregif_Encoder_Zero_Keep_3 = mdcb_area_encoder_3_encoder_iphase_out;
+  assign AD5544_TRIGER_0 = mdcb_area_mdcbregif_AD5544_TRIGER_0;
+  assign AD5544_DATA_0_0 = mdcb_area_mdcbregif_AD5544_DATA_0_0;
+  assign AD5544_DATA_0_1 = mdcb_area_mdcbregif_AD5544_DATA_0_1;
+  assign AD5544_DATA_0_2 = mdcb_area_mdcbregif_AD5544_DATA_0_2;
+  assign AD5544_DATA_0_3 = mdcb_area_mdcbregif_AD5544_DATA_0_3;
+  assign AD5544_TRIGER_1 = mdcb_area_mdcbregif_AD5544_TRIGER_1;
+  assign AD5544_DATA_1_0 = mdcb_area_mdcbregif_AD5544_DATA_1_0;
+  assign AD5544_DATA_1_1 = mdcb_area_mdcbregif_AD5544_DATA_1_1;
+  assign AD5544_DATA_1_2 = mdcb_area_mdcbregif_AD5544_DATA_1_2;
+  assign AD5544_DATA_1_3 = mdcb_area_mdcbregif_AD5544_DATA_1_3;
+  assign AD5544_TRIGER_2 = mdcb_area_mdcbregif_AD5544_TRIGER_2;
+  assign AD5544_DATA_2_0 = mdcb_area_mdcbregif_AD5544_DATA_2_0;
+  assign AD5544_DATA_2_1 = mdcb_area_mdcbregif_AD5544_DATA_2_1;
+  assign AD5544_DATA_2_2 = mdcb_area_mdcbregif_AD5544_DATA_2_2;
+  assign AD5544_DATA_2_3 = mdcb_area_mdcbregif_AD5544_DATA_2_3;
+  assign AD5544_0_AD5544_SCLK = mdcb_area_adda_area_ad5544_0_AD5544_SCLK;
+  assign AD5544_0_AD5544_CS = mdcb_area_adda_area_ad5544_0_AD5544_CS;
+  assign AD5544_0_AD5544_LDAC = mdcb_area_adda_area_ad5544_0_AD5544_LDAC;
+  assign AD5544_0_AD5544_RS = mdcb_area_adda_area_ad5544_0_AD5544_RS;
+  assign AD5544_0_AD5544_SDIN = mdcb_area_adda_area_ad5544_0_AD5544_SDIN;
+  assign AD5544_0_AD5544_MSB = mdcb_area_adda_area_ad5544_0_AD5544_MSB;
+  assign mdcb_area_adda_area_ad5544_0_AD5544_DATA_IN1 = mdcb_area_mdcbregif_AD5544_DATA_0_0;
+  assign mdcb_area_adda_area_ad5544_0_AD5544_DATA_IN2 = mdcb_area_mdcbregif_AD5544_DATA_0_1;
+  assign mdcb_area_adda_area_ad5544_0_AD5544_DATA_IN3 = mdcb_area_mdcbregif_AD5544_DATA_0_2;
+  assign mdcb_area_adda_area_ad5544_0_AD5544_DATA_IN4 = mdcb_area_mdcbregif_AD5544_DATA_0_3;
+  assign AD5544_1_AD5544_SCLK = mdcb_area_adda_area_ad5544_1_AD5544_SCLK;
+  assign AD5544_1_AD5544_CS = mdcb_area_adda_area_ad5544_1_AD5544_CS;
+  assign AD5544_1_AD5544_LDAC = mdcb_area_adda_area_ad5544_1_AD5544_LDAC;
+  assign AD5544_1_AD5544_RS = mdcb_area_adda_area_ad5544_1_AD5544_RS;
+  assign AD5544_1_AD5544_SDIN = mdcb_area_adda_area_ad5544_1_AD5544_SDIN;
+  assign AD5544_1_AD5544_MSB = mdcb_area_adda_area_ad5544_1_AD5544_MSB;
+  assign mdcb_area_adda_area_ad5544_1_AD5544_DATA_IN1 = mdcb_area_mdcbregif_AD5544_DATA_1_0;
+  assign mdcb_area_adda_area_ad5544_1_AD5544_DATA_IN2 = mdcb_area_mdcbregif_AD5544_DATA_1_1;
+  assign mdcb_area_adda_area_ad5544_1_AD5544_DATA_IN3 = mdcb_area_mdcbregif_AD5544_DATA_1_2;
+  assign mdcb_area_adda_area_ad5544_1_AD5544_DATA_IN4 = mdcb_area_mdcbregif_AD5544_DATA_1_3;
+  assign AD5544_2_AD5544_SCLK = mdcb_area_adda_area_ad5544_2_AD5544_SCLK;
+  assign AD5544_2_AD5544_CS = mdcb_area_adda_area_ad5544_2_AD5544_CS;
+  assign AD5544_2_AD5544_LDAC = mdcb_area_adda_area_ad5544_2_AD5544_LDAC;
+  assign AD5544_2_AD5544_RS = mdcb_area_adda_area_ad5544_2_AD5544_RS;
+  assign AD5544_2_AD5544_SDIN = mdcb_area_adda_area_ad5544_2_AD5544_SDIN;
+  assign AD5544_2_AD5544_MSB = mdcb_area_adda_area_ad5544_2_AD5544_MSB;
+  assign mdcb_area_adda_area_ad5544_2_AD5544_DATA_IN1 = mdcb_area_mdcbregif_AD5544_DATA_2_0;
+  assign mdcb_area_adda_area_ad5544_2_AD5544_DATA_IN2 = mdcb_area_mdcbregif_AD5544_DATA_2_1;
+  assign mdcb_area_adda_area_ad5544_2_AD5544_DATA_IN3 = mdcb_area_mdcbregif_AD5544_DATA_2_2;
+  assign mdcb_area_adda_area_ad5544_2_AD5544_DATA_IN4 = mdcb_area_mdcbregif_AD5544_DATA_2_3;
+  assign AD7606_0_ad_cs = mdcb_area_adda_area_ad7606_0_ad_cs;
+  assign AD7606_0_ad_os = mdcb_area_adda_area_ad7606_0_ad_os;
+  assign AD7606_0_ad_rd = mdcb_area_adda_area_ad7606_0_ad_rd;
+  assign AD7606_0_ad_convsta = mdcb_area_adda_area_ad7606_0_ad_convsta;
+  assign AD7606_0_ad_convstb = mdcb_area_adda_area_ad7606_0_ad_convstb;
+  assign AD7606_0_ad_reset = mdcb_area_adda_area_ad7606_0_ad_reset;
+  assign AD7606_0_ad_range = mdcb_area_adda_area_ad7606_0_ad_range;
+  assign mdcb_area_mdcbregif_AD7606_DATA_0_0 = mdcb_area_adda_area_ad7606_0_ad_ch1_o;
+  assign mdcb_area_mdcbregif_AD7606_DATA_0_1 = mdcb_area_adda_area_ad7606_0_ad_ch2_o;
+  assign mdcb_area_mdcbregif_AD7606_DATA_0_2 = mdcb_area_adda_area_ad7606_0_ad_ch3_o;
+  assign mdcb_area_mdcbregif_AD7606_DATA_0_3 = mdcb_area_adda_area_ad7606_0_ad_ch4_o;
+  assign mdcb_area_mdcbregif_AD7606_DATA_0_4 = mdcb_area_adda_area_ad7606_0_ad_ch5_o;
+  assign mdcb_area_mdcbregif_AD7606_DATA_0_5 = mdcb_area_adda_area_ad7606_0_ad_ch6_o;
+  assign mdcb_area_mdcbregif_AD7606_DATA_0_6 = mdcb_area_adda_area_ad7606_0_ad_ch7_o;
+  assign mdcb_area_mdcbregif_AD7606_DATA_0_7 = mdcb_area_adda_area_ad7606_0_ad_ch8_o;
+  assign AD7606_1_ad_cs = mdcb_area_adda_area_ad7606_1_ad_cs;
+  assign AD7606_1_ad_os = mdcb_area_adda_area_ad7606_1_ad_os;
+  assign AD7606_1_ad_rd = mdcb_area_adda_area_ad7606_1_ad_rd;
+  assign AD7606_1_ad_convsta = mdcb_area_adda_area_ad7606_1_ad_convsta;
+  assign AD7606_1_ad_convstb = mdcb_area_adda_area_ad7606_1_ad_convstb;
+  assign AD7606_1_ad_reset = mdcb_area_adda_area_ad7606_1_ad_reset;
+  assign AD7606_1_ad_range = mdcb_area_adda_area_ad7606_1_ad_range;
+  assign mdcb_area_mdcbregif_AD7606_DATA_1_0 = mdcb_area_adda_area_ad7606_1_ad_ch1_o;
+  assign mdcb_area_mdcbregif_AD7606_DATA_1_1 = mdcb_area_adda_area_ad7606_1_ad_ch2_o;
+  assign mdcb_area_mdcbregif_AD7606_DATA_1_2 = mdcb_area_adda_area_ad7606_1_ad_ch3_o;
+  assign mdcb_area_mdcbregif_AD7606_DATA_1_3 = mdcb_area_adda_area_ad7606_1_ad_ch4_o;
+  assign mdcb_area_mdcbregif_AD7606_DATA_1_4 = mdcb_area_adda_area_ad7606_1_ad_ch5_o;
+  assign mdcb_area_mdcbregif_AD7606_DATA_1_5 = mdcb_area_adda_area_ad7606_1_ad_ch6_o;
+  assign mdcb_area_mdcbregif_AD7606_DATA_1_6 = mdcb_area_adda_area_ad7606_1_ad_ch7_o;
+  assign mdcb_area_mdcbregif_AD7606_DATA_1_7 = mdcb_area_adda_area_ad7606_1_ad_ch8_o;
+  assign BISSC_0_enc_clk = mdcb_area_adda_area_bissc_0_enc_clk;
+  assign mdcb_area_mdcbregif_BissC_Pos_0 = mdcb_area_adda_area_bissc_0_enc_position_out;
+  assign BISSC_1_enc_clk = mdcb_area_adda_area_bissc_1_enc_clk;
+  assign mdcb_area_mdcbregif_BissC_Pos_1 = mdcb_area_adda_area_bissc_1_enc_position_out;
+  assign BISSC_2_enc_clk = mdcb_area_adda_area_bissc_2_enc_clk;
+  assign mdcb_area_mdcbregif_BissC_Pos_2 = mdcb_area_adda_area_bissc_2_enc_position_out;
+  assign BISSC_3_enc_clk = mdcb_area_adda_area_bissc_3_enc_clk;
+  assign mdcb_area_mdcbregif_BissC_Pos_3 = mdcb_area_adda_area_bissc_3_enc_position_out;
+  assign mdcb_area_adda_area_encoder_0_encoder_clr_in = mdcb_area_mdcbregif_Encoder_Clr_0[0];
+  assign mdcb_area_mdcbregif_Encoder_Zero_Keep_0 = mdcb_area_adda_area_encoder_0_encoder_iphase_out;
+  assign mdcb_area_adda_area_encoder_1_encoder_clr_in = mdcb_area_mdcbregif_Encoder_Clr_1_1[0];
+  assign mdcb_area_mdcbregif_Encoder_Zero_Keep_1 = mdcb_area_adda_area_encoder_1_encoder_iphase_out;
+  assign mdcb_area_adda_area_encoder_2_encoder_clr_in = mdcb_area_mdcbregif_Encoder_Clr_2_1[0];
+  assign mdcb_area_mdcbregif_Encoder_Zero_Keep_2 = mdcb_area_adda_area_encoder_2_encoder_iphase_out;
+  assign mdcb_area_adda_area_encoder_3_encoder_clr_in = mdcb_area_mdcbregif_Encoder_Clr_3_1[0];
+  assign mdcb_area_mdcbregif_Encoder_Zero_Keep_3 = mdcb_area_adda_area_encoder_3_encoder_iphase_out;
   assign M_EN_TTL = mdcb_area_mdcbregif_M_EN_TTL;
   assign FPGA_DO = mdcb_area_mdcbregif_FPGA_DO;
 
@@ -912,33 +945,34 @@ module Encoder_Top (
 );
 
   wire                encoderarea_Encoder_resetn;
-  wire                encoderarea_encoder_clr_encoder_clr_out;
-  wire                encoderarea_zerosensor_zerosensor_out;
+  wire                encoder_Clr_4_encoder_clr_out;
+  wire                zeroSensor_4_zerosensor_out;
   wire       [31:0]   encoderarea_Encoder_encoder_position_out;
   wire                encoderarea_Encoder_enc_udn;
   wire                encoderarea_Encoder_enc_cas;
   wire                encoderarea_Encoder_count_enable;
   wire                encoderarea_Encoder_count_direction;
-  reg        [31:0]   encoderarea_encoder_lock_pos;
+  reg                 encoderarea_encoder_iphase;
+  (* async_reg = "true" *) reg        [31:0]   _zz_encoder_lock_pos;
   reg                 encoderinterface_encoder_iphase_regNext;
-  wire                when_Encoder_l110;
+  wire                when_Encoder_l122;
 
-  Encoder_Clr encoderarea_encoder_clr (
-    .encoder_clr_in     (encoder_clr_in                           ), //i
-    .encoder_clr_out    (encoderarea_encoder_clr_encoder_clr_out  ), //o
-    .clk                (clk                                      ), //i
-    .reset              (reset                                    )  //i
+  Encoder_Clr encoder_Clr_4 (
+    .encoder_clr_in     (encoder_clr_in                 ), //i
+    .encoder_clr_out    (encoder_Clr_4_encoder_clr_out  ), //o
+    .clk                (clk                            ), //i
+    .reset              (reset                          )  //i
   );
-  ZeroSensor encoderarea_zerosensor (
-    .zerosensor_in     (encoderinterface_encoder_iphase        ), //i
-    .zerosensor_out    (encoderarea_zerosensor_zerosensor_out  ), //o
-    .clk               (clk                                    ), //i
-    .reset             (reset                                  )  //i
+  ZeroSensor zeroSensor_4 (
+    .zerosensor_in     (encoderinterface_encoder_iphase  ), //i
+    .zerosensor_out    (zeroSensor_4_zerosensor_out      ), //o
+    .clk               (clk                              ), //i
+    .reset             (reset                            )  //i
   );
   encoder encoderarea_Encoder (
     .clk80m                  (clk                                             ), //i
     .resetn                  (encoderarea_Encoder_resetn                      ), //i
-    .enc_rstn                (encoderarea_encoder_clr_encoder_clr_out         ), //i
+    .enc_rstn                (encoder_clr_in                                  ), //i
     .enca                    (encoderinterface_encoder_aphase                 ), //i
     .encb                    (encoderinterface_encoder_bphase                 ), //i
     .encx                    (1'b0                                            ), //i
@@ -949,19 +983,21 @@ module Encoder_Top (
     .count_direction         (encoderarea_Encoder_count_direction             ), //o
     .clk160m                 (clk_160M                                        )  //i
   );
-  assign encoder_iphase_out = encoderarea_zerosensor_zerosensor_out;
+  assign encoder_iphase_out = zeroSensor_4_zerosensor_out;
   assign encoderarea_Encoder_resetn = (! reset);
   assign encoder_position_out = encoderarea_Encoder_encoder_position_out;
-  assign when_Encoder_l110 = (encoderinterface_encoder_iphase && (! encoderinterface_encoder_iphase_regNext));
-  assign encoder_lock_pos = encoderarea_encoder_lock_pos;
+  assign when_Encoder_l122 = (encoderinterface_encoder_iphase && (! encoderinterface_encoder_iphase_regNext));
+  assign encoder_lock_pos = _zz_encoder_lock_pos;
   always @(posedge clk or posedge reset) begin
     if(reset) begin
-      encoderarea_encoder_lock_pos <= 32'h0;
+      encoderarea_encoder_iphase <= 1'b0;
+      _zz_encoder_lock_pos <= 32'h0;
     end else begin
-      if(when_Encoder_l110) begin
-        encoderarea_encoder_lock_pos <= encoderarea_Encoder_encoder_position_out;
+      encoderarea_encoder_iphase <= encoderinterface_encoder_iphase;
+      if(when_Encoder_l122) begin
+        _zz_encoder_lock_pos <= encoderarea_Encoder_encoder_position_out;
       end else begin
-        encoderarea_encoder_lock_pos <= encoderarea_encoder_lock_pos;
+        _zz_encoder_lock_pos <= _zz_encoder_lock_pos;
       end
     end
   end
@@ -974,73 +1010,73 @@ module Encoder_Top (
 endmodule
 
 module Mdcb_Regif (
-  input      [7:0]    simplebus_RADDR,
-  output     [31:0]   simplebus_RDATA,
-  input               simplebus_RENABLE,
-  input      [7:0]    simplebus_WADDR,
-  input      [31:0]   simplebus_WDATA,
-  input               simplebus_WENABLE,
-  input      [31:0]   slaveid,
-  input      [7:0]    M_Fault_TTL_Filter,
-  input      [15:0]   FPGA_DI_Filter,
-  output reg [7:0]    M_EN_TTL,
-  output reg [15:0]   FPGA_DO,
-  output     [15:0]   AD5544_DATA_0_0,
-  output     [15:0]   AD5544_DATA_0_1,
-  output     [15:0]   AD5544_DATA_0_2,
-  output     [15:0]   AD5544_DATA_0_3,
-  output     [15:0]   AD5544_DATA_1_0,
-  output     [15:0]   AD5544_DATA_1_1,
-  output     [15:0]   AD5544_DATA_1_2,
-  output     [15:0]   AD5544_DATA_1_3,
-  output     [15:0]   AD5544_DATA_2_0,
-  output     [15:0]   AD5544_DATA_2_1,
-  output     [15:0]   AD5544_DATA_2_2,
-  output     [15:0]   AD5544_DATA_2_3,
-  output              AD5544_TRIGER_0,
-  output              AD5544_TRIGER_1,
-  output              AD5544_TRIGER_2,
-  input      [15:0]   AD7606_DATA_0_0,
-  input      [15:0]   AD7606_DATA_0_1,
-  input      [15:0]   AD7606_DATA_0_2,
-  input      [15:0]   AD7606_DATA_0_3,
-  input      [15:0]   AD7606_DATA_0_4,
-  input      [15:0]   AD7606_DATA_0_5,
-  input      [15:0]   AD7606_DATA_0_6,
-  input      [15:0]   AD7606_DATA_0_7,
-  input      [15:0]   AD7606_DATA_1_0,
-  input      [15:0]   AD7606_DATA_1_1,
-  input      [15:0]   AD7606_DATA_1_2,
-  input      [15:0]   AD7606_DATA_1_3,
-  input      [15:0]   AD7606_DATA_1_4,
-  input      [15:0]   AD7606_DATA_1_5,
-  input      [15:0]   AD7606_DATA_1_6,
-  input      [15:0]   AD7606_DATA_1_7,
-  input      [31:0]   BissC_Pos_0,
-  input      [31:0]   BissC_Pos_1,
-  input      [31:0]   BissC_Pos_2,
-  input      [31:0]   BissC_Pos_3,
-  input      [31:0]   Encoder_Pos_0,
-  input      [31:0]   Encoder_Pos_1,
-  input      [31:0]   Encoder_Pos_2,
-  input      [31:0]   Encoder_Pos_3,
-  input      [0:0]    Encoder_Zero_Keep_0,
-  input      [0:0]    Encoder_Zero_Keep_1,
-  input      [0:0]    Encoder_Zero_Keep_2,
-  input      [0:0]    Encoder_Zero_Keep_3,
-  output     [0:0]    Encoder_Clr_0,
-  output     [0:0]    Encoder_Clr_1_1,
-  output     [0:0]    Encoder_Clr_2_1,
-  output     [0:0]    Encoder_Clr_3_1,
-  input      [31:0]   Encoder_lock_Pos_0,
-  input      [31:0]   Encoder_lock_Pos_1,
-  input      [31:0]   Encoder_lock_Pos_2,
-  input      [31:0]   Encoder_lock_Pos_3,
+  (* keep = "true" *) input      [8:0]    simplebus_RADDR,
+  (* keep = "true" *) output     [31:0]   simplebus_RDATA,
+  (* keep = "true" *) input               simplebus_RENABLE,
+  (* keep = "true" *) input      [8:0]    simplebus_WADDR,
+  (* keep = "true" *) input      [31:0]   simplebus_WDATA,
+  (* keep = "true" *) input               simplebus_WENABLE,
+  (* keep = "true" *) input      [31:0]   slaveid,
+  (* keep = "true" *) input      [7:0]    M_Fault_TTL_Filter,
+  (* keep = "true" *) input      [15:0]   FPGA_DI_Filter,
+  (* keep = "true" *) output reg [7:0]    M_EN_TTL,
+  (* keep = "true" *) output reg [15:0]   FPGA_DO,
+  (* keep = "true" *) output     [15:0]   AD5544_DATA_0_0,
+  (* keep = "true" *) output     [15:0]   AD5544_DATA_0_1,
+  (* keep = "true" *) output     [15:0]   AD5544_DATA_0_2,
+  (* keep = "true" *) output     [15:0]   AD5544_DATA_0_3,
+  (* keep = "true" *) output     [15:0]   AD5544_DATA_1_0,
+  (* keep = "true" *) output     [15:0]   AD5544_DATA_1_1,
+  (* keep = "true" *) output     [15:0]   AD5544_DATA_1_2,
+  (* keep = "true" *) output     [15:0]   AD5544_DATA_1_3,
+  (* keep = "true" *) output     [15:0]   AD5544_DATA_2_0,
+  (* keep = "true" *) output     [15:0]   AD5544_DATA_2_1,
+  (* keep = "true" *) output     [15:0]   AD5544_DATA_2_2,
+  (* keep = "true" *) output     [15:0]   AD5544_DATA_2_3,
+  (* keep = "true" *) output              AD5544_TRIGER_0,
+  (* keep = "true" *) output              AD5544_TRIGER_1,
+  (* keep = "true" *) output              AD5544_TRIGER_2,
+  (* keep = "true" *) input      [15:0]   AD7606_DATA_0_0,
+  (* keep = "true" *) input      [15:0]   AD7606_DATA_0_1,
+  (* keep = "true" *) input      [15:0]   AD7606_DATA_0_2,
+  (* keep = "true" *) input      [15:0]   AD7606_DATA_0_3,
+  (* keep = "true" *) input      [15:0]   AD7606_DATA_0_4,
+  (* keep = "true" *) input      [15:0]   AD7606_DATA_0_5,
+  (* keep = "true" *) input      [15:0]   AD7606_DATA_0_6,
+  (* keep = "true" *) input      [15:0]   AD7606_DATA_0_7,
+  (* keep = "true" *) input      [15:0]   AD7606_DATA_1_0,
+  (* keep = "true" *) input      [15:0]   AD7606_DATA_1_1,
+  (* keep = "true" *) input      [15:0]   AD7606_DATA_1_2,
+  (* keep = "true" *) input      [15:0]   AD7606_DATA_1_3,
+  (* keep = "true" *) input      [15:0]   AD7606_DATA_1_4,
+  (* keep = "true" *) input      [15:0]   AD7606_DATA_1_5,
+  (* keep = "true" *) input      [15:0]   AD7606_DATA_1_6,
+  (* keep = "true" *) input      [15:0]   AD7606_DATA_1_7,
+  (* keep = "true" *) input      [31:0]   BissC_Pos_0,
+  (* keep = "true" *) input      [31:0]   BissC_Pos_1,
+  (* keep = "true" *) input      [31:0]   BissC_Pos_2,
+  (* keep = "true" *) input      [31:0]   BissC_Pos_3,
+  (* keep = "true" *) input      [31:0]   Encoder_Pos_0,
+  (* keep = "true" *) input      [31:0]   Encoder_Pos_1,
+  (* keep = "true" *) input      [31:0]   Encoder_Pos_2,
+  (* keep = "true" *) input      [31:0]   Encoder_Pos_3,
+  (* keep = "true" *) input      [0:0]    Encoder_Zero_Keep_0,
+  (* keep = "true" *) input      [0:0]    Encoder_Zero_Keep_1,
+  (* keep = "true" *) input      [0:0]    Encoder_Zero_Keep_2,
+  (* keep = "true" *) input      [0:0]    Encoder_Zero_Keep_3,
+  (* keep = "true" *) output     [0:0]    Encoder_Clr_0,
+  (* keep = "true" *) output     [0:0]    Encoder_Clr_1_1,
+  (* keep = "true" *) output     [0:0]    Encoder_Clr_2_1,
+  (* keep = "true" *) output     [0:0]    Encoder_Clr_3_1,
+  (* keep = "true" *) input      [31:0]   Encoder_lock_Pos_0,
+  (* keep = "true" *) input      [31:0]   Encoder_lock_Pos_1,
+  (* keep = "true" *) input      [31:0]   Encoder_lock_Pos_2,
+  (* keep = "true" *) input      [31:0]   Encoder_lock_Pos_3,
   input               clk,
   input               reset
 );
 
-  wire       [15:0]   _zz_busslave_readData;
+  wire       [1:0]    _zz_busslave_readData;
   wire       [0:0]    _zz_busslave_readData_1;
   wire       [10:0]   _zz_busslave_readData_2;
   reg                 busslave_readError;
@@ -1048,35 +1084,18 @@ module Mdcb_Regif (
   wire       [31:0]   HEADER;
   wire       [31:0]   Slaveid_1;
   wire       [31:0]   VERSION;
-  wire       [0:0]    Encoder1_ZeroSingle;
-  wire       [0:0]    Encoder2_ZeroSingle;
-  wire       [0:0]    Encoder3_ZeroSingle;
-  wire       [0:0]    Encoder4_ZeroSingle;
-  wire       [31:0]   Encoder1_Pos;
-  wire       [31:0]   Encoder2_Pos;
-  wire       [31:0]   Encoder3_Pos;
-  wire       [31:0]   Encoder4_Pos;
-  wire                when_RegInst_l153;
-  reg        [0:0]    Encoder1_Pos_Clr;
-  reg        [0:0]    Encoder2_Pos_Clr;
-  reg        [0:0]    Encoder3_Pos_Clr;
-  reg        [0:0]    Encoder4_Pos_Clr;
-  wire       [31:0]   Encoder1_Lock_Pos;
-  wire       [31:0]   Encoder2_Lock_Pos;
-  wire       [31:0]   Encoder3_Lock_Pos;
-  wire       [31:0]   Encoder4_Lock_Pos;
-  wire                when_RegInst_l153_1;
-  reg        [31:0]   Reserve1;
-  wire                when_RegInst_l153_2;
-  reg        [31:0]   Reserve2;
-  wire                when_RegInst_l153_3;
-  reg        [31:0]   Reserve3;
-  wire                when_RegInst_l153_4;
-  reg        [31:0]   Reserve4;
   wire       [31:0]   BissC1_Pos;
   wire       [31:0]   BissC2_Pos;
   wire       [31:0]   BissC3_Pos;
   wire       [31:0]   BissC4_Pos;
+  wire                when_RegInst_l153;
+  reg        [31:0]   Reserve1;
+  wire                when_RegInst_l153_1;
+  reg        [31:0]   Reserve2;
+  wire                when_RegInst_l153_2;
+  reg        [31:0]   Reserve3;
+  wire                when_RegInst_l153_3;
+  reg        [31:0]   Reserve4;
   wire       [0:0]    TTL1_Single;
   wire       [0:0]    TTL2_Single;
   wire       [0:0]    TTL3_Single;
@@ -1101,14 +1120,18 @@ module Mdcb_Regif (
   wire       [0:0]    Opt14_Single;
   wire       [0:0]    Opt15_Single;
   wire       [0:0]    Opt16_Single;
-  wire                when_RegInst_l153_5;
-  reg        [31:0]   Reserve5;
-  wire                when_RegInst_l153_6;
-  reg        [31:0]   Reserve6;
-  wire                when_RegInst_l153_7;
-  reg        [31:0]   Reserve7;
-  wire                when_RegInst_l153_8;
-  reg        [31:0]   Reserve8;
+  wire       [0:0]    Encoder1_ZeroSingle;
+  wire       [0:0]    Encoder2_ZeroSingle;
+  wire       [0:0]    Encoder3_ZeroSingle;
+  wire       [0:0]    Encoder4_ZeroSingle;
+  wire       [31:0]   Encoder1_Pos;
+  wire       [31:0]   Encoder2_Pos;
+  wire       [31:0]   Encoder3_Pos;
+  wire       [31:0]   Encoder4_Pos;
+  wire       [31:0]   Encoder1_Lock_Pos;
+  wire       [31:0]   Encoder2_Lock_Pos;
+  wire       [31:0]   Encoder3_Lock_Pos;
+  wire       [31:0]   Encoder4_Lock_Pos;
   wire       [15:0]   AD7606_Datatemp1;
   wire       [15:0]   AD7606_Datatemp2;
   wire       [15:0]   AD7606_Datatemp3;
@@ -1125,18 +1148,10 @@ module Mdcb_Regif (
   wire       [15:0]   AD7606_Datatemp14;
   wire       [15:0]   AD7606_Datatemp15;
   wire       [15:0]   AD7606_Datatemp16;
-  wire                when_RegInst_l153_9;
-  reg        [31:0]   Reserve9;
-  wire                when_RegInst_l153_10;
-  reg        [31:0]   Reserve10;
-  wire                when_RegInst_l153_11;
-  reg        [31:0]   Reserve11;
-  wire                when_RegInst_l153_12;
-  reg        [31:0]   Reserve12;
-  wire                when_RegInst_l153_13;
+  wire                when_RegInst_l153_4;
   reg        [15:0]   AD5544_Datatemp1;
   reg        [15:0]   AD5544_Datatemp2;
-  wire                when_RegInst_l153_14;
+  wire                when_RegInst_l153_5;
   reg        [15:0]   AD5544_Datatemp3;
   reg        [15:0]   AD5544_Datatemp4;
   wire                AD5544_Triger1_Temp;
@@ -1146,10 +1161,10 @@ module Mdcb_Regif (
   reg                 AD5544_Triger1_Temp_delay_1_2;
   reg                 AD5544_Triger1_Temp_delay_2_1;
   reg                 AD5544_Triger1_Temp_delay_3;
-  wire                when_RegInst_l153_15;
+  wire                when_RegInst_l153_6;
   reg        [15:0]   AD5544_Datatemp5;
   reg        [15:0]   AD5544_Datatemp6;
-  wire                when_RegInst_l153_16;
+  wire                when_RegInst_l153_7;
   reg        [15:0]   AD5544_Datatemp7;
   reg        [15:0]   AD5544_Datatemp8;
   wire                AD5544_Triger2_Temp;
@@ -1159,10 +1174,10 @@ module Mdcb_Regif (
   reg                 AD5544_Triger2_Temp_delay_1_2;
   reg                 AD5544_Triger2_Temp_delay_2_1;
   reg                 AD5544_Triger2_Temp_delay_3;
-  wire                when_RegInst_l153_17;
+  wire                when_RegInst_l153_8;
   reg        [15:0]   AD5544_Datatemp9;
   reg        [15:0]   AD5544_Datatemp10;
-  wire                when_RegInst_l153_18;
+  wire                when_RegInst_l153_9;
   reg        [15:0]   AD5544_Datatemp11;
   reg        [15:0]   AD5544_Datatemp12;
   wire                AD5544_Triger3_Temp;
@@ -1172,16 +1187,25 @@ module Mdcb_Regif (
   reg                 AD5544_Triger3_Temp_delay_1_2;
   reg                 AD5544_Triger3_Temp_delay_2_1;
   reg                 AD5544_Triger3_Temp_delay_3;
-  wire                when_RegInst_l153_19;
+  wire                when_RegInst_l153_10;
   reg        [0:0]    M_EN_TTL1;
   reg        [0:0]    M_EN_TTL2;
   reg        [0:0]    M_EN_TTL3;
   reg        [0:0]    M_EN_TTL4;
+  wire                when_RegInst_l153_11;
   reg        [0:0]    M_EN_TTL5;
   reg        [0:0]    M_EN_TTL6;
   reg        [0:0]    M_EN_TTL7;
   reg        [0:0]    M_EN_TTL8;
-  wire                when_RegInst_l153_20;
+  wire                when_RegInst_l153_12;
+  reg        [31:0]   Emergency;
+  wire                when_RegInst_l153_13;
+  reg        [31:0]   Project_ID;
+  wire                when_RegInst_l153_14;
+  reg        [31:0]   Config_Encoder;
+  wire                when_RegInst_l153_15;
+  reg        [31:0]   Valve;
+  wire                when_RegInst_l153_16;
   reg        [0:0]    FPGA_DO_0;
   reg        [0:0]    FPGA_DO_1;
   reg        [0:0]    FPGA_DO_2;
@@ -1198,39 +1222,27 @@ module Mdcb_Regif (
   reg        [0:0]    FPGA_DO_13;
   reg        [0:0]    FPGA_DO_14;
   reg        [0:0]    FPGA_DO_15;
+  wire                when_RegInst_l153_17;
+  reg        [0:0]    Encoder1_Pos_Clr;
+  reg        [0:0]    Encoder2_Pos_Clr;
+  reg        [0:0]    Encoder3_Pos_Clr;
+  reg        [0:0]    Encoder4_Pos_Clr;
 
-  assign _zz_busslave_readData = {1'b0,{Opt8_Single,{1'b0,{Opt7_Single,{1'b0,{Opt6_Single,{1'b0,{Opt5_Single,{1'b0,{Opt4_Single,{1'b0,{Opt3_Single,{1'b0,{Opt2_Single,{1'b0,Opt1_Single}}}}}}}}}}}}}}};
+  assign _zz_busslave_readData = {Opt1_Single,1'b0};
   assign _zz_busslave_readData_1 = 1'b0;
   assign _zz_busslave_readData_2 = {FPGA_DO_5,{1'b0,{FPGA_DO_4,{1'b0,{FPGA_DO_3,{1'b0,{FPGA_DO_2,{1'b0,{FPGA_DO_1,{1'b0,FPGA_DO_0}}}}}}}}}};
   assign simplebus_RDATA = busslave_readData;
   assign HEADER = 32'h00f1f2f3;
   assign Slaveid_1 = slaveid;
-  assign VERSION = 32'h20220114;
-  assign Encoder1_ZeroSingle = Encoder_Zero_Keep_0;
-  assign Encoder2_ZeroSingle = Encoder_Zero_Keep_1;
-  assign Encoder3_ZeroSingle = Encoder_Zero_Keep_2;
-  assign Encoder4_ZeroSingle = Encoder_Zero_Keep_3;
-  assign Encoder1_Pos = Encoder_Pos_0;
-  assign Encoder2_Pos = Encoder_Pos_1;
-  assign Encoder3_Pos = Encoder_Pos_2;
-  assign Encoder4_Pos = Encoder_Pos_3;
-  assign when_RegInst_l153 = ((simplebus_WADDR == 8'h20) && simplebus_WENABLE);
-  assign Encoder_Clr_0 = (Encoder1_Pos_Clr & when_RegInst_l153);
-  assign Encoder_Clr_1_1 = (Encoder2_Pos_Clr & when_RegInst_l153);
-  assign Encoder_Clr_2_1 = (Encoder3_Pos_Clr & when_RegInst_l153);
-  assign Encoder_Clr_3_1 = (Encoder4_Pos_Clr & when_RegInst_l153);
-  assign Encoder1_Lock_Pos = Encoder_lock_Pos_0;
-  assign Encoder2_Lock_Pos = Encoder_lock_Pos_1;
-  assign Encoder3_Lock_Pos = Encoder_lock_Pos_2;
-  assign Encoder4_Lock_Pos = Encoder_lock_Pos_3;
-  assign when_RegInst_l153_1 = ((simplebus_WADDR == 8'h34) && simplebus_WENABLE);
-  assign when_RegInst_l153_2 = ((simplebus_WADDR == 8'h38) && simplebus_WENABLE);
-  assign when_RegInst_l153_3 = ((simplebus_WADDR == 8'h3c) && simplebus_WENABLE);
-  assign when_RegInst_l153_4 = ((simplebus_WADDR == 8'h40) && simplebus_WENABLE);
+  assign VERSION = 32'h07e6060f;
   assign BissC1_Pos = BissC_Pos_0;
   assign BissC2_Pos = BissC_Pos_1;
   assign BissC3_Pos = BissC_Pos_2;
   assign BissC4_Pos = BissC_Pos_3;
+  assign when_RegInst_l153 = ((simplebus_WADDR == 9'h01c) && simplebus_WENABLE);
+  assign when_RegInst_l153_1 = ((simplebus_WADDR == 9'h020) && simplebus_WENABLE);
+  assign when_RegInst_l153_2 = ((simplebus_WADDR == 9'h024) && simplebus_WENABLE);
+  assign when_RegInst_l153_3 = ((simplebus_WADDR == 9'h028) && simplebus_WENABLE);
   assign TTL1_Single = M_Fault_TTL_Filter[0];
   assign TTL2_Single = M_Fault_TTL_Filter[1];
   assign TTL3_Single = M_Fault_TTL_Filter[2];
@@ -1255,10 +1267,18 @@ module Mdcb_Regif (
   assign Opt14_Single = FPGA_DI_Filter[13];
   assign Opt15_Single = FPGA_DI_Filter[14];
   assign Opt16_Single = FPGA_DI_Filter[15];
-  assign when_RegInst_l153_5 = ((simplebus_WADDR == 8'h5c) && simplebus_WENABLE);
-  assign when_RegInst_l153_6 = ((simplebus_WADDR == 8'h60) && simplebus_WENABLE);
-  assign when_RegInst_l153_7 = ((simplebus_WADDR == 8'h64) && simplebus_WENABLE);
-  assign when_RegInst_l153_8 = ((simplebus_WADDR == 8'h68) && simplebus_WENABLE);
+  assign Encoder1_ZeroSingle = Encoder_Zero_Keep_0;
+  assign Encoder2_ZeroSingle = Encoder_Zero_Keep_1;
+  assign Encoder3_ZeroSingle = Encoder_Zero_Keep_2;
+  assign Encoder4_ZeroSingle = Encoder_Zero_Keep_3;
+  assign Encoder1_Pos = Encoder_Pos_0;
+  assign Encoder2_Pos = Encoder_Pos_1;
+  assign Encoder3_Pos = Encoder_Pos_2;
+  assign Encoder4_Pos = Encoder_Pos_3;
+  assign Encoder1_Lock_Pos = Encoder_lock_Pos_0;
+  assign Encoder2_Lock_Pos = Encoder_lock_Pos_1;
+  assign Encoder3_Lock_Pos = Encoder_lock_Pos_2;
+  assign Encoder4_Lock_Pos = Encoder_lock_Pos_3;
   assign AD7606_Datatemp1 = AD7606_DATA_0_0;
   assign AD7606_Datatemp2 = AD7606_DATA_0_1;
   assign AD7606_Datatemp3 = AD7606_DATA_0_2;
@@ -1275,35 +1295,31 @@ module Mdcb_Regif (
   assign AD7606_Datatemp14 = AD7606_DATA_1_5;
   assign AD7606_Datatemp15 = AD7606_DATA_1_6;
   assign AD7606_Datatemp16 = AD7606_DATA_1_7;
-  assign when_RegInst_l153_9 = ((simplebus_WADDR == 8'h8c) && simplebus_WENABLE);
-  assign when_RegInst_l153_10 = ((simplebus_WADDR == 8'h90) && simplebus_WENABLE);
-  assign when_RegInst_l153_11 = ((simplebus_WADDR == 8'h94) && simplebus_WENABLE);
-  assign when_RegInst_l153_12 = ((simplebus_WADDR == 8'h98) && simplebus_WENABLE);
-  assign when_RegInst_l153_13 = ((simplebus_WADDR == 8'h9c) && simplebus_WENABLE);
+  assign when_RegInst_l153_4 = ((simplebus_WADDR == 9'h10c) && simplebus_WENABLE);
   assign AD5544_DATA_0_0 = AD5544_Datatemp1;
   assign AD5544_DATA_0_1 = AD5544_Datatemp2;
-  assign when_RegInst_l153_14 = ((simplebus_WADDR == 8'ha0) && simplebus_WENABLE);
+  assign when_RegInst_l153_5 = ((simplebus_WADDR == 9'h110) && simplebus_WENABLE);
   assign AD5544_DATA_0_2 = AD5544_Datatemp3;
   assign AD5544_DATA_0_3 = AD5544_Datatemp4;
-  assign AD5544_Triger1_Temp = (when_RegInst_l153_13 || when_RegInst_l153_14);
+  assign AD5544_Triger1_Temp = (when_RegInst_l153_4 || when_RegInst_l153_5);
   assign AD5544_TRIGER_0 = (((AD5544_Triger1_Temp || AD5544_Triger1_Temp_delay_1) || AD5544_Triger1_Temp_delay_2) || AD5544_Triger1_Temp_delay_3);
-  assign when_RegInst_l153_15 = ((simplebus_WADDR == 8'ha4) && simplebus_WENABLE);
+  assign when_RegInst_l153_6 = ((simplebus_WADDR == 9'h114) && simplebus_WENABLE);
   assign AD5544_DATA_1_0 = AD5544_Datatemp5;
   assign AD5544_DATA_1_1 = AD5544_Datatemp6;
-  assign when_RegInst_l153_16 = ((simplebus_WADDR == 8'ha8) && simplebus_WENABLE);
+  assign when_RegInst_l153_7 = ((simplebus_WADDR == 9'h118) && simplebus_WENABLE);
   assign AD5544_DATA_1_2 = AD5544_Datatemp7;
   assign AD5544_DATA_1_3 = AD5544_Datatemp8;
-  assign AD5544_Triger2_Temp = (when_RegInst_l153_15 || when_RegInst_l153_16);
+  assign AD5544_Triger2_Temp = (when_RegInst_l153_6 || when_RegInst_l153_7);
   assign AD5544_TRIGER_1 = (((AD5544_Triger2_Temp || AD5544_Triger2_Temp_delay_1) || AD5544_Triger2_Temp_delay_2) || AD5544_Triger2_Temp_delay_3);
-  assign when_RegInst_l153_17 = ((simplebus_WADDR == 8'hac) && simplebus_WENABLE);
+  assign when_RegInst_l153_8 = ((simplebus_WADDR == 9'h11c) && simplebus_WENABLE);
   assign AD5544_DATA_2_0 = AD5544_Datatemp9;
   assign AD5544_DATA_2_1 = AD5544_Datatemp10;
-  assign when_RegInst_l153_18 = ((simplebus_WADDR == 8'hb0) && simplebus_WENABLE);
+  assign when_RegInst_l153_9 = ((simplebus_WADDR == 9'h120) && simplebus_WENABLE);
   assign AD5544_DATA_2_2 = AD5544_Datatemp11;
   assign AD5544_DATA_2_3 = AD5544_Datatemp12;
-  assign AD5544_Triger3_Temp = (when_RegInst_l153_17 || when_RegInst_l153_18);
+  assign AD5544_Triger3_Temp = (when_RegInst_l153_8 || when_RegInst_l153_9);
   assign AD5544_TRIGER_2 = (((AD5544_Triger3_Temp || AD5544_Triger3_Temp_delay_1) || AD5544_Triger3_Temp_delay_2) || AD5544_Triger3_Temp_delay_3);
-  assign when_RegInst_l153_19 = ((simplebus_WADDR == 8'hb4) && simplebus_WENABLE);
+  assign when_RegInst_l153_10 = ((simplebus_WADDR == 9'h124) && simplebus_WENABLE);
   always @(*) begin
     M_EN_TTL[0] = M_EN_TTL1[0];
     M_EN_TTL[1] = M_EN_TTL2[0];
@@ -1315,7 +1331,12 @@ module Mdcb_Regif (
     M_EN_TTL[7] = M_EN_TTL8[0];
   end
 
-  assign when_RegInst_l153_20 = ((simplebus_WADDR == 8'hb8) && simplebus_WENABLE);
+  assign when_RegInst_l153_11 = ((simplebus_WADDR == 9'h128) && simplebus_WENABLE);
+  assign when_RegInst_l153_12 = ((simplebus_WADDR == 9'h12c) && simplebus_WENABLE);
+  assign when_RegInst_l153_13 = ((simplebus_WADDR == 9'h130) && simplebus_WENABLE);
+  assign when_RegInst_l153_14 = ((simplebus_WADDR == 9'h134) && simplebus_WENABLE);
+  assign when_RegInst_l153_15 = ((simplebus_WADDR == 9'h138) && simplebus_WENABLE);
+  assign when_RegInst_l153_16 = ((simplebus_WADDR == 9'h13c) && simplebus_WENABLE);
   always @(*) begin
     FPGA_DO[0] = FPGA_DO_0[0];
     FPGA_DO[1] = FPGA_DO_1[0];
@@ -1335,26 +1356,19 @@ module Mdcb_Regif (
     FPGA_DO[15] = FPGA_DO_15[0];
   end
 
+  assign when_RegInst_l153_17 = ((simplebus_WADDR == 9'h140) && simplebus_WENABLE);
+  assign Encoder_Clr_0 = (Encoder1_Pos_Clr & when_RegInst_l153_17);
+  assign Encoder_Clr_1_1 = (Encoder2_Pos_Clr & when_RegInst_l153_17);
+  assign Encoder_Clr_2_1 = (Encoder3_Pos_Clr & when_RegInst_l153_17);
+  assign Encoder_Clr_3_1 = (Encoder4_Pos_Clr & when_RegInst_l153_17);
   always @(posedge clk or posedge reset) begin
     if(reset) begin
       busslave_readError <= 1'b0;
       busslave_readData <= 32'h0;
-      Encoder1_Pos_Clr <= 1'b0;
-      Encoder2_Pos_Clr <= 1'b0;
-      Encoder3_Pos_Clr <= 1'b0;
-      Encoder4_Pos_Clr <= 1'b0;
       Reserve1 <= 32'h00000001;
       Reserve2 <= 32'h00000002;
       Reserve3 <= 32'h00000003;
       Reserve4 <= 32'h00000004;
-      Reserve5 <= 32'h00000001;
-      Reserve6 <= 32'h00000002;
-      Reserve7 <= 32'h00000003;
-      Reserve8 <= 32'h00000004;
-      Reserve9 <= 32'h00000001;
-      Reserve10 <= 32'h00000002;
-      Reserve11 <= 32'h00000003;
-      Reserve12 <= 32'h00000004;
       AD5544_Datatemp1 <= 16'h8000;
       AD5544_Datatemp2 <= 16'h8000;
       AD5544_Datatemp3 <= 16'h8000;
@@ -1375,6 +1389,10 @@ module Mdcb_Regif (
       M_EN_TTL6 <= 1'b0;
       M_EN_TTL7 <= 1'b0;
       M_EN_TTL8 <= 1'b0;
+      Emergency <= 32'h0;
+      Project_ID <= 32'h0;
+      Config_Encoder <= 32'h0;
+      Valve <= 32'h0;
       FPGA_DO_0 <= 1'b0;
       FPGA_DO_1 <= 1'b0;
       FPGA_DO_2 <= 1'b0;
@@ -1391,351 +1409,331 @@ module Mdcb_Regif (
       FPGA_DO_13 <= 1'b0;
       FPGA_DO_14 <= 1'b0;
       FPGA_DO_15 <= 1'b0;
+      Encoder1_Pos_Clr <= 1'b0;
+      Encoder2_Pos_Clr <= 1'b0;
+      Encoder3_Pos_Clr <= 1'b0;
+      Encoder4_Pos_Clr <= 1'b0;
     end else begin
       if(when_RegInst_l153) begin
-        Encoder1_Pos_Clr <= simplebus_WDATA[0 : 0];
-      end
-      if(when_RegInst_l153) begin
-        Encoder2_Pos_Clr <= simplebus_WDATA[8 : 8];
-      end
-      if(when_RegInst_l153) begin
-        Encoder3_Pos_Clr <= simplebus_WDATA[16 : 16];
-      end
-      if(when_RegInst_l153) begin
-        Encoder4_Pos_Clr <= simplebus_WDATA[24 : 24];
-      end
-      if(when_RegInst_l153_1) begin
         Reserve1 <= simplebus_WDATA[31 : 0];
       end
-      if(when_RegInst_l153_2) begin
+      if(when_RegInst_l153_1) begin
         Reserve2 <= simplebus_WDATA[31 : 0];
       end
-      if(when_RegInst_l153_3) begin
+      if(when_RegInst_l153_2) begin
         Reserve3 <= simplebus_WDATA[31 : 0];
       end
-      if(when_RegInst_l153_4) begin
+      if(when_RegInst_l153_3) begin
         Reserve4 <= simplebus_WDATA[31 : 0];
       end
-      if(when_RegInst_l153_5) begin
-        Reserve5 <= simplebus_WDATA[31 : 0];
-      end
-      if(when_RegInst_l153_6) begin
-        Reserve6 <= simplebus_WDATA[31 : 0];
-      end
-      if(when_RegInst_l153_7) begin
-        Reserve7 <= simplebus_WDATA[31 : 0];
-      end
-      if(when_RegInst_l153_8) begin
-        Reserve8 <= simplebus_WDATA[31 : 0];
-      end
-      if(when_RegInst_l153_9) begin
-        Reserve9 <= simplebus_WDATA[31 : 0];
-      end
-      if(when_RegInst_l153_10) begin
-        Reserve10 <= simplebus_WDATA[31 : 0];
-      end
-      if(when_RegInst_l153_11) begin
-        Reserve11 <= simplebus_WDATA[31 : 0];
-      end
-      if(when_RegInst_l153_12) begin
-        Reserve12 <= simplebus_WDATA[31 : 0];
-      end
-      if(when_RegInst_l153_13) begin
+      if(when_RegInst_l153_4) begin
         AD5544_Datatemp1 <= simplebus_WDATA[15 : 0];
       end
-      if(when_RegInst_l153_13) begin
+      if(when_RegInst_l153_4) begin
         AD5544_Datatemp2 <= simplebus_WDATA[31 : 16];
       end
-      if(when_RegInst_l153_14) begin
+      if(when_RegInst_l153_5) begin
         AD5544_Datatemp3 <= simplebus_WDATA[15 : 0];
       end
-      if(when_RegInst_l153_14) begin
+      if(when_RegInst_l153_5) begin
         AD5544_Datatemp4 <= simplebus_WDATA[31 : 16];
       end
-      if(when_RegInst_l153_15) begin
+      if(when_RegInst_l153_6) begin
         AD5544_Datatemp5 <= simplebus_WDATA[15 : 0];
       end
-      if(when_RegInst_l153_15) begin
+      if(when_RegInst_l153_6) begin
         AD5544_Datatemp6 <= simplebus_WDATA[31 : 16];
       end
-      if(when_RegInst_l153_16) begin
+      if(when_RegInst_l153_7) begin
         AD5544_Datatemp7 <= simplebus_WDATA[15 : 0];
       end
-      if(when_RegInst_l153_16) begin
+      if(when_RegInst_l153_7) begin
         AD5544_Datatemp8 <= simplebus_WDATA[31 : 16];
       end
-      if(when_RegInst_l153_17) begin
+      if(when_RegInst_l153_8) begin
         AD5544_Datatemp9 <= simplebus_WDATA[15 : 0];
       end
-      if(when_RegInst_l153_17) begin
+      if(when_RegInst_l153_8) begin
         AD5544_Datatemp10 <= simplebus_WDATA[31 : 16];
       end
-      if(when_RegInst_l153_18) begin
+      if(when_RegInst_l153_9) begin
         AD5544_Datatemp11 <= simplebus_WDATA[15 : 0];
       end
-      if(when_RegInst_l153_18) begin
+      if(when_RegInst_l153_9) begin
         AD5544_Datatemp12 <= simplebus_WDATA[31 : 16];
       end
-      if(when_RegInst_l153_19) begin
-        M_EN_TTL1 <= simplebus_WDATA[0 : 0];
+      if(when_RegInst_l153_10) begin
+        M_EN_TTL1 <= simplebus_WDATA[2 : 2];
       end
-      if(when_RegInst_l153_19) begin
-        M_EN_TTL2 <= simplebus_WDATA[4 : 4];
+      if(when_RegInst_l153_10) begin
+        M_EN_TTL2 <= simplebus_WDATA[10 : 10];
       end
-      if(when_RegInst_l153_19) begin
-        M_EN_TTL3 <= simplebus_WDATA[8 : 8];
+      if(when_RegInst_l153_10) begin
+        M_EN_TTL3 <= simplebus_WDATA[18 : 18];
       end
-      if(when_RegInst_l153_19) begin
-        M_EN_TTL4 <= simplebus_WDATA[12 : 12];
+      if(when_RegInst_l153_10) begin
+        M_EN_TTL4 <= simplebus_WDATA[26 : 26];
       end
-      if(when_RegInst_l153_19) begin
-        M_EN_TTL5 <= simplebus_WDATA[16 : 16];
+      if(when_RegInst_l153_11) begin
+        M_EN_TTL5 <= simplebus_WDATA[2 : 2];
       end
-      if(when_RegInst_l153_19) begin
-        M_EN_TTL6 <= simplebus_WDATA[20 : 20];
+      if(when_RegInst_l153_11) begin
+        M_EN_TTL6 <= simplebus_WDATA[10 : 10];
       end
-      if(when_RegInst_l153_19) begin
-        M_EN_TTL7 <= simplebus_WDATA[24 : 24];
+      if(when_RegInst_l153_11) begin
+        M_EN_TTL7 <= simplebus_WDATA[18 : 18];
       end
-      if(when_RegInst_l153_19) begin
-        M_EN_TTL8 <= simplebus_WDATA[28 : 28];
+      if(when_RegInst_l153_11) begin
+        M_EN_TTL8 <= simplebus_WDATA[26 : 26];
       end
-      if(when_RegInst_l153_20) begin
+      if(when_RegInst_l153_12) begin
+        Emergency <= simplebus_WDATA[31 : 0];
+      end
+      if(when_RegInst_l153_13) begin
+        Project_ID <= simplebus_WDATA[31 : 0];
+      end
+      if(when_RegInst_l153_14) begin
+        Config_Encoder <= simplebus_WDATA[31 : 0];
+      end
+      if(when_RegInst_l153_15) begin
+        Valve <= simplebus_WDATA[31 : 0];
+      end
+      if(when_RegInst_l153_16) begin
         FPGA_DO_0 <= simplebus_WDATA[0 : 0];
       end
-      if(when_RegInst_l153_20) begin
+      if(when_RegInst_l153_16) begin
         FPGA_DO_1 <= simplebus_WDATA[2 : 2];
       end
-      if(when_RegInst_l153_20) begin
+      if(when_RegInst_l153_16) begin
         FPGA_DO_2 <= simplebus_WDATA[4 : 4];
       end
-      if(when_RegInst_l153_20) begin
+      if(when_RegInst_l153_16) begin
         FPGA_DO_3 <= simplebus_WDATA[6 : 6];
       end
-      if(when_RegInst_l153_20) begin
+      if(when_RegInst_l153_16) begin
         FPGA_DO_4 <= simplebus_WDATA[8 : 8];
       end
-      if(when_RegInst_l153_20) begin
+      if(when_RegInst_l153_16) begin
         FPGA_DO_5 <= simplebus_WDATA[10 : 10];
       end
-      if(when_RegInst_l153_20) begin
+      if(when_RegInst_l153_16) begin
         FPGA_DO_6 <= simplebus_WDATA[12 : 12];
       end
-      if(when_RegInst_l153_20) begin
+      if(when_RegInst_l153_16) begin
         FPGA_DO_7 <= simplebus_WDATA[14 : 14];
       end
-      if(when_RegInst_l153_20) begin
+      if(when_RegInst_l153_16) begin
         FPGA_DO_8 <= simplebus_WDATA[16 : 16];
       end
-      if(when_RegInst_l153_20) begin
+      if(when_RegInst_l153_16) begin
         FPGA_DO_9 <= simplebus_WDATA[18 : 18];
       end
-      if(when_RegInst_l153_20) begin
+      if(when_RegInst_l153_16) begin
         FPGA_DO_10 <= simplebus_WDATA[20 : 20];
       end
-      if(when_RegInst_l153_20) begin
+      if(when_RegInst_l153_16) begin
         FPGA_DO_11 <= simplebus_WDATA[22 : 22];
       end
-      if(when_RegInst_l153_20) begin
+      if(when_RegInst_l153_16) begin
         FPGA_DO_12 <= simplebus_WDATA[24 : 24];
       end
-      if(when_RegInst_l153_20) begin
+      if(when_RegInst_l153_16) begin
         FPGA_DO_13 <= simplebus_WDATA[26 : 26];
       end
-      if(when_RegInst_l153_20) begin
+      if(when_RegInst_l153_16) begin
         FPGA_DO_14 <= simplebus_WDATA[28 : 28];
       end
-      if(when_RegInst_l153_20) begin
+      if(when_RegInst_l153_16) begin
         FPGA_DO_15 <= simplebus_WDATA[30 : 30];
+      end
+      if(when_RegInst_l153_17) begin
+        Encoder1_Pos_Clr <= simplebus_WDATA[0 : 0];
+      end
+      if(when_RegInst_l153_17) begin
+        Encoder2_Pos_Clr <= simplebus_WDATA[8 : 8];
+      end
+      if(when_RegInst_l153_17) begin
+        Encoder3_Pos_Clr <= simplebus_WDATA[16 : 16];
+      end
+      if(when_RegInst_l153_17) begin
+        Encoder4_Pos_Clr <= simplebus_WDATA[24 : 24];
       end
       if(simplebus_RENABLE) begin
         case(simplebus_RADDR)
-          8'h0 : begin
+          9'h0 : begin
             busslave_readData <= HEADER;
             busslave_readError <= 1'b0;
           end
-          8'h04 : begin
+          9'h004 : begin
             busslave_readData <= Slaveid_1;
             busslave_readError <= 1'b0;
           end
-          8'h08 : begin
+          9'h008 : begin
             busslave_readData <= VERSION;
             busslave_readError <= 1'b0;
           end
-          8'h0c : begin
-            busslave_readData <= {7'h0,{Encoder4_ZeroSingle,{7'h0,{Encoder3_ZeroSingle,{7'h0,{Encoder2_ZeroSingle,{7'h0,Encoder1_ZeroSingle}}}}}}};
-            busslave_readError <= 1'b0;
-          end
-          8'h10 : begin
-            busslave_readData <= Encoder1_Pos;
-            busslave_readError <= 1'b0;
-          end
-          8'h14 : begin
-            busslave_readData <= Encoder2_Pos;
-            busslave_readError <= 1'b0;
-          end
-          8'h18 : begin
-            busslave_readData <= Encoder3_Pos;
-            busslave_readError <= 1'b0;
-          end
-          8'h1c : begin
-            busslave_readData <= Encoder4_Pos;
-            busslave_readError <= 1'b0;
-          end
-          8'h20 : begin
-            busslave_readData <= {7'h0,{Encoder4_Pos_Clr,{7'h0,{Encoder3_Pos_Clr,{7'h0,{Encoder2_Pos_Clr,{7'h0,Encoder1_Pos_Clr}}}}}}};
-            busslave_readError <= 1'b0;
-          end
-          8'h24 : begin
-            busslave_readData <= Encoder1_Lock_Pos;
-            busslave_readError <= 1'b0;
-          end
-          8'h28 : begin
-            busslave_readData <= Encoder2_Lock_Pos;
-            busslave_readError <= 1'b0;
-          end
-          8'h2c : begin
-            busslave_readData <= Encoder3_Lock_Pos;
-            busslave_readError <= 1'b0;
-          end
-          8'h30 : begin
-            busslave_readData <= Encoder4_Lock_Pos;
-            busslave_readError <= 1'b0;
-          end
-          8'h34 : begin
-            busslave_readData <= Reserve1;
-            busslave_readError <= 1'b0;
-          end
-          8'h38 : begin
-            busslave_readData <= Reserve2;
-            busslave_readError <= 1'b0;
-          end
-          8'h3c : begin
-            busslave_readData <= Reserve3;
-            busslave_readError <= 1'b0;
-          end
-          8'h40 : begin
-            busslave_readData <= Reserve4;
-            busslave_readError <= 1'b0;
-          end
-          8'h44 : begin
+          9'h00c : begin
             busslave_readData <= BissC1_Pos;
             busslave_readError <= 1'b0;
           end
-          8'h48 : begin
+          9'h010 : begin
             busslave_readData <= BissC2_Pos;
             busslave_readError <= 1'b0;
           end
-          8'h4c : begin
+          9'h014 : begin
             busslave_readData <= BissC3_Pos;
             busslave_readError <= 1'b0;
           end
-          8'h50 : begin
+          9'h018 : begin
             busslave_readData <= BissC4_Pos;
             busslave_readError <= 1'b0;
           end
-          8'h54 : begin
-            busslave_readData <= {3'b000,{TTL8_Single,{3'b000,{TTL7_Single,{3'b000,{TTL6_Single,{3'b000,{TTL5_Single,{3'b000,{TTL4_Single,{3'b000,{TTL3_Single,{3'b000,{TTL2_Single,{3'b000,TTL1_Single}}}}}}}}}}}}}}};
+          9'h01c : begin
+            busslave_readData <= Reserve1;
             busslave_readError <= 1'b0;
           end
-          8'h58 : begin
-            busslave_readData <= {1'b0,{Opt16_Single,{1'b0,{Opt15_Single,{1'b0,{Opt14_Single,{1'b0,{Opt13_Single,{1'b0,{Opt12_Single,{1'b0,{Opt11_Single,{1'b0,{Opt10_Single,{1'b0,{Opt9_Single,_zz_busslave_readData}}}}}}}}}}}}}}}};
+          9'h020 : begin
+            busslave_readData <= Reserve2;
             busslave_readError <= 1'b0;
           end
-          8'h5c : begin
-            busslave_readData <= Reserve5;
+          9'h024 : begin
+            busslave_readData <= Reserve3;
             busslave_readError <= 1'b0;
           end
-          8'h60 : begin
-            busslave_readData <= Reserve6;
+          9'h028 : begin
+            busslave_readData <= Reserve4;
             busslave_readError <= 1'b0;
           end
-          8'h64 : begin
-            busslave_readData <= Reserve7;
+          9'h02c : begin
+            busslave_readData <= {23'h0,{TTL8_Single,{TTL7_Single,{TTL6_Single,{TTL5_Single,{TTL4_Single,{TTL3_Single,{TTL2_Single,{TTL1_Single,1'b0}}}}}}}}};
             busslave_readError <= 1'b0;
           end
-          8'h68 : begin
-            busslave_readData <= Reserve8;
+          9'h030 : begin
+            busslave_readData <= {15'h0,{Opt16_Single,{Opt15_Single,{Opt14_Single,{Opt13_Single,{Opt12_Single,{Opt11_Single,{Opt10_Single,{Opt9_Single,{Opt8_Single,{Opt7_Single,{Opt6_Single,{Opt5_Single,{Opt4_Single,{Opt3_Single,{Opt2_Single,_zz_busslave_readData}}}}}}}}}}}}}}}};
             busslave_readError <= 1'b0;
           end
-          8'h6c : begin
+          9'h034 : begin
+            busslave_readData <= {7'h0,{Encoder4_ZeroSingle,{7'h0,{Encoder3_ZeroSingle,{7'h0,{Encoder2_ZeroSingle,{7'h0,Encoder1_ZeroSingle}}}}}}};
+            busslave_readError <= 1'b0;
+          end
+          9'h038 : begin
+            busslave_readData <= Encoder1_Pos;
+            busslave_readError <= 1'b0;
+          end
+          9'h03c : begin
+            busslave_readData <= Encoder2_Pos;
+            busslave_readError <= 1'b0;
+          end
+          9'h040 : begin
+            busslave_readData <= Encoder3_Pos;
+            busslave_readError <= 1'b0;
+          end
+          9'h044 : begin
+            busslave_readData <= Encoder4_Pos;
+            busslave_readError <= 1'b0;
+          end
+          9'h048 : begin
+            busslave_readData <= Encoder1_Lock_Pos;
+            busslave_readError <= 1'b0;
+          end
+          9'h04c : begin
+            busslave_readData <= Encoder2_Lock_Pos;
+            busslave_readError <= 1'b0;
+          end
+          9'h050 : begin
+            busslave_readData <= Encoder3_Lock_Pos;
+            busslave_readError <= 1'b0;
+          end
+          9'h054 : begin
+            busslave_readData <= Encoder4_Lock_Pos;
+            busslave_readError <= 1'b0;
+          end
+          9'h058 : begin
             busslave_readData <= {AD7606_Datatemp2,AD7606_Datatemp1};
             busslave_readError <= 1'b0;
           end
-          8'h70 : begin
+          9'h05c : begin
             busslave_readData <= {AD7606_Datatemp4,AD7606_Datatemp3};
             busslave_readError <= 1'b0;
           end
-          8'h74 : begin
+          9'h060 : begin
             busslave_readData <= {AD7606_Datatemp6,AD7606_Datatemp5};
             busslave_readError <= 1'b0;
           end
-          8'h78 : begin
+          9'h064 : begin
             busslave_readData <= {AD7606_Datatemp8,AD7606_Datatemp7};
             busslave_readError <= 1'b0;
           end
-          8'h7c : begin
+          9'h068 : begin
             busslave_readData <= {AD7606_Datatemp10,AD7606_Datatemp9};
             busslave_readError <= 1'b0;
           end
-          8'h80 : begin
+          9'h06c : begin
             busslave_readData <= {AD7606_Datatemp12,AD7606_Datatemp11};
             busslave_readError <= 1'b0;
           end
-          8'h84 : begin
+          9'h070 : begin
             busslave_readData <= {AD7606_Datatemp14,AD7606_Datatemp13};
             busslave_readError <= 1'b0;
           end
-          8'h88 : begin
+          9'h074 : begin
             busslave_readData <= {AD7606_Datatemp16,AD7606_Datatemp15};
             busslave_readError <= 1'b0;
           end
-          8'h8c : begin
-            busslave_readData <= Reserve9;
-            busslave_readError <= 1'b0;
-          end
-          8'h90 : begin
-            busslave_readData <= Reserve10;
-            busslave_readError <= 1'b0;
-          end
-          8'h94 : begin
-            busslave_readData <= Reserve11;
-            busslave_readError <= 1'b0;
-          end
-          8'h98 : begin
-            busslave_readData <= Reserve12;
-            busslave_readError <= 1'b0;
-          end
-          8'h9c : begin
+          9'h10c : begin
             busslave_readData <= {AD5544_Datatemp2,AD5544_Datatemp1};
             busslave_readError <= 1'b0;
           end
-          8'ha0 : begin
+          9'h110 : begin
             busslave_readData <= {AD5544_Datatemp4,AD5544_Datatemp3};
             busslave_readError <= 1'b0;
           end
-          8'ha4 : begin
+          9'h114 : begin
             busslave_readData <= {AD5544_Datatemp6,AD5544_Datatemp5};
             busslave_readError <= 1'b0;
           end
-          8'ha8 : begin
+          9'h118 : begin
             busslave_readData <= {AD5544_Datatemp8,AD5544_Datatemp7};
             busslave_readError <= 1'b0;
           end
-          8'hac : begin
+          9'h11c : begin
             busslave_readData <= {AD5544_Datatemp10,AD5544_Datatemp9};
             busslave_readError <= 1'b0;
           end
-          8'hb0 : begin
+          9'h120 : begin
             busslave_readData <= {AD5544_Datatemp12,AD5544_Datatemp11};
             busslave_readError <= 1'b0;
           end
-          8'hb4 : begin
-            busslave_readData <= {3'b000,{M_EN_TTL8,{3'b000,{M_EN_TTL7,{3'b000,{M_EN_TTL6,{3'b000,{M_EN_TTL5,{3'b000,{M_EN_TTL4,{3'b000,{M_EN_TTL3,{3'b000,{M_EN_TTL2,{3'b000,M_EN_TTL1}}}}}}}}}}}}}}};
+          9'h124 : begin
+            busslave_readData <= {5'h0,{M_EN_TTL4,{7'h0,{M_EN_TTL3,{7'h0,{M_EN_TTL2,{7'h0,{M_EN_TTL1,2'b00}}}}}}}};
             busslave_readError <= 1'b0;
           end
-          8'hb8 : begin
+          9'h128 : begin
+            busslave_readData <= {5'h0,{M_EN_TTL8,{7'h0,{M_EN_TTL7,{7'h0,{M_EN_TTL6,{7'h0,{M_EN_TTL5,2'b00}}}}}}}};
+            busslave_readError <= 1'b0;
+          end
+          9'h12c : begin
+            busslave_readData <= Emergency;
+            busslave_readError <= 1'b0;
+          end
+          9'h130 : begin
+            busslave_readData <= Project_ID;
+            busslave_readError <= 1'b0;
+          end
+          9'h134 : begin
+            busslave_readData <= Config_Encoder;
+            busslave_readError <= 1'b0;
+          end
+          9'h138 : begin
+            busslave_readData <= Valve;
+            busslave_readError <= 1'b0;
+          end
+          9'h13c : begin
             busslave_readData <= {1'b0,{FPGA_DO_15,{1'b0,{FPGA_DO_14,{1'b0,{FPGA_DO_13,{1'b0,{FPGA_DO_12,{1'b0,{FPGA_DO_11,{1'b0,{FPGA_DO_10,{1'b0,{FPGA_DO_9,{1'b0,{FPGA_DO_8,{1'b0,{FPGA_DO_7,{1'b0,{FPGA_DO_6,{_zz_busslave_readData_1,_zz_busslave_readData_2}}}}}}}}}}}}}}}}}}}}};
+            busslave_readError <= 1'b0;
+          end
+          9'h140 : begin
+            busslave_readData <= {7'h0,{Encoder4_Pos_Clr,{7'h0,{Encoder3_Pos_Clr,{7'h0,{Encoder2_Pos_Clr,{7'h0,Encoder1_Pos_Clr}}}}}}};
             busslave_readError <= 1'b0;
           end
           default : begin
@@ -1772,14 +1770,14 @@ module Mdcb_Regif (
 endmodule
 
 module MdcbTxSimpleBus (
-  output              output_valid,
-  input               output_ready,
-  output              output_payload_last,
-  output     [31:0]   output_payload_fragment,
-  output              RENABLE,
-  output     [7:0]    RADDR,
-  input      [31:0]   RDATA,
-  input               timer_tick,
+  (* keep = "true" *) output              output_valid,
+  (* keep = "true" *) input               output_ready,
+  (* keep = "true" *) output              output_payload_last,
+  (* keep = "true" *) output     [31:0]   output_payload_fragment,
+  (* keep = "true" *) output              RENABLE,
+  (* keep = "true" *) output     [8:0]    RADDR,
+  (* keep = "true" *) input      [31:0]   RDATA,
+  (* keep = "true" *) input               timer_tick,
   input               clk,
   input               reset
 );
@@ -1797,9 +1795,9 @@ module MdcbTxSimpleBus (
   wire       [5:0]    streamfifo_1_io_occupancy;
   wire       [5:0]    streamfifo_1_io_availability;
   reg                 RENABLE_1;
-  reg        [7:0]    RADDR_1;
+  reg        [8:0]    RADDR_1;
   reg        [31:0]   RDATA_1;
-  reg        [7:0]    send_length;
+  reg        [8:0]    send_length;
   wire                when_MdcbTxSimpleBus_l30;
   wire                fsm_wantExit;
   reg                 fsm_wantStart;
@@ -1808,7 +1806,7 @@ module MdcbTxSimpleBus (
   wire                output_fire;
   reg        [1:0]    fsm_stateReg;
   reg        [1:0]    fsm_stateNext;
-  wire                when_MdcbTxSimpleBus_l53;
+  wire                when_MdcbTxSimpleBus_l54;
   `ifndef SYNTHESIS
   reg [79:0] fsm_stateReg_string;
   reg [79:0] fsm_stateNext_string;
@@ -1899,7 +1897,7 @@ module MdcbTxSimpleBus (
         end
       end
       fsm_enumDef_1_Send_Data : begin
-        if(when_MdcbTxSimpleBus_l53) begin
+        if(when_MdcbTxSimpleBus_l54) begin
           fsm_stateNext = fsm_enumDef_1_End_1;
         end
       end
@@ -1917,32 +1915,32 @@ module MdcbTxSimpleBus (
     end
   end
 
-  assign when_MdcbTxSimpleBus_l53 = (send_length == 8'h31);
+  assign when_MdcbTxSimpleBus_l54 = (send_length == 9'h031);
   always @(posedge clk or posedge reset) begin
     if(reset) begin
       RENABLE_1 <= 1'b0;
-      RADDR_1 <= 8'h0;
-      send_length <= 8'h0;
+      RADDR_1 <= 9'h0;
+      send_length <= 9'h0;
       fsm_stateReg <= fsm_enumDef_1_BOOT;
     end else begin
       fsm_stateReg <= fsm_stateNext;
       case(fsm_stateReg)
         fsm_enumDef_1_Wait_Start : begin
           if(timer_1_io_full) begin
-            RADDR_1 <= 8'h0;
+            RADDR_1 <= 9'h0;
             RENABLE_1 <= 1'b1;
-            send_length <= 8'h0;
+            send_length <= 9'h0;
           end
         end
         fsm_enumDef_1_Send_Data : begin
-          RADDR_1 <= (RADDR_1 + 8'h04);
-          send_length <= (send_length + 8'h01);
-          if(when_MdcbTxSimpleBus_l53) begin
+          RADDR_1 <= (RADDR_1 + 9'h004);
+          send_length <= (send_length + 9'h001);
+          if(when_MdcbTxSimpleBus_l54) begin
             RENABLE_1 <= 1'b0;
           end
         end
         fsm_enumDef_1_End_1 : begin
-          send_length <= 8'h0;
+          send_length <= 9'h0;
           RENABLE_1 <= 1'b0;
         end
         default : begin
@@ -1959,13 +1957,13 @@ module MdcbTxSimpleBus (
 endmodule
 
 module MdcbRxSimpleBus (
-  input               input_valid,
-  output              input_ready,
-  input               input_payload_last,
-  input      [31:0]   input_payload_fragment,
-  output     [7:0]    waddr,
-  output     [31:0]   wdata,
-  output              wenable,
+  (* keep = "true" *) input               input_valid,
+  (* keep = "true" *) output              input_ready,
+  (* keep = "true" *) input               input_payload_last,
+  (* keep = "true" *) input      [31:0]   input_payload_fragment,
+  (* keep = "true" *) output     [8:0]    waddr,
+  (* keep = "true" *) output     [31:0]   wdata,
+  (* keep = "true" *) output              wenable,
   input               clk,
   input               reset
 );
@@ -1973,8 +1971,8 @@ module MdcbRxSimpleBus (
   localparam fsm_enumDef_Get_Header = 2'd1;
   localparam fsm_enumDef_Get_Data = 2'd2;
 
-  wire       [9:0]    _zz_waddr;
-  reg        [7:0]    waddr_1;
+  wire       [10:0]   _zz_waddr;
+  reg        [8:0]    waddr_1;
   reg        [31:0]   wdata_1;
   reg                 wenable_1;
   reg                 flag;
@@ -1983,8 +1981,8 @@ module MdcbRxSimpleBus (
   wire                fsm_wantKill;
   reg        [1:0]    fsm_stateReg;
   reg        [1:0]    fsm_stateNext;
-  wire                when_MdcbRxPreamble_l67;
-  wire                when_MdcbRxPreamble_l73;
+  wire                when_MdcbRxPreamble_l68;
+  wire                when_MdcbRxPreamble_l74;
   `ifndef SYNTHESIS
   reg [79:0] fsm_stateReg_string;
   reg [79:0] fsm_stateNext_string;
@@ -2026,7 +2024,7 @@ module MdcbRxSimpleBus (
   end
 
   assign fsm_wantKill = 1'b0;
-  assign waddr = _zz_waddr[7:0];
+  assign waddr = _zz_waddr[8:0];
   assign wenable = wenable_1;
   assign wdata = wdata_1;
   assign input_ready = 1'b1;
@@ -2039,7 +2037,7 @@ module MdcbRxSimpleBus (
         end
       end
       fsm_enumDef_Get_Data : begin
-        if(when_MdcbRxPreamble_l67) begin
+        if(when_MdcbRxPreamble_l68) begin
           fsm_stateNext = fsm_enumDef_Get_Header;
         end
       end
@@ -2054,8 +2052,8 @@ module MdcbRxSimpleBus (
     end
   end
 
-  assign when_MdcbRxPreamble_l67 = (input_valid && input_payload_last);
-  assign when_MdcbRxPreamble_l73 = (! flag);
+  assign when_MdcbRxPreamble_l68 = (input_valid && input_payload_last);
+  assign when_MdcbRxPreamble_l74 = (! flag);
   always @(posedge clk or posedge reset) begin
     if(reset) begin
       wenable_1 <= 1'b0;
@@ -2066,7 +2064,7 @@ module MdcbRxSimpleBus (
         fsm_enumDef_Get_Header : begin
         end
         fsm_enumDef_Get_Data : begin
-          if(when_MdcbRxPreamble_l67) begin
+          if(when_MdcbRxPreamble_l68) begin
             wenable_1 <= 1'b0;
           end else begin
             if(input_valid) begin
@@ -2086,18 +2084,18 @@ module MdcbRxSimpleBus (
     case(fsm_stateReg)
       fsm_enumDef_Get_Header : begin
         if(input_valid) begin
-          waddr_1 <= 8'h03;
+          waddr_1 <= 9'h043;
           flag <= 1'b0;
         end
       end
       fsm_enumDef_Get_Data : begin
-        if(!when_MdcbRxPreamble_l67) begin
+        if(!when_MdcbRxPreamble_l68) begin
           if(input_valid) begin
             wdata_1 <= input_payload_fragment;
-            if(when_MdcbRxPreamble_l73) begin
+            if(when_MdcbRxPreamble_l74) begin
               flag <= 1'b1;
             end else begin
-              waddr_1 <= (waddr_1 + 8'h01);
+              waddr_1 <= (waddr_1 + 9'h001);
             end
           end
         end
@@ -2111,14 +2109,15 @@ module MdcbRxSimpleBus (
 endmodule
 
 module MdcbRxPreamble (
-  input               input_valid,
-  output              input_ready,
-  input               input_payload_last,
-  input      [31:0]   input_payload_fragment,
-  output reg          output_valid,
-  input               output_ready,
-  output              output_payload_last,
-  output     [31:0]   output_payload_fragment,
+  (* keep = "true" *) input               input_valid,
+  (* keep = "true" *) output              input_ready,
+  (* keep = "true" *) input               input_payload_last,
+  (* keep = "true" *) input      [31:0]   input_payload_fragment,
+  (* keep = "true" *) input      [31:0]   slave_id,
+  (* keep = "true" *) output reg          output_valid,
+  (* keep = "true" *) input               output_ready,
+  (* keep = "true" *) output              output_payload_last,
+  (* keep = "true" *) output     [31:0]   output_payload_fragment,
   input               clk,
   input               reset
 );
@@ -2144,10 +2143,10 @@ module MdcbRxPreamble (
   wire       [63:0]   historyDataCat;
   wire                hit;
   reg                 inFrame;
-  wire                when_MdcbRxPreamble_l26;
-  wire                when_MdcbRxPreamble_l33;
+  wire                when_MdcbRxPreamble_l27;
+  wire                when_MdcbRxPreamble_l34;
 
-  assign startDelimiter = 64'h00f1f2f300000001;
+  assign startDelimiter = {slave_id,32'h00f1f2f3};
   assign input_fire = (input_valid && input_ready);
   assign _zz_history_0_valid = input_valid;
   assign _zz_history_0_ready = input_ready;
@@ -2165,7 +2164,7 @@ module MdcbRxPreamble (
   assign hit = ((history_0_valid && history_1_valid) && (historyDataCat == startDelimiter));
   always @(*) begin
     output_valid = 1'b0;
-    if(!when_MdcbRxPreamble_l26) begin
+    if(!when_MdcbRxPreamble_l27) begin
       if(input_valid) begin
         output_valid = 1'b1;
       end
@@ -2175,8 +2174,8 @@ module MdcbRxPreamble (
   assign output_payload_fragment = input_payload_fragment;
   assign input_ready = ((! inFrame) || output_ready);
   assign output_payload_last = input_payload_last;
-  assign when_MdcbRxPreamble_l26 = (! inFrame);
-  assign when_MdcbRxPreamble_l33 = (output_ready && input_payload_last);
+  assign when_MdcbRxPreamble_l27 = (! inFrame);
+  assign when_MdcbRxPreamble_l34 = (output_ready && input_payload_last);
   always @(posedge clk) begin
     if(input_fire) begin
       _zz_history_1_valid <= _zz_history_0_valid;
@@ -2190,13 +2189,13 @@ module MdcbRxPreamble (
     if(reset) begin
       inFrame <= 1'b0;
     end else begin
-      if(when_MdcbRxPreamble_l26) begin
+      if(when_MdcbRxPreamble_l27) begin
         if(hit) begin
           inFrame <= 1'b1;
         end
       end else begin
         if(input_valid) begin
-          if(when_MdcbRxPreamble_l33) begin
+          if(when_MdcbRxPreamble_l34) begin
             inFrame <= 1'b0;
           end
         end
@@ -2352,10 +2351,10 @@ module ZeroSensor (
   reg        [15:0]   counter_value;
   wire                counter_willOverflowIfInc;
   wire                counter_willOverflow;
-  reg                 zerosensor_temp;
+  (* async_reg = "true" *) reg                 zerosensor_temp;
   reg        [1:0]    stateMachine_state;
   reg                 zerosensor_in_regNext;
-  wire                when_Encoder_l37;
+  wire                when_Encoder_l43;
   `ifndef SYNTHESIS
   reg [39:0] stateMachine_state_string;
   `endif
@@ -2391,7 +2390,7 @@ module ZeroSensor (
     counter_willClear = 1'b0;
     case(stateMachine_state)
       ZeroState_ZIDLE : begin
-        if(when_Encoder_l37) begin
+        if(when_Encoder_l43) begin
           counter_willClear = 1'b1;
         end
       end
@@ -2415,7 +2414,7 @@ module ZeroSensor (
     end
   end
 
-  assign when_Encoder_l37 = (zerosensor_in && (! zerosensor_in_regNext));
+  assign when_Encoder_l43 = (zerosensor_in && (! zerosensor_in_regNext));
   assign zerosensor_out = zerosensor_temp;
   always @(posedge clk or posedge reset) begin
     if(reset) begin
@@ -2426,7 +2425,7 @@ module ZeroSensor (
       counter_value <= counter_valueNext;
       case(stateMachine_state)
         ZeroState_ZIDLE : begin
-          if(when_Encoder_l37) begin
+          if(when_Encoder_l43) begin
             stateMachine_state <= ZeroState_ZWAIT;
             zerosensor_temp <= 1'b1;
           end
@@ -2458,20 +2457,23 @@ module Encoder_Clr (
   input               reset
 );
 
-  reg                 encoder_clr_out_1;
-  reg                 encoder_clr_in_regNext;
-  wire                when_Encoder_Clr_l14;
+  (* async_reg = "true" *) reg                 encoder_clr_out_1;
+  (* async_reg = "true" *) reg                 encoder_clr_in_1;
+  reg                 encoder_clr_in_1_regNext;
+  wire                when_Encoder_Clr_l17;
   reg                 encoder_clr_out_1_delay_1;
   reg                 encoder_clr_out_1_delay_1_1;
   reg                 encoder_clr_out_1_delay_2;
 
-  assign when_Encoder_Clr_l14 = (encoder_clr_in && (! encoder_clr_in_regNext));
+  assign when_Encoder_Clr_l17 = (encoder_clr_in_1 && (! encoder_clr_in_1_regNext));
   assign encoder_clr_out = (! ((encoder_clr_out_1 || encoder_clr_out_1_delay_1) || encoder_clr_out_1_delay_2));
   always @(posedge clk or posedge reset) begin
     if(reset) begin
       encoder_clr_out_1 <= 1'b0;
+      encoder_clr_in_1 <= 1'b0;
     end else begin
-      if(when_Encoder_Clr_l14) begin
+      encoder_clr_in_1 <= encoder_clr_in;
+      if(when_Encoder_Clr_l17) begin
         encoder_clr_out_1 <= 1'b1;
       end else begin
         encoder_clr_out_1 <= 1'b0;
@@ -2480,7 +2482,7 @@ module Encoder_Clr (
   end
 
   always @(posedge clk) begin
-    encoder_clr_in_regNext <= encoder_clr_in;
+    encoder_clr_in_1_regNext <= encoder_clr_in_1;
     encoder_clr_out_1_delay_1 <= encoder_clr_out_1;
     encoder_clr_out_1_delay_1_1 <= encoder_clr_out_1;
     encoder_clr_out_1_delay_2 <= encoder_clr_out_1_delay_1_1;
@@ -2536,7 +2538,7 @@ module StreamFifo (
   reg                 _zz_io_pop_valid;
   wire                when_Stream_l946;
   wire       [5:0]    logic_ptrDif;
-  reg [31:0] logic_ram [0:49];
+  (* ram_style = "block" *) reg [31:0] logic_ram [0:49];
 
   assign _zz_logic_pushPtr_valueNext_1 = logic_pushPtr_willIncrement;
   assign _zz_logic_pushPtr_valueNext = {5'd0, _zz_logic_pushPtr_valueNext_1};

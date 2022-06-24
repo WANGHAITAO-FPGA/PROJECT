@@ -26,21 +26,30 @@ class FiberTop(portcount : Int, datawidth : Int, distrib_length : Int, txfifodep
     val reset = in Bool()
     val uart = if(!lookback) Seq.fill(portcount)(master(Uart())) else null
     val led = out Bool()
+    val slave_id = in Bits(datawidth bits)
+    //val test_output = master(Stream(Fragment(Bits(datawidth bits))))
   }
   noIoPrefix()
 
   val fiberclkdomain = ClockDomain(io.clk,io.reset,frequency = FixedFrequency(125 MHz))
 
   val fiberarea = new ClockingArea(fiberclkdomain){
+//    val test_uart = Uart_Test(32)
+//    io.test_output << test_uart.io.output
+//    test_uart.io.slave_id := io.slave_id
+
     val fiberrxpreamble = new FiberRxPreamble(32)
     fiberrxpreamble.io.input << io.input
-    fiberrxpreamble.io.slave_id := B"x00000001"
+    //fiberrxpreamble.io.input << test_uart.io.output
+    fiberrxpreamble.io.slave_id := io.slave_id
 
-    val fiberrxbuffer = new FiberRxBuffer(fiberclkdomain,fiberclkdomain,datawidth,8,256)
+    val fiberrxbuffer = new FiberRxBuffer(fiberclkdomain,fiberclkdomain,datawidth,8,1024)
     fiberrxbuffer.io.push.stream << fiberrxpreamble.io.output
+    fiberrxpreamble.io.output.addAttribute("MARK_DEBUG","TRUE")
 
     val fiberrxstream = new FiberRxStream(portcount,8,portcount*distrib_length*datawidth/8)
     fiberrxstream.io.input << fiberrxbuffer.io.pop.stream
+    fiberrxstream.io.input.addAttribute("MARK_DEBUG","TRUE")
 
     val modbus = Seq.fill(portcount)(new ModusTop(txfifodepth,rxfifodepth,rx_waittime,lookback))
 
@@ -55,8 +64,11 @@ class FiberTop(portcount : Int, datawidth : Int, distrib_length : Int, txfifodep
       fibertxstream.io.reads(i).dataOut := modbus(i).io.reads.dataOut
     }
 
+    modbus(0).io.input.addAttribute("MARK_DEBUG","TRUE")
+
     val fibertxheader = new FiberTxHeader(32)
     fibertxheader.io.input << fibertxstream.io.output
+    fibertxheader.io.slave_id := io.slave_id
     //io.output << fibertxheader.io.output
 
     val fibertxpadder = new FiberTxPadder(32,64)
@@ -80,114 +92,127 @@ object FiberTop_v extends App{
   SpinalConfig(
     //oneFilePerComponent = true,
     defaultClockDomainFrequency=FixedFrequency(125 MHz)
-  ).generateVerilog(new FiberTop(7,32,8,32,32,4000,6000,false))
+  ).generateVerilog(new FiberTop(7,32,8,32,32,4000,6250,false))
 }
 
+//
+//case class FiberTest() extends FiberTop(7,32,8,32,32,4000,6000,true){
+//  import spinal.core.sim._
+//  def init: Unit ={
+//    fiberarea.clockDomain.forkStimulus(10)
+//    io.input.payload.last #= false
+//    io.input.valid #= false
+//    io.output.ready #= true
+//    io.timer_tick #= true
+//    fiberarea.clockDomain.waitSampling(10)
+//  }
+//  def header: Unit ={
+//    io.input.payload.fragment #= 0x00F1F2F3
+//    io.input.valid #= true
+//    fiberarea.clockDomain.waitSampling()
+//    io.input.payload.fragment #= 0x00000002
+//    io.input.valid #= true
+//    fiberarea.clockDomain.waitSampling()
+//  }
+//  def modbus_read(slaveid:Int, functioncode:Int, addr: Int, length: Int, crc: Int, last : Boolean): Unit ={
+//    io.input.payload.fragment #= (slaveid<<24)+(functioncode<<16)+addr
+//    io.input.valid #= true
+//    fiberarea.clockDomain.waitSampling()
+//    io.input.payload.fragment #= (length>>16)+crc
+//    io.input.valid #= true
+//    fiberarea.clockDomain.waitSampling()
+//    io.input.payload.fragment #= 0
+//    io.input.valid #= true
+//    fiberarea.clockDomain.waitSampling()
+//    io.input.payload.fragment #= 0
+//    io.input.valid #= true
+//    fiberarea.clockDomain.waitSampling()
+//    io.input.payload.fragment #= 0
+//    io.input.valid #= true
+//    fiberarea.clockDomain.waitSampling()
+//    io.input.payload.fragment #= 0
+//    io.input.valid #= true
+//    fiberarea.clockDomain.waitSampling()
+//    io.input.payload.fragment #= 0
+//    io.input.valid #= true
+//    fiberarea.clockDomain.waitSampling()
+//    io.input.payload.fragment #= 0
+//    io.input.valid #= true
+//    if(last)io.input.payload.last #= true else io.input.payload.last #= false
+//    fiberarea.clockDomain.waitSampling()
+//  }
+//  def modbus_write(slaveid:Int, functioncode:Int, addr: Int, length: Int, data: Int, crc: Int, last : Boolean): Unit ={
+//    io.input.payload.fragment #= (slaveid<<24)+(functioncode<<16)+addr
+//    io.input.valid #= true
+//    fiberarea.clockDomain.waitSampling()
+//    io.input.payload.fragment #= ((length&0xffff)<<16)+((2*length)<<8)+ (data>>8)&0xff
+//    io.input.valid #= true
+//    fiberarea.clockDomain.waitSampling()
+//    io.input.payload.fragment #= ((data&0xff)<<24)+(crc<<8)
+//    io.input.valid #= true
+//    fiberarea.clockDomain.waitSampling()
+//    io.input.payload.fragment #= 0
+//    io.input.valid #= true
+//    fiberarea.clockDomain.waitSampling()
+//    io.input.payload.fragment #= 0
+//    io.input.valid #= true
+//    fiberarea.clockDomain.waitSampling()
+//    io.input.payload.fragment #= 0
+//    io.input.valid #= true
+//    fiberarea.clockDomain.waitSampling()
+//    io.input.payload.fragment #= 0
+//    io.input.valid #= true
+//    fiberarea.clockDomain.waitSampling()
+//    io.input.payload.fragment #= 0
+//    io.input.valid #= true
+//    if(last)io.input.payload.last #= true else io.input.payload.last #= false
+//    fiberarea.clockDomain.waitSampling()
+//  }
+//  def reset : Unit ={
+//    io.input.valid #= false
+//    io.input.payload.last #= false
+//  }
+//
+//  def waitcycle(count: Int): Unit ={
+//    for(i <- 0 until count){
+//      fiberarea.clockDomain.waitSampling()
+//    }
+//  }
+//}
 
-case class FiberTest() extends FiberTop(7,32,8,32,32,4000,6000,true){
+//object FiberTop{
+//  import spinal.core.sim._
+//  def main(args: Array[String]): Unit = {
+//    val dut = SimConfig.withWave.compile(new FiberTest())
+//    dut.doSim{dut=>
+//      dut.init
+//      dut.io.slave_id #= 2
+//      dut.header
+//      dut.modbus_write(1,16,300,1,85,340,false)
+//      dut.modbus_write(2,16,300,1,85,340,false)
+//      dut.modbus_write(3,16,300,1,85,340,false)
+//      dut.modbus_write(4,16,300,1,85,340,false)
+//      dut.modbus_write(5,16,300,1,85,340,false)
+//      dut.modbus_write(6,16,300,1,85,340,false)
+//      dut.modbus_write(7,16,300,1,85,340,true)
+//      dut.reset
+//      dut.fiberarea.clockDomain.waitSampling(100000)
+//      for(i <- 0 until 10000){
+//        dut.io.output.ready #= Random.nextBoolean()
+//        dut.fiberarea.clockDomain.waitSampling()
+//      }
+//    }
+//  }
+//}
+
+object Uart_TT{
   import spinal.core.sim._
-  def init: Unit ={
-    fiberarea.clockDomain.forkStimulus(10)
-    io.input.payload.last #= false
-    io.input.valid #= false
-    io.output.ready #= true
-    io.timer_tick #= true
-    fiberarea.clockDomain.waitSampling(10)
-  }
-  def header: Unit ={
-    io.input.payload.fragment #= 0x00F1F2F3
-    io.input.valid #= true
-    fiberarea.clockDomain.waitSampling()
-    io.input.payload.fragment #= 0x00000001
-    io.input.valid #= true
-    fiberarea.clockDomain.waitSampling()
-  }
-  def modbus_read(slaveid:Int, functioncode:Int, addr: Int, length: Int, crc: Int, last : Boolean): Unit ={
-    io.input.payload.fragment #= (slaveid<<24)+(functioncode<<16)+addr
-    io.input.valid #= true
-    fiberarea.clockDomain.waitSampling()
-    io.input.payload.fragment #= (length>>16)+crc
-    io.input.valid #= true
-    fiberarea.clockDomain.waitSampling()
-    io.input.payload.fragment #= 0
-    io.input.valid #= true
-    fiberarea.clockDomain.waitSampling()
-    io.input.payload.fragment #= 0
-    io.input.valid #= true
-    fiberarea.clockDomain.waitSampling()
-    io.input.payload.fragment #= 0
-    io.input.valid #= true
-    fiberarea.clockDomain.waitSampling()
-    io.input.payload.fragment #= 0
-    io.input.valid #= true
-    fiberarea.clockDomain.waitSampling()
-    io.input.payload.fragment #= 0
-    io.input.valid #= true
-    fiberarea.clockDomain.waitSampling()
-    io.input.payload.fragment #= 0
-    io.input.valid #= true
-    if(last)io.input.payload.last #= true else io.input.payload.last #= false
-    fiberarea.clockDomain.waitSampling()
-  }
-  def modbus_write(slaveid:Int, functioncode:Int, addr: Int, length: Int, data: Int, crc: Int, last : Boolean): Unit ={
-    io.input.payload.fragment #= (slaveid<<24)+(functioncode<<16)+addr
-    io.input.valid #= true
-    fiberarea.clockDomain.waitSampling()
-    io.input.payload.fragment #= ((length&0xffff)<<16)+((2*length)<<8)+ (data>>8)&0xff
-    io.input.valid #= true
-    fiberarea.clockDomain.waitSampling()
-    io.input.payload.fragment #= ((data&0xff)<<24)+(crc<<8)
-    io.input.valid #= true
-    fiberarea.clockDomain.waitSampling()
-    io.input.payload.fragment #= 0
-    io.input.valid #= true
-    fiberarea.clockDomain.waitSampling()
-    io.input.payload.fragment #= 0
-    io.input.valid #= true
-    fiberarea.clockDomain.waitSampling()
-    io.input.payload.fragment #= 0
-    io.input.valid #= true
-    fiberarea.clockDomain.waitSampling()
-    io.input.payload.fragment #= 0
-    io.input.valid #= true
-    fiberarea.clockDomain.waitSampling()
-    io.input.payload.fragment #= 0
-    io.input.valid #= true
-    if(last)io.input.payload.last #= true else io.input.payload.last #= false
-    fiberarea.clockDomain.waitSampling()
-  }
-  def reset : Unit ={
-    io.input.valid #= false
-    io.input.payload.last #= false
-  }
 
-  def waitcycle(count: Int): Unit ={
-    for(i <- 0 until count){
-      fiberarea.clockDomain.waitSampling()
-    }
-  }
-}
-
-object FiberTop{
-  import spinal.core.sim._
   def main(args: Array[String]): Unit = {
-    val dut = SimConfig.withWave.compile(new FiberTest())
-    dut.doSim{dut=>
-      dut.init
-      dut.header
-      dut.modbus_write(1,16,300,1,85,340,false)
-      dut.modbus_write(2,16,300,1,85,340,false)
-      dut.modbus_write(3,16,300,1,85,340,false)
-      dut.modbus_write(4,16,300,1,85,340,false)
-      dut.modbus_write(5,16,300,1,85,340,false)
-      dut.modbus_write(6,16,300,1,85,340,false)
-      dut.modbus_write(7,16,300,1,85,340,true)
-      dut.reset
-      dut.fiberarea.clockDomain.waitSampling(100000)
-      for(i <- 0 until 10000){
-        dut.io.output.ready #= Random.nextBoolean()
-        dut.fiberarea.clockDomain.waitSampling()
-      }
+    SimConfig.withWave.doSim(new FiberTop(7,32,8,32,32,4000,6000,false)){dut=>
+      dut.fiberarea.clockDomain.forkStimulus(8)
+      dut.fiberarea.clockDomain.waitSampling(20)
+      dut.fiberarea.clockDomain.waitSampling(20000)
     }
   }
 }

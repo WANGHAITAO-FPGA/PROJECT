@@ -54,7 +54,7 @@ case class GTP_TEST() extends Component{
     gtxtest.io.log_rst_q := io.log_rst_q
 
     gtxtest.io.tx_packet_gtxid := 1
-    gtxtest.io.tx_packet_head := 0x013B
+    gtxtest.io.tx_packet_head := 0x0304
     //gtxtest.s_axi_tx_tkeep := 15
     gtxtest.io.tx_packet_req := timer_B.io.full|Delay(timer_B.io.full,1)|Delay(timer_B.io.full,2)|Delay(timer_B.io.full,3)
     gtxtest.io.tx_packet_trigger := False
@@ -80,6 +80,7 @@ case class GTP_TEST() extends Component{
     val mem = Mem(Bits(32 bits), 256) initBigInt(meminitvalue)
     mem.addAttribute("ram_style", "block")
     gtxtest.io.tx_packet_data := mem.readSync(gtxtest.io.tx_packet_addra.asUInt,!gtxtest.io.tx_packet_rden)
+    //gtxtest.io.tx_packet_data := mem.readAsync(gtxtest.io.tx_packet_addra.asUInt)
   }
 }
 
@@ -92,18 +93,18 @@ object GTP_TEST{
       dut.gtx_area.clockDomain.waitSampling(10)
       var i = 0
       for(idex <- 0 until 10000){
-        dut.io.s_axi_tx_tready #= Random.nextBoolean()
+        dut.io.s_axi_tx_tready #= true
         //dut.io.s_axi_tx_tready #= true
         dut.gtx_area.clockDomain.waitSampling()
         if(dut.io.s_axi_tx_tvalid.toBoolean && dut.io.s_axi_tx_tready.toBoolean){
           i = i + 1
           println(i)
-          if(dut.io.s_axi_tx_tlast.toBoolean){
-            assert(dut.io.s_axi_tx_tdata.toBigInt == 0x0000FFBD)
-            assert(i == 64)
-            i = 0
-            println(dut.io.s_axi_tx_tdata.toBigInt)
-          }
+//          if(dut.io.s_axi_tx_tlast.toBoolean){
+//            assert(dut.io.s_axi_tx_tdata.toBigInt == 0x0000FFBD)
+//            assert(i == 64)
+//            i = 0
+//            println(dut.io.s_axi_tx_tdata.toBigInt)
+//          }
         }
       }
       sleep(100)

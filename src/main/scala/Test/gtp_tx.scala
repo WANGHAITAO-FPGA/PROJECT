@@ -44,13 +44,18 @@ case class gtp_tx() extends Component{
       crc32.io.cmd.mode := CRCCombinationalCmdMode.UPDATE
     }
 
+    val tx_packet_req = Reg(Bool()) init False  addTag(crossClockDomain)
+    tx_packet_req := io.tx_packet_req
+
     val fsm = new StateMachine{
       val Wait_Start: State = new State with EntryPoint {
         whenIsActive{
           valid := False
           last := False
-          when(io.tx_packet_req){
+          when(tx_packet_req.rise()){
             goto(Send_Head)
+          }otherwise{
+            goto(Wait_Start)
           }
         }
       }
@@ -120,8 +125,7 @@ case class gtp_tx() extends Component{
       }
     }
 
-
-    io.crc_data := 0x00001234
+    io.crc_data := crc32.io.nextcrc
     io.tx_packet_addra := rd_addr.asBits
     io.tx_packet_rden := rd_rden
 
@@ -136,6 +140,7 @@ case class gtp_tx() extends Component{
     io.s_axi_tx_tvalid := streamfifo.io.pop.valid
     streamfifo.io.pop.ready := io.s_axi_tx_tready
     io.s_axi_tx_tlast := (streamfifo.io.occupancy === 1) & io.s_axi_tx_tready & io.s_axi_tx_tvalid
+
   }
 }
 

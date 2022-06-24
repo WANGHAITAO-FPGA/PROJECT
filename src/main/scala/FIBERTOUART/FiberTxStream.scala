@@ -94,7 +94,7 @@ case class FiberTxStream(pushCd : ClockDomain, popCd : ClockDomain, portcount : 
     streamfifo.io.pop.ready := io.output.ready
     io.output.payload.last := (streamfifo.io.occupancy === 1) & io.output.fire*/
 
-    val fibertxbuffer = new FiberTxBuffer(pushCd,popCd,8,datawidth,256)
+    val fibertxbuffer = new FiberTxBuffer(pushCd,popCd,8,datawidth,1024)
     fibertxbuffer.io.push.stream.valid := RegNext(valid) init False
     fibertxbuffer.io.push.stream.payload.fragment := rd_data
     fibertxbuffer.io.push.stream.payload.last := RegNext(last) init False

@@ -1,30 +1,8 @@
-// Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
+// Generator : SpinalHDL v1.6.1    git head : 3bf789d53b1b5a36974196e2d591342e15ddf28c
 // Component : Emif_Ctrl_test
+// Git hash  : faa136a5cd11b0754bd45144fa843c52609e72a5
 
-
-`define UartStopType_binary_sequential_type [0:0]
-`define UartStopType_binary_sequential_ONE 1'b0
-`define UartStopType_binary_sequential_TWO 1'b1
-
-`define UartParityType_binary_sequential_type [1:0]
-`define UartParityType_binary_sequential_NONE 2'b00
-`define UartParityType_binary_sequential_EVEN 2'b01
-`define UartParityType_binary_sequential_ODD 2'b10
-
-`define UartCtrlTxState_binary_sequential_type [2:0]
-`define UartCtrlTxState_binary_sequential_IDLE 3'b000
-`define UartCtrlTxState_binary_sequential_START 3'b001
-`define UartCtrlTxState_binary_sequential_DATA 3'b010
-`define UartCtrlTxState_binary_sequential_PARITY 3'b011
-`define UartCtrlTxState_binary_sequential_STOP 3'b100
-
-`define UartCtrlRxState_binary_sequential_type [2:0]
-`define UartCtrlRxState_binary_sequential_IDLE 3'b000
-`define UartCtrlRxState_binary_sequential_START 3'b001
-`define UartCtrlRxState_binary_sequential_DATA 3'b010
-`define UartCtrlRxState_binary_sequential_PARITY 3'b011
-`define UartCtrlRxState_binary_sequential_STOP 3'b100
-
+`timescale 1ns/1ps 
 
 module Emif_Ctrl_test (
   input      [31:0]   top_emif_emif_addr,
@@ -40,6 +18,7 @@ module Emif_Ctrl_test (
   input               clk,
   input               reset
 );
+
   wire       [31:0]   area_emif_Ctrl_emif_emif_data_write;
   wire                area_emif_Ctrl_emif_emif_data_writeEnable;
   wire       [15:0]   area_emif_Ctrl_gpioA_write;
@@ -49,16 +28,16 @@ module Emif_Ctrl_test (
   reg                 area_tt;
 
   Emif_Ctrl area_emif_Ctrl (
-    .emif_emif_addr                (top_emif_emif_addr                         ), //i
-    .emif_emif_data_read           (top_emif_emif_data_read                    ), //i
-    .emif_emif_data_write          (area_emif_Ctrl_emif_emif_data_write        ), //o
+    .emif_emif_addr                (top_emif_emif_addr[31:0]                   ), //i
+    .emif_emif_data_read           (top_emif_emif_data_read[31:0]              ), //i
+    .emif_emif_data_write          (area_emif_Ctrl_emif_emif_data_write[31:0]  ), //o
     .emif_emif_data_writeEnable    (area_emif_Ctrl_emif_emif_data_writeEnable  ), //o
     .emif_emif_cs                  (top_emif_emif_cs                           ), //i
     .emif_emif_we                  (top_emif_emif_we                           ), //i
     .emif_emif_oe                  (top_emif_emif_oe                           ), //i
-    .gpioA_read                    (top_gpioA_read                             ), //i
-    .gpioA_write                   (area_emif_Ctrl_gpioA_write                 ), //o
-    .gpioA_writeEnable             (area_emif_Ctrl_gpioA_writeEnable           ), //o
+    .gpioA_read                    (top_gpioA_read[15:0]                       ), //i
+    .gpioA_write                   (area_emif_Ctrl_gpioA_write[15:0]           ), //o
+    .gpioA_writeEnable             (area_emif_Ctrl_gpioA_writeEnable[15:0]     ), //o
     .uart_txd                      (area_emif_Ctrl_uart_txd                    ), //o
     .uart_rxd                      (area_temp                                  ), //i
     .clk                           (clk                                        ), //i
@@ -92,6 +71,7 @@ module Emif_Ctrl (
   input               clk,
   input               reset
 );
+
   wire       [3:0]    area_gpioACtrl_io_apb_PADDR;
   wire       [4:0]    area_uartCtrl_io_apb_PADDR;
   wire       [31:0]   area_emif_interface_emif_emif_data_write;
@@ -134,99 +114,99 @@ module Emif_Ctrl (
   wire       [31:0]   apb3Router_1_io_outputs_1_PWDATA;
 
   Emif_Apb area_emif_interface (
-    .emif_emif_addr                (emif_emif_addr                                  ), //i
-    .emif_emif_data_read           (emif_emif_data_read                             ), //i
-    .emif_emif_data_write          (area_emif_interface_emif_emif_data_write        ), //o
+    .emif_emif_addr                (emif_emif_addr[31:0]                            ), //i
+    .emif_emif_data_read           (emif_emif_data_read[31:0]                       ), //i
+    .emif_emif_data_write          (area_emif_interface_emif_emif_data_write[31:0]  ), //o
     .emif_emif_data_writeEnable    (area_emif_interface_emif_emif_data_writeEnable  ), //o
     .emif_emif_cs                  (emif_emif_cs                                    ), //i
     .emif_emif_we                  (emif_emif_we                                    ), //i
     .emif_emif_oe                  (emif_emif_oe                                    ), //i
-    .apb_PADDR                     (area_emif_interface_apb_PADDR                   ), //o
+    .apb_PADDR                     (area_emif_interface_apb_PADDR[31:0]             ), //o
     .apb_PSEL                      (area_emif_interface_apb_PSEL                    ), //o
     .apb_PENABLE                   (area_emif_interface_apb_PENABLE                 ), //o
     .apb_PREADY                    (apb_decoder_io_input_PREADY                     ), //i
     .apb_PWRITE                    (area_emif_interface_apb_PWRITE                  ), //o
-    .apb_PWDATA                    (area_emif_interface_apb_PWDATA                  ), //o
-    .apb_PRDATA                    (apb_decoder_io_input_PRDATA                     ), //i
+    .apb_PWDATA                    (area_emif_interface_apb_PWDATA[31:0]            ), //o
+    .apb_PRDATA                    (apb_decoder_io_input_PRDATA[31:0]               ), //i
     .apb_PSLVERROR                 (apb_decoder_io_input_PSLVERROR                  ), //i
     .clk                           (clk                                             ), //i
     .reset                         (reset                                           )  //i
   );
   apb3Gpio area_gpioACtrl (
-    .io_apb_PADDR           (area_gpioACtrl_io_apb_PADDR         ), //i
-    .io_apb_PSEL            (apb3Router_1_io_outputs_0_PSEL      ), //i
-    .io_apb_PENABLE         (apb3Router_1_io_outputs_0_PENABLE   ), //i
-    .io_apb_PREADY          (area_gpioACtrl_io_apb_PREADY        ), //o
-    .io_apb_PWRITE          (apb3Router_1_io_outputs_0_PWRITE    ), //i
-    .io_apb_PWDATA          (apb3Router_1_io_outputs_0_PWDATA    ), //i
-    .io_apb_PRDATA          (area_gpioACtrl_io_apb_PRDATA        ), //o
-    .io_apb_PSLVERROR       (area_gpioACtrl_io_apb_PSLVERROR     ), //o
-    .io_gpio_read           (gpioA_read                          ), //i
-    .io_gpio_write          (area_gpioACtrl_io_gpio_write        ), //o
-    .io_gpio_writeEnable    (area_gpioACtrl_io_gpio_writeEnable  ), //o
-    .io_value               (area_gpioACtrl_io_value             ), //o
-    .clk                    (clk                                 ), //i
-    .reset                  (reset                               )  //i
+    .io_apb_PADDR           (area_gpioACtrl_io_apb_PADDR[3:0]          ), //i
+    .io_apb_PSEL            (apb3Router_1_io_outputs_0_PSEL            ), //i
+    .io_apb_PENABLE         (apb3Router_1_io_outputs_0_PENABLE         ), //i
+    .io_apb_PREADY          (area_gpioACtrl_io_apb_PREADY              ), //o
+    .io_apb_PWRITE          (apb3Router_1_io_outputs_0_PWRITE          ), //i
+    .io_apb_PWDATA          (apb3Router_1_io_outputs_0_PWDATA[31:0]    ), //i
+    .io_apb_PRDATA          (area_gpioACtrl_io_apb_PRDATA[31:0]        ), //o
+    .io_apb_PSLVERROR       (area_gpioACtrl_io_apb_PSLVERROR           ), //o
+    .io_gpio_read           (gpioA_read[15:0]                          ), //i
+    .io_gpio_write          (area_gpioACtrl_io_gpio_write[15:0]        ), //o
+    .io_gpio_writeEnable    (area_gpioACtrl_io_gpio_writeEnable[15:0]  ), //o
+    .io_value               (area_gpioACtrl_io_value[15:0]             ), //o
+    .clk                    (clk                                       ), //i
+    .reset                  (reset                                     )  //i
   );
   Apb3UartCtrl area_uartCtrl (
-    .io_apb_PADDR      (area_uartCtrl_io_apb_PADDR         ), //i
-    .io_apb_PSEL       (apb3Router_1_io_outputs_1_PSEL     ), //i
-    .io_apb_PENABLE    (apb3Router_1_io_outputs_1_PENABLE  ), //i
-    .io_apb_PREADY     (area_uartCtrl_io_apb_PREADY        ), //o
-    .io_apb_PWRITE     (apb3Router_1_io_outputs_1_PWRITE   ), //i
-    .io_apb_PWDATA     (apb3Router_1_io_outputs_1_PWDATA   ), //i
-    .io_apb_PRDATA     (area_uartCtrl_io_apb_PRDATA        ), //o
-    .io_uart_txd       (area_uartCtrl_io_uart_txd          ), //o
-    .io_uart_rxd       (uart_rxd                           ), //i
-    .io_interrupt      (area_uartCtrl_io_interrupt         ), //o
-    .clk               (clk                                ), //i
-    .reset             (reset                              )  //i
+    .io_apb_PADDR      (area_uartCtrl_io_apb_PADDR[4:0]         ), //i
+    .io_apb_PSEL       (apb3Router_1_io_outputs_1_PSEL          ), //i
+    .io_apb_PENABLE    (apb3Router_1_io_outputs_1_PENABLE       ), //i
+    .io_apb_PREADY     (area_uartCtrl_io_apb_PREADY             ), //o
+    .io_apb_PWRITE     (apb3Router_1_io_outputs_1_PWRITE        ), //i
+    .io_apb_PWDATA     (apb3Router_1_io_outputs_1_PWDATA[31:0]  ), //i
+    .io_apb_PRDATA     (area_uartCtrl_io_apb_PRDATA[31:0]       ), //o
+    .io_uart_txd       (area_uartCtrl_io_uart_txd               ), //o
+    .io_uart_rxd       (uart_rxd                                ), //i
+    .io_interrupt      (area_uartCtrl_io_interrupt              ), //o
+    .clk               (clk                                     ), //i
+    .reset             (reset                                   )  //i
   );
   Apb3Decoder apb_decoder (
-    .io_input_PADDR         (area_emif_interface_apb_PADDR    ), //i
-    .io_input_PSEL          (area_emif_interface_apb_PSEL     ), //i
-    .io_input_PENABLE       (area_emif_interface_apb_PENABLE  ), //i
-    .io_input_PREADY        (apb_decoder_io_input_PREADY      ), //o
-    .io_input_PWRITE        (area_emif_interface_apb_PWRITE   ), //i
-    .io_input_PWDATA        (area_emif_interface_apb_PWDATA   ), //i
-    .io_input_PRDATA        (apb_decoder_io_input_PRDATA      ), //o
-    .io_input_PSLVERROR     (apb_decoder_io_input_PSLVERROR   ), //o
-    .io_output_PADDR        (apb_decoder_io_output_PADDR      ), //o
-    .io_output_PSEL         (apb_decoder_io_output_PSEL       ), //o
-    .io_output_PENABLE      (apb_decoder_io_output_PENABLE    ), //o
-    .io_output_PREADY       (apb3Router_1_io_input_PREADY     ), //i
-    .io_output_PWRITE       (apb_decoder_io_output_PWRITE     ), //o
-    .io_output_PWDATA       (apb_decoder_io_output_PWDATA     ), //o
-    .io_output_PRDATA       (apb3Router_1_io_input_PRDATA     ), //i
-    .io_output_PSLVERROR    (apb3Router_1_io_input_PSLVERROR  )  //i
+    .io_input_PADDR         (area_emif_interface_apb_PADDR[31:0]   ), //i
+    .io_input_PSEL          (area_emif_interface_apb_PSEL          ), //i
+    .io_input_PENABLE       (area_emif_interface_apb_PENABLE       ), //i
+    .io_input_PREADY        (apb_decoder_io_input_PREADY           ), //o
+    .io_input_PWRITE        (area_emif_interface_apb_PWRITE        ), //i
+    .io_input_PWDATA        (area_emif_interface_apb_PWDATA[31:0]  ), //i
+    .io_input_PRDATA        (apb_decoder_io_input_PRDATA[31:0]     ), //o
+    .io_input_PSLVERROR     (apb_decoder_io_input_PSLVERROR        ), //o
+    .io_output_PADDR        (apb_decoder_io_output_PADDR[31:0]     ), //o
+    .io_output_PSEL         (apb_decoder_io_output_PSEL[1:0]       ), //o
+    .io_output_PENABLE      (apb_decoder_io_output_PENABLE         ), //o
+    .io_output_PREADY       (apb3Router_1_io_input_PREADY          ), //i
+    .io_output_PWRITE       (apb_decoder_io_output_PWRITE          ), //o
+    .io_output_PWDATA       (apb_decoder_io_output_PWDATA[31:0]    ), //o
+    .io_output_PRDATA       (apb3Router_1_io_input_PRDATA[31:0]    ), //i
+    .io_output_PSLVERROR    (apb3Router_1_io_input_PSLVERROR       )  //i
   );
   Apb3Router apb3Router_1 (
-    .io_input_PADDR            (apb_decoder_io_output_PADDR        ), //i
-    .io_input_PSEL             (apb_decoder_io_output_PSEL         ), //i
-    .io_input_PENABLE          (apb_decoder_io_output_PENABLE      ), //i
-    .io_input_PREADY           (apb3Router_1_io_input_PREADY       ), //o
-    .io_input_PWRITE           (apb_decoder_io_output_PWRITE       ), //i
-    .io_input_PWDATA           (apb_decoder_io_output_PWDATA       ), //i
-    .io_input_PRDATA           (apb3Router_1_io_input_PRDATA       ), //o
-    .io_input_PSLVERROR        (apb3Router_1_io_input_PSLVERROR    ), //o
-    .io_outputs_0_PADDR        (apb3Router_1_io_outputs_0_PADDR    ), //o
-    .io_outputs_0_PSEL         (apb3Router_1_io_outputs_0_PSEL     ), //o
-    .io_outputs_0_PENABLE      (apb3Router_1_io_outputs_0_PENABLE  ), //o
-    .io_outputs_0_PREADY       (area_gpioACtrl_io_apb_PREADY       ), //i
-    .io_outputs_0_PWRITE       (apb3Router_1_io_outputs_0_PWRITE   ), //o
-    .io_outputs_0_PWDATA       (apb3Router_1_io_outputs_0_PWDATA   ), //o
-    .io_outputs_0_PRDATA       (area_gpioACtrl_io_apb_PRDATA       ), //i
-    .io_outputs_0_PSLVERROR    (area_gpioACtrl_io_apb_PSLVERROR    ), //i
-    .io_outputs_1_PADDR        (apb3Router_1_io_outputs_1_PADDR    ), //o
-    .io_outputs_1_PSEL         (apb3Router_1_io_outputs_1_PSEL     ), //o
-    .io_outputs_1_PENABLE      (apb3Router_1_io_outputs_1_PENABLE  ), //o
-    .io_outputs_1_PREADY       (area_uartCtrl_io_apb_PREADY        ), //i
-    .io_outputs_1_PWRITE       (apb3Router_1_io_outputs_1_PWRITE   ), //o
-    .io_outputs_1_PWDATA       (apb3Router_1_io_outputs_1_PWDATA   ), //o
-    .io_outputs_1_PRDATA       (area_uartCtrl_io_apb_PRDATA        ), //i
-    .io_outputs_1_PSLVERROR    (1'b0                               ), //i
-    .clk                       (clk                                ), //i
-    .reset                     (reset                              )  //i
+    .io_input_PADDR            (apb_decoder_io_output_PADDR[31:0]       ), //i
+    .io_input_PSEL             (apb_decoder_io_output_PSEL[1:0]         ), //i
+    .io_input_PENABLE          (apb_decoder_io_output_PENABLE           ), //i
+    .io_input_PREADY           (apb3Router_1_io_input_PREADY            ), //o
+    .io_input_PWRITE           (apb_decoder_io_output_PWRITE            ), //i
+    .io_input_PWDATA           (apb_decoder_io_output_PWDATA[31:0]      ), //i
+    .io_input_PRDATA           (apb3Router_1_io_input_PRDATA[31:0]      ), //o
+    .io_input_PSLVERROR        (apb3Router_1_io_input_PSLVERROR         ), //o
+    .io_outputs_0_PADDR        (apb3Router_1_io_outputs_0_PADDR[31:0]   ), //o
+    .io_outputs_0_PSEL         (apb3Router_1_io_outputs_0_PSEL          ), //o
+    .io_outputs_0_PENABLE      (apb3Router_1_io_outputs_0_PENABLE       ), //o
+    .io_outputs_0_PREADY       (area_gpioACtrl_io_apb_PREADY            ), //i
+    .io_outputs_0_PWRITE       (apb3Router_1_io_outputs_0_PWRITE        ), //o
+    .io_outputs_0_PWDATA       (apb3Router_1_io_outputs_0_PWDATA[31:0]  ), //o
+    .io_outputs_0_PRDATA       (area_gpioACtrl_io_apb_PRDATA[31:0]      ), //i
+    .io_outputs_0_PSLVERROR    (area_gpioACtrl_io_apb_PSLVERROR         ), //i
+    .io_outputs_1_PADDR        (apb3Router_1_io_outputs_1_PADDR[31:0]   ), //o
+    .io_outputs_1_PSEL         (apb3Router_1_io_outputs_1_PSEL          ), //o
+    .io_outputs_1_PENABLE      (apb3Router_1_io_outputs_1_PENABLE       ), //o
+    .io_outputs_1_PREADY       (area_uartCtrl_io_apb_PREADY             ), //i
+    .io_outputs_1_PWRITE       (apb3Router_1_io_outputs_1_PWRITE        ), //o
+    .io_outputs_1_PWDATA       (apb3Router_1_io_outputs_1_PWDATA[31:0]  ), //o
+    .io_outputs_1_PRDATA       (area_uartCtrl_io_apb_PRDATA[31:0]       ), //i
+    .io_outputs_1_PSLVERROR    (1'b0                                    ), //i
+    .clk                       (clk                                     ), //i
+    .reset                     (reset                                   )  //i
   );
   assign emif_emif_data_write = area_emif_interface_emif_emif_data_write;
   assign emif_emif_data_writeEnable = area_emif_interface_emif_emif_data_writeEnable;
@@ -266,6 +246,7 @@ module Apb3Router (
   input               clk,
   input               reset
 );
+
   reg                 _zz_io_input_PREADY;
   reg        [31:0]   _zz_io_input_PRDATA;
   reg                 _zz_io_input_PSLVERROR;
@@ -326,7 +307,8 @@ module Apb3Decoder (
   input      [31:0]   io_output_PRDATA,
   input               io_output_PSLVERROR
 );
-  wire                when_Apb3Decoder_l84;
+
+  wire                when_Apb3Decoder_l88;
 
   assign io_output_PADDR = io_input_PADDR;
   assign io_output_PENABLE = io_input_PENABLE;
@@ -339,7 +321,7 @@ module Apb3Decoder (
 
   always @(*) begin
     io_input_PREADY = io_output_PREADY;
-    if(when_Apb3Decoder_l84) begin
+    if(when_Apb3Decoder_l88) begin
       io_input_PREADY = 1'b1;
     end
   end
@@ -347,12 +329,12 @@ module Apb3Decoder (
   assign io_input_PRDATA = io_output_PRDATA;
   always @(*) begin
     io_input_PSLVERROR = io_output_PSLVERROR;
-    if(when_Apb3Decoder_l84) begin
+    if(when_Apb3Decoder_l88) begin
       io_input_PSLVERROR = 1'b1;
     end
   end
 
-  assign when_Apb3Decoder_l84 = (io_input_PSEL[0] && (io_output_PSEL == 2'b00));
+  assign when_Apb3Decoder_l88 = (io_input_PSEL[0] && (io_output_PSEL == 2'b00));
 
 endmodule
 
@@ -370,6 +352,12 @@ module Apb3UartCtrl (
   input               clk,
   input               reset
 );
+  localparam UartStopType_ONE = 1'd0;
+  localparam UartStopType_TWO = 1'd1;
+  localparam UartParityType_NONE = 2'd0;
+  localparam UartParityType_EVEN = 2'd1;
+  localparam UartParityType_ODD = 2'd2;
+
   reg                 uartCtrl_1_io_read_queueWithOccupancy_io_pop_ready;
   wire                uartCtrl_1_io_write_ready;
   wire                uartCtrl_1_io_read_valid;
@@ -398,8 +386,8 @@ module Apb3UartCtrl (
   wire                busCtrl_doWrite;
   wire                busCtrl_doRead;
   wire       [2:0]    bridge_uartConfigReg_frame_dataLength;
-  wire       `UartStopType_binary_sequential_type bridge_uartConfigReg_frame_stop;
-  wire       `UartParityType_binary_sequential_type bridge_uartConfigReg_frame_parity;
+  wire       [0:0]    bridge_uartConfigReg_frame_stop;
+  wire       [1:0]    bridge_uartConfigReg_frame_parity;
   reg        [19:0]   bridge_uartConfigReg_clockDivider;
   reg                 _zz_bridge_write_streamUnbuffered_valid;
   wire                bridge_write_streamUnbuffered_valid;
@@ -422,7 +410,7 @@ module Apb3UartCtrl (
   wire                uartCtrl_1_io_read_isStall;
   reg                 bridge_misc_breakDetected;
   reg                 uartCtrl_1_io_readBreak_regNext;
-  wire                when_UartCtrl_l154;
+  wire                when_UartCtrl_l155;
   reg                 when_BusSlaveFactory_l335_2;
   wire                when_BusSlaveFactory_l337_2;
   reg                 bridge_misc_doBreak;
@@ -435,13 +423,7 @@ module Apb3UartCtrl (
   reg [31:0] bridge_uartConfigReg_frame_parity_string;
   `endif
 
-  function [19:0] zz_bridge_uartConfigReg_clockDivider(input dummy);
-    begin
-      zz_bridge_uartConfigReg_clockDivider = 20'h0;
-      zz_bridge_uartConfigReg_clockDivider = 20'h00005;
-    end
-  endfunction
-  wire [19:0] _zz_1;
+  wire       [19:0]   bridge_uartConfigReg_clockDivider_const;
 
   assign _zz_bridge_misc_readError = 1'b0;
   assign _zz_bridge_misc_readOverflowError = 1'b0;
@@ -450,63 +432,63 @@ module Apb3UartCtrl (
   assign _zz_bridge_misc_doBreak_1 = 1'b0;
   assign _zz_io_apb_PRDATA = (5'h10 - bridge_write_streamUnbuffered_queueWithOccupancy_io_occupancy);
   UartCtrl uartCtrl_1 (
-    .io_config_frame_dataLength    (bridge_uartConfigReg_frame_dataLength                            ), //i
-    .io_config_frame_stop          (bridge_uartConfigReg_frame_stop                                  ), //i
-    .io_config_frame_parity        (bridge_uartConfigReg_frame_parity                                ), //i
-    .io_config_clockDivider        (bridge_uartConfigReg_clockDivider                                ), //i
-    .io_write_valid                (bridge_write_streamUnbuffered_queueWithOccupancy_io_pop_valid    ), //i
-    .io_write_ready                (uartCtrl_1_io_write_ready                                        ), //o
-    .io_write_payload              (bridge_write_streamUnbuffered_queueWithOccupancy_io_pop_payload  ), //i
-    .io_read_valid                 (uartCtrl_1_io_read_valid                                         ), //o
-    .io_read_ready                 (uartCtrl_1_io_read_queueWithOccupancy_io_push_ready              ), //i
-    .io_read_payload               (uartCtrl_1_io_read_payload                                       ), //o
-    .io_uart_txd                   (uartCtrl_1_io_uart_txd                                           ), //o
-    .io_uart_rxd                   (io_uart_rxd                                                      ), //i
-    .io_readError                  (uartCtrl_1_io_readError                                          ), //o
-    .io_writeBreak                 (bridge_misc_doBreak                                              ), //i
-    .io_readBreak                  (uartCtrl_1_io_readBreak                                          ), //o
-    .clk                           (clk                                                              ), //i
-    .reset                         (reset                                                            )  //i
+    .io_config_frame_dataLength    (bridge_uartConfigReg_frame_dataLength[2:0]                            ), //i
+    .io_config_frame_stop          (bridge_uartConfigReg_frame_stop                                       ), //i
+    .io_config_frame_parity        (bridge_uartConfigReg_frame_parity[1:0]                                ), //i
+    .io_config_clockDivider        (bridge_uartConfigReg_clockDivider[19:0]                               ), //i
+    .io_write_valid                (bridge_write_streamUnbuffered_queueWithOccupancy_io_pop_valid         ), //i
+    .io_write_ready                (uartCtrl_1_io_write_ready                                             ), //o
+    .io_write_payload              (bridge_write_streamUnbuffered_queueWithOccupancy_io_pop_payload[7:0]  ), //i
+    .io_read_valid                 (uartCtrl_1_io_read_valid                                              ), //o
+    .io_read_ready                 (uartCtrl_1_io_read_queueWithOccupancy_io_push_ready                   ), //i
+    .io_read_payload               (uartCtrl_1_io_read_payload[7:0]                                       ), //o
+    .io_uart_txd                   (uartCtrl_1_io_uart_txd                                                ), //o
+    .io_uart_rxd                   (io_uart_rxd                                                           ), //i
+    .io_readError                  (uartCtrl_1_io_readError                                               ), //o
+    .io_writeBreak                 (bridge_misc_doBreak                                                   ), //i
+    .io_readBreak                  (uartCtrl_1_io_readBreak                                               ), //o
+    .clk                           (clk                                                                   ), //i
+    .reset                         (reset                                                                 )  //i
   );
   StreamFifo bridge_write_streamUnbuffered_queueWithOccupancy (
-    .io_push_valid      (bridge_write_streamUnbuffered_valid                               ), //i
-    .io_push_ready      (bridge_write_streamUnbuffered_queueWithOccupancy_io_push_ready    ), //o
-    .io_push_payload    (bridge_write_streamUnbuffered_payload                             ), //i
-    .io_pop_valid       (bridge_write_streamUnbuffered_queueWithOccupancy_io_pop_valid     ), //o
-    .io_pop_ready       (uartCtrl_1_io_write_ready                                         ), //i
-    .io_pop_payload     (bridge_write_streamUnbuffered_queueWithOccupancy_io_pop_payload   ), //o
-    .io_flush           (1'b0                                                              ), //i
-    .io_occupancy       (bridge_write_streamUnbuffered_queueWithOccupancy_io_occupancy     ), //o
-    .io_availability    (bridge_write_streamUnbuffered_queueWithOccupancy_io_availability  ), //o
-    .clk                (clk                                                               ), //i
-    .reset              (reset                                                             )  //i
+    .io_push_valid      (bridge_write_streamUnbuffered_valid                                    ), //i
+    .io_push_ready      (bridge_write_streamUnbuffered_queueWithOccupancy_io_push_ready         ), //o
+    .io_push_payload    (bridge_write_streamUnbuffered_payload[7:0]                             ), //i
+    .io_pop_valid       (bridge_write_streamUnbuffered_queueWithOccupancy_io_pop_valid          ), //o
+    .io_pop_ready       (uartCtrl_1_io_write_ready                                              ), //i
+    .io_pop_payload     (bridge_write_streamUnbuffered_queueWithOccupancy_io_pop_payload[7:0]   ), //o
+    .io_flush           (1'b0                                                                   ), //i
+    .io_occupancy       (bridge_write_streamUnbuffered_queueWithOccupancy_io_occupancy[4:0]     ), //o
+    .io_availability    (bridge_write_streamUnbuffered_queueWithOccupancy_io_availability[4:0]  ), //o
+    .clk                (clk                                                                    ), //i
+    .reset              (reset                                                                  )  //i
   );
   StreamFifo uartCtrl_1_io_read_queueWithOccupancy (
-    .io_push_valid      (uartCtrl_1_io_read_valid                               ), //i
-    .io_push_ready      (uartCtrl_1_io_read_queueWithOccupancy_io_push_ready    ), //o
-    .io_push_payload    (uartCtrl_1_io_read_payload                             ), //i
-    .io_pop_valid       (uartCtrl_1_io_read_queueWithOccupancy_io_pop_valid     ), //o
-    .io_pop_ready       (uartCtrl_1_io_read_queueWithOccupancy_io_pop_ready     ), //i
-    .io_pop_payload     (uartCtrl_1_io_read_queueWithOccupancy_io_pop_payload   ), //o
-    .io_flush           (1'b0                                                   ), //i
-    .io_occupancy       (uartCtrl_1_io_read_queueWithOccupancy_io_occupancy     ), //o
-    .io_availability    (uartCtrl_1_io_read_queueWithOccupancy_io_availability  ), //o
-    .clk                (clk                                                    ), //i
-    .reset              (reset                                                  )  //i
+    .io_push_valid      (uartCtrl_1_io_read_valid                                    ), //i
+    .io_push_ready      (uartCtrl_1_io_read_queueWithOccupancy_io_push_ready         ), //o
+    .io_push_payload    (uartCtrl_1_io_read_payload[7:0]                             ), //i
+    .io_pop_valid       (uartCtrl_1_io_read_queueWithOccupancy_io_pop_valid          ), //o
+    .io_pop_ready       (uartCtrl_1_io_read_queueWithOccupancy_io_pop_ready          ), //i
+    .io_pop_payload     (uartCtrl_1_io_read_queueWithOccupancy_io_pop_payload[7:0]   ), //o
+    .io_flush           (1'b0                                                        ), //i
+    .io_occupancy       (uartCtrl_1_io_read_queueWithOccupancy_io_occupancy[4:0]     ), //o
+    .io_availability    (uartCtrl_1_io_read_queueWithOccupancy_io_availability[4:0]  ), //o
+    .clk                (clk                                                         ), //i
+    .reset              (reset                                                       )  //i
   );
   `ifndef SYNTHESIS
   always @(*) begin
     case(bridge_uartConfigReg_frame_stop)
-      `UartStopType_binary_sequential_ONE : bridge_uartConfigReg_frame_stop_string = "ONE";
-      `UartStopType_binary_sequential_TWO : bridge_uartConfigReg_frame_stop_string = "TWO";
+      UartStopType_ONE : bridge_uartConfigReg_frame_stop_string = "ONE";
+      UartStopType_TWO : bridge_uartConfigReg_frame_stop_string = "TWO";
       default : bridge_uartConfigReg_frame_stop_string = "???";
     endcase
   end
   always @(*) begin
     case(bridge_uartConfigReg_frame_parity)
-      `UartParityType_binary_sequential_NONE : bridge_uartConfigReg_frame_parity_string = "NONE";
-      `UartParityType_binary_sequential_EVEN : bridge_uartConfigReg_frame_parity_string = "EVEN";
-      `UartParityType_binary_sequential_ODD : bridge_uartConfigReg_frame_parity_string = "ODD ";
+      UartParityType_NONE : bridge_uartConfigReg_frame_parity_string = "NONE";
+      UartParityType_EVEN : bridge_uartConfigReg_frame_parity_string = "EVEN";
+      UartParityType_ODD : bridge_uartConfigReg_frame_parity_string = "ODD ";
       default : bridge_uartConfigReg_frame_parity_string = "????";
     endcase
   end
@@ -545,11 +527,15 @@ module Apb3UartCtrl (
   assign busCtrl_askRead = ((io_apb_PSEL[0] && io_apb_PENABLE) && (! io_apb_PWRITE));
   assign busCtrl_doWrite = (((io_apb_PSEL[0] && io_apb_PENABLE) && io_apb_PREADY) && io_apb_PWRITE);
   assign busCtrl_doRead = (((io_apb_PSEL[0] && io_apb_PENABLE) && io_apb_PREADY) && (! io_apb_PWRITE));
-  assign _zz_1 = zz_bridge_uartConfigReg_clockDivider(1'b0);
-  always @(*) bridge_uartConfigReg_clockDivider = _zz_1;
+  assign bridge_uartConfigReg_clockDivider_const = 20'h0;
+  always @(*) begin
+      bridge_uartConfigReg_clockDivider = bridge_uartConfigReg_clockDivider_const;
+      bridge_uartConfigReg_clockDivider = 20'h00005;
+  end
+
   assign bridge_uartConfigReg_frame_dataLength = 3'b111;
-  assign bridge_uartConfigReg_frame_parity = `UartParityType_binary_sequential_NONE;
-  assign bridge_uartConfigReg_frame_stop = `UartStopType_binary_sequential_ONE;
+  assign bridge_uartConfigReg_frame_parity = UartParityType_NONE;
+  assign bridge_uartConfigReg_frame_stop = UartStopType_ONE;
   always @(*) begin
     _zz_bridge_write_streamUnbuffered_valid = 1'b0;
     case(io_apb_PADDR)
@@ -626,7 +612,7 @@ module Apb3UartCtrl (
 
   assign when_BusSlaveFactory_l337_1 = io_apb_PWDATA[1];
   assign uartCtrl_1_io_read_isStall = (uartCtrl_1_io_read_valid && (! uartCtrl_1_io_read_queueWithOccupancy_io_push_ready));
-  assign when_UartCtrl_l154 = (uartCtrl_1_io_readBreak && (! uartCtrl_1_io_readBreak_regNext));
+  assign when_UartCtrl_l155 = (uartCtrl_1_io_readBreak && (! uartCtrl_1_io_readBreak_regNext));
   always @(*) begin
     when_BusSlaveFactory_l335_2 = 1'b0;
     case(io_apb_PADDR)
@@ -695,7 +681,7 @@ module Apb3UartCtrl (
       if(uartCtrl_1_io_read_isStall) begin
         bridge_misc_readOverflowError <= 1'b1;
       end
-      if(when_UartCtrl_l154) begin
+      if(when_UartCtrl_l155) begin
         bridge_misc_breakDetected <= 1'b1;
       end
       if(when_BusSlaveFactory_l335_2) begin
@@ -749,6 +735,7 @@ module apb3Gpio (
   input               clk,
   input               reset
 );
+
   wire       [15:0]   io_gpio_read_buffercc_io_dataOut;
   wire                ctrl_askWrite;
   wire                ctrl_askRead;
@@ -758,10 +745,10 @@ module apb3Gpio (
   reg        [15:0]   io_gpio_writeEnable_driver;
 
   BufferCC_1 io_gpio_read_buffercc (
-    .io_dataIn     (io_gpio_read                      ), //i
-    .io_dataOut    (io_gpio_read_buffercc_io_dataOut  ), //o
-    .clk           (clk                               ), //i
-    .reset         (reset                             )  //i
+    .io_dataIn     (io_gpio_read[15:0]                      ), //i
+    .io_dataOut    (io_gpio_read_buffercc_io_dataOut[15:0]  ), //o
+    .clk           (clk                                     ), //i
+    .reset         (reset                                   )  //i
   );
   assign io_value = io_gpio_read_buffercc_io_dataOut;
   assign io_apb_PREADY = 1'b1;
@@ -839,6 +826,7 @@ module Emif_Apb (
   input               clk,
   input               reset
 );
+
   reg                 penable;
   reg                 penable_regNext;
   wire                when_Emif_Ctrl_l71;
@@ -885,6 +873,7 @@ module StreamFifo (
   input               clk,
   input               reset
 );
+
   reg        [7:0]    _zz_logic_ram_port0;
   wire       [3:0]    _zz_logic_pushPtr_valueNext;
   wire       [0:0]    _zz_logic_pushPtr_valueNext_1;
@@ -913,7 +902,7 @@ module StreamFifo (
   wire                logic_empty;
   wire                logic_full;
   reg                 _zz_io_pop_valid;
-  wire                when_Stream_l933;
+  wire                when_Stream_l946;
   wire       [3:0]    logic_ptrDif;
   reg [7:0] logic_ram [0:15];
 
@@ -996,7 +985,7 @@ module StreamFifo (
   assign io_push_ready = (! logic_full);
   assign io_pop_valid = ((! logic_empty) && (! (_zz_io_pop_valid && (! logic_full))));
   assign io_pop_payload = _zz_logic_ram_port0;
-  assign when_Stream_l933 = (logic_pushing != logic_popping);
+  assign when_Stream_l946 = (logic_pushing != logic_popping);
   assign logic_ptrDif = (logic_pushPtr_value - logic_popPtr_value);
   assign io_occupancy = {(logic_risingOccupancy && logic_ptrMatch),logic_ptrDif};
   assign io_availability = {((! logic_risingOccupancy) && logic_ptrMatch),_zz_io_availability};
@@ -1010,7 +999,7 @@ module StreamFifo (
       logic_pushPtr_value <= logic_pushPtr_valueNext;
       logic_popPtr_value <= logic_popPtr_valueNext;
       _zz_io_pop_valid <= (logic_popPtr_valueNext == logic_pushPtr_value);
-      if(when_Stream_l933) begin
+      if(when_Stream_l946) begin
         logic_risingOccupancy <= logic_pushing;
       end
       if(io_flush) begin
@@ -1024,8 +1013,8 @@ endmodule
 
 module UartCtrl (
   input      [2:0]    io_config_frame_dataLength,
-  input      `UartStopType_binary_sequential_type io_config_frame_stop,
-  input      `UartParityType_binary_sequential_type io_config_frame_parity,
+  input      [0:0]    io_config_frame_stop,
+  input      [1:0]    io_config_frame_parity,
   input      [19:0]   io_config_clockDivider,
   input               io_write_valid,
   output reg          io_write_ready,
@@ -1041,6 +1030,12 @@ module UartCtrl (
   input               clk,
   input               reset
 );
+  localparam UartStopType_ONE = 1'd0;
+  localparam UartStopType_TWO = 1'd1;
+  localparam UartParityType_NONE = 2'd0;
+  localparam UartParityType_EVEN = 2'd1;
+  localparam UartParityType_ODD = 2'd2;
+
   wire                tx_io_write_ready;
   wire                tx_io_txd;
   wire                rx_io_read_valid;
@@ -1050,6 +1045,7 @@ module UartCtrl (
   wire                rx_io_break;
   reg        [19:0]   clockDivider_counter;
   wire                clockDivider_tick;
+  reg                 clockDivider_tickReg;
   reg                 io_write_thrown_valid;
   wire                io_write_thrown_ready;
   wire       [7:0]    io_write_thrown_payload;
@@ -1060,47 +1056,47 @@ module UartCtrl (
 
 
   UartCtrlTx tx (
-    .io_configFrame_dataLength    (io_config_frame_dataLength  ), //i
-    .io_configFrame_stop          (io_config_frame_stop        ), //i
-    .io_configFrame_parity        (io_config_frame_parity      ), //i
-    .io_samplingTick              (clockDivider_tick           ), //i
-    .io_write_valid               (io_write_thrown_valid       ), //i
-    .io_write_ready               (tx_io_write_ready           ), //o
-    .io_write_payload             (io_write_thrown_payload     ), //i
-    .io_cts                       (1'b0                        ), //i
-    .io_txd                       (tx_io_txd                   ), //o
-    .io_break                     (io_writeBreak               ), //i
-    .clk                          (clk                         ), //i
-    .reset                        (reset                       )  //i
+    .io_configFrame_dataLength    (io_config_frame_dataLength[2:0]  ), //i
+    .io_configFrame_stop          (io_config_frame_stop             ), //i
+    .io_configFrame_parity        (io_config_frame_parity[1:0]      ), //i
+    .io_samplingTick              (clockDivider_tickReg             ), //i
+    .io_write_valid               (io_write_thrown_valid            ), //i
+    .io_write_ready               (tx_io_write_ready                ), //o
+    .io_write_payload             (io_write_thrown_payload[7:0]     ), //i
+    .io_cts                       (1'b0                             ), //i
+    .io_txd                       (tx_io_txd                        ), //o
+    .io_break                     (io_writeBreak                    ), //i
+    .clk                          (clk                              ), //i
+    .reset                        (reset                            )  //i
   );
   UartCtrlRx rx (
-    .io_configFrame_dataLength    (io_config_frame_dataLength  ), //i
-    .io_configFrame_stop          (io_config_frame_stop        ), //i
-    .io_configFrame_parity        (io_config_frame_parity      ), //i
-    .io_samplingTick              (clockDivider_tick           ), //i
-    .io_read_valid                (rx_io_read_valid            ), //o
-    .io_read_ready                (io_read_ready               ), //i
-    .io_read_payload              (rx_io_read_payload          ), //o
-    .io_rxd                       (io_uart_rxd                 ), //i
-    .io_rts                       (rx_io_rts                   ), //o
-    .io_error                     (rx_io_error                 ), //o
-    .io_break                     (rx_io_break                 ), //o
-    .clk                          (clk                         ), //i
-    .reset                        (reset                       )  //i
+    .io_configFrame_dataLength    (io_config_frame_dataLength[2:0]  ), //i
+    .io_configFrame_stop          (io_config_frame_stop             ), //i
+    .io_configFrame_parity        (io_config_frame_parity[1:0]      ), //i
+    .io_samplingTick              (clockDivider_tickReg             ), //i
+    .io_read_valid                (rx_io_read_valid                 ), //o
+    .io_read_ready                (io_read_ready                    ), //i
+    .io_read_payload              (rx_io_read_payload[7:0]          ), //o
+    .io_rxd                       (io_uart_rxd                      ), //i
+    .io_rts                       (rx_io_rts                        ), //o
+    .io_error                     (rx_io_error                      ), //o
+    .io_break                     (rx_io_break                      ), //o
+    .clk                          (clk                              ), //i
+    .reset                        (reset                            )  //i
   );
   `ifndef SYNTHESIS
   always @(*) begin
     case(io_config_frame_stop)
-      `UartStopType_binary_sequential_ONE : io_config_frame_stop_string = "ONE";
-      `UartStopType_binary_sequential_TWO : io_config_frame_stop_string = "TWO";
+      UartStopType_ONE : io_config_frame_stop_string = "ONE";
+      UartStopType_TWO : io_config_frame_stop_string = "TWO";
       default : io_config_frame_stop_string = "???";
     endcase
   end
   always @(*) begin
     case(io_config_frame_parity)
-      `UartParityType_binary_sequential_NONE : io_config_frame_parity_string = "NONE";
-      `UartParityType_binary_sequential_EVEN : io_config_frame_parity_string = "EVEN";
-      `UartParityType_binary_sequential_ODD : io_config_frame_parity_string = "ODD ";
+      UartParityType_NONE : io_config_frame_parity_string = "NONE";
+      UartParityType_EVEN : io_config_frame_parity_string = "EVEN";
+      UartParityType_ODD : io_config_frame_parity_string = "ODD ";
       default : io_config_frame_parity_string = "????";
     endcase
   end
@@ -1131,7 +1127,9 @@ module UartCtrl (
   always @(posedge clk or posedge reset) begin
     if(reset) begin
       clockDivider_counter <= 20'h0;
+      clockDivider_tickReg <= 1'b0;
     end else begin
+      clockDivider_tickReg <= clockDivider_tick;
       clockDivider_counter <= (clockDivider_counter - 20'h00001);
       if(clockDivider_tick) begin
         clockDivider_counter <= io_config_clockDivider;
@@ -1148,6 +1146,7 @@ module BufferCC_1 (
   input               clk,
   input               reset
 );
+
   (* async_reg = "true" *) reg        [15:0]   buffers_0;
   (* async_reg = "true" *) reg        [15:0]   buffers_1;
 
@@ -1162,8 +1161,8 @@ endmodule
 
 module UartCtrlRx (
   input      [2:0]    io_configFrame_dataLength,
-  input      `UartStopType_binary_sequential_type io_configFrame_stop,
-  input      `UartParityType_binary_sequential_type io_configFrame_parity,
+  input      [0:0]    io_configFrame_stop,
+  input      [1:0]    io_configFrame_parity,
   input               io_samplingTick,
   output              io_read_valid,
   input               io_read_ready,
@@ -1175,6 +1174,17 @@ module UartCtrlRx (
   input               clk,
   input               reset
 );
+  localparam UartStopType_ONE = 1'd0;
+  localparam UartStopType_TWO = 1'd1;
+  localparam UartParityType_NONE = 2'd0;
+  localparam UartParityType_EVEN = 2'd1;
+  localparam UartParityType_ODD = 2'd2;
+  localparam UartCtrlRxState_IDLE = 3'd0;
+  localparam UartCtrlRxState_START = 3'd1;
+  localparam UartCtrlRxState_DATA = 3'd2;
+  localparam UartCtrlRxState_PARITY = 3'd3;
+  localparam UartCtrlRxState_STOP = 3'd4;
+
   wire                io_rxd_buffercc_io_dataOut;
   wire       [2:0]    _zz_when_UartCtrlRx_l139;
   wire       [0:0]    _zz_when_UartCtrlRx_l139_1;
@@ -1192,7 +1202,7 @@ module UartCtrlRx (
   reg        [6:0]    break_counter;
   wire                break_valid;
   wire                when_UartCtrlRx_l69;
-  reg        `UartCtrlRxState_binary_sequential_type stateMachine_state;
+  reg        [2:0]    stateMachine_state;
   reg                 stateMachine_parity;
   reg        [7:0]    stateMachine_shifter;
   reg                 stateMachine_validReg;
@@ -1210,7 +1220,7 @@ module UartCtrlRx (
   `endif
 
 
-  assign _zz_when_UartCtrlRx_l139_1 = ((io_configFrame_stop == `UartStopType_binary_sequential_ONE) ? 1'b0 : 1'b1);
+  assign _zz_when_UartCtrlRx_l139_1 = ((io_configFrame_stop == UartStopType_ONE) ? 1'b0 : 1'b1);
   assign _zz_when_UartCtrlRx_l139 = {2'd0, _zz_when_UartCtrlRx_l139_1};
   BufferCC io_rxd_buffercc (
     .io_dataIn     (io_rxd                      ), //i
@@ -1221,26 +1231,26 @@ module UartCtrlRx (
   `ifndef SYNTHESIS
   always @(*) begin
     case(io_configFrame_stop)
-      `UartStopType_binary_sequential_ONE : io_configFrame_stop_string = "ONE";
-      `UartStopType_binary_sequential_TWO : io_configFrame_stop_string = "TWO";
+      UartStopType_ONE : io_configFrame_stop_string = "ONE";
+      UartStopType_TWO : io_configFrame_stop_string = "TWO";
       default : io_configFrame_stop_string = "???";
     endcase
   end
   always @(*) begin
     case(io_configFrame_parity)
-      `UartParityType_binary_sequential_NONE : io_configFrame_parity_string = "NONE";
-      `UartParityType_binary_sequential_EVEN : io_configFrame_parity_string = "EVEN";
-      `UartParityType_binary_sequential_ODD : io_configFrame_parity_string = "ODD ";
+      UartParityType_NONE : io_configFrame_parity_string = "NONE";
+      UartParityType_EVEN : io_configFrame_parity_string = "EVEN";
+      UartParityType_ODD : io_configFrame_parity_string = "ODD ";
       default : io_configFrame_parity_string = "????";
     endcase
   end
   always @(*) begin
     case(stateMachine_state)
-      `UartCtrlRxState_binary_sequential_IDLE : stateMachine_state_string = "IDLE  ";
-      `UartCtrlRxState_binary_sequential_START : stateMachine_state_string = "START ";
-      `UartCtrlRxState_binary_sequential_DATA : stateMachine_state_string = "DATA  ";
-      `UartCtrlRxState_binary_sequential_PARITY : stateMachine_state_string = "PARITY";
-      `UartCtrlRxState_binary_sequential_STOP : stateMachine_state_string = "STOP  ";
+      UartCtrlRxState_IDLE : stateMachine_state_string = "IDLE  ";
+      UartCtrlRxState_START : stateMachine_state_string = "START ";
+      UartCtrlRxState_DATA : stateMachine_state_string = "DATA  ";
+      UartCtrlRxState_PARITY : stateMachine_state_string = "PARITY";
+      UartCtrlRxState_STOP : stateMachine_state_string = "STOP  ";
       default : stateMachine_state_string = "??????";
     endcase
   end
@@ -1249,13 +1259,13 @@ module UartCtrlRx (
   always @(*) begin
     io_error = 1'b0;
     case(stateMachine_state)
-      `UartCtrlRxState_binary_sequential_IDLE : begin
+      UartCtrlRxState_IDLE : begin
       end
-      `UartCtrlRxState_binary_sequential_START : begin
+      UartCtrlRxState_START : begin
       end
-      `UartCtrlRxState_binary_sequential_DATA : begin
+      UartCtrlRxState_DATA : begin
       end
-      `UartCtrlRxState_binary_sequential_PARITY : begin
+      UartCtrlRxState_PARITY : begin
         if(bitTimer_tick) begin
           if(!when_UartCtrlRx_l125) begin
             io_error = 1'b1;
@@ -1292,7 +1302,7 @@ module UartCtrlRx (
   assign when_UartCtrlRx_l93 = ((sampler_tick && (! sampler_value)) && (! break_valid));
   assign when_UartCtrlRx_l103 = (sampler_value == 1'b1);
   assign when_UartCtrlRx_l111 = (bitCounter_value == io_configFrame_dataLength);
-  assign when_UartCtrlRx_l113 = (io_configFrame_parity == `UartParityType_binary_sequential_NONE);
+  assign when_UartCtrlRx_l113 = (io_configFrame_parity == UartParityType_NONE);
   assign when_UartCtrlRx_l125 = (stateMachine_parity == sampler_value);
   assign when_UartCtrlRx_l136 = (! sampler_value);
   assign when_UartCtrlRx_l139 = (bitCounter_value == _zz_when_UartCtrlRx_l139);
@@ -1305,7 +1315,7 @@ module UartCtrlRx (
       sampler_value <= 1'b1;
       sampler_tick <= 1'b0;
       break_counter <= 7'h0;
-      stateMachine_state <= `UartCtrlRxState_binary_sequential_IDLE;
+      stateMachine_state <= UartCtrlRxState_IDLE;
       stateMachine_validReg <= 1'b0;
     end else begin
       _zz_io_rts <= (! io_read_ready);
@@ -1326,48 +1336,48 @@ module UartCtrlRx (
       end
       stateMachine_validReg <= 1'b0;
       case(stateMachine_state)
-        `UartCtrlRxState_binary_sequential_IDLE : begin
+        UartCtrlRxState_IDLE : begin
           if(when_UartCtrlRx_l93) begin
-            stateMachine_state <= `UartCtrlRxState_binary_sequential_START;
+            stateMachine_state <= UartCtrlRxState_START;
           end
         end
-        `UartCtrlRxState_binary_sequential_START : begin
+        UartCtrlRxState_START : begin
           if(bitTimer_tick) begin
-            stateMachine_state <= `UartCtrlRxState_binary_sequential_DATA;
+            stateMachine_state <= UartCtrlRxState_DATA;
             if(when_UartCtrlRx_l103) begin
-              stateMachine_state <= `UartCtrlRxState_binary_sequential_IDLE;
+              stateMachine_state <= UartCtrlRxState_IDLE;
             end
           end
         end
-        `UartCtrlRxState_binary_sequential_DATA : begin
+        UartCtrlRxState_DATA : begin
           if(bitTimer_tick) begin
             if(when_UartCtrlRx_l111) begin
               if(when_UartCtrlRx_l113) begin
-                stateMachine_state <= `UartCtrlRxState_binary_sequential_STOP;
+                stateMachine_state <= UartCtrlRxState_STOP;
                 stateMachine_validReg <= 1'b1;
               end else begin
-                stateMachine_state <= `UartCtrlRxState_binary_sequential_PARITY;
+                stateMachine_state <= UartCtrlRxState_PARITY;
               end
             end
           end
         end
-        `UartCtrlRxState_binary_sequential_PARITY : begin
+        UartCtrlRxState_PARITY : begin
           if(bitTimer_tick) begin
             if(when_UartCtrlRx_l125) begin
-              stateMachine_state <= `UartCtrlRxState_binary_sequential_STOP;
+              stateMachine_state <= UartCtrlRxState_STOP;
               stateMachine_validReg <= 1'b1;
             end else begin
-              stateMachine_state <= `UartCtrlRxState_binary_sequential_IDLE;
+              stateMachine_state <= UartCtrlRxState_IDLE;
             end
           end
         end
         default : begin
           if(bitTimer_tick) begin
             if(when_UartCtrlRx_l136) begin
-              stateMachine_state <= `UartCtrlRxState_binary_sequential_IDLE;
+              stateMachine_state <= UartCtrlRxState_IDLE;
             end else begin
               if(when_UartCtrlRx_l139) begin
-                stateMachine_state <= `UartCtrlRxState_binary_sequential_IDLE;
+                stateMachine_state <= UartCtrlRxState_IDLE;
               end
             end
           end
@@ -1390,18 +1400,18 @@ module UartCtrlRx (
       stateMachine_parity <= (stateMachine_parity ^ sampler_value);
     end
     case(stateMachine_state)
-      `UartCtrlRxState_binary_sequential_IDLE : begin
+      UartCtrlRxState_IDLE : begin
         if(when_UartCtrlRx_l93) begin
           bitTimer_counter <= 3'b001;
         end
       end
-      `UartCtrlRxState_binary_sequential_START : begin
+      UartCtrlRxState_START : begin
         if(bitTimer_tick) begin
           bitCounter_value <= 3'b000;
-          stateMachine_parity <= (io_configFrame_parity == `UartParityType_binary_sequential_ODD);
+          stateMachine_parity <= (io_configFrame_parity == UartParityType_ODD);
         end
       end
-      `UartCtrlRxState_binary_sequential_DATA : begin
+      UartCtrlRxState_DATA : begin
         if(bitTimer_tick) begin
           stateMachine_shifter[bitCounter_value] <= sampler_value;
           if(when_UartCtrlRx_l111) begin
@@ -1409,7 +1419,7 @@ module UartCtrlRx (
           end
         end
       end
-      `UartCtrlRxState_binary_sequential_PARITY : begin
+      UartCtrlRxState_PARITY : begin
         if(bitTimer_tick) begin
           bitCounter_value <= 3'b000;
         end
@@ -1424,8 +1434,8 @@ endmodule
 
 module UartCtrlTx (
   input      [2:0]    io_configFrame_dataLength,
-  input      `UartStopType_binary_sequential_type io_configFrame_stop,
-  input      `UartParityType_binary_sequential_type io_configFrame_parity,
+  input      [0:0]    io_configFrame_stop,
+  input      [1:0]    io_configFrame_parity,
   input               io_samplingTick,
   input               io_write_valid,
   output reg          io_write_ready,
@@ -1436,6 +1446,17 @@ module UartCtrlTx (
   input               clk,
   input               reset
 );
+  localparam UartStopType_ONE = 1'd0;
+  localparam UartStopType_TWO = 1'd1;
+  localparam UartParityType_NONE = 2'd0;
+  localparam UartParityType_EVEN = 2'd1;
+  localparam UartParityType_ODD = 2'd2;
+  localparam UartCtrlTxState_IDLE = 3'd0;
+  localparam UartCtrlTxState_START = 3'd1;
+  localparam UartCtrlTxState_DATA = 3'd2;
+  localparam UartCtrlTxState_PARITY = 3'd3;
+  localparam UartCtrlTxState_STOP = 3'd4;
+
   wire       [2:0]    _zz_clockDivider_counter_valueNext;
   wire       [0:0]    _zz_clockDivider_counter_valueNext_1;
   wire       [2:0]    _zz_when_UartCtrlTx_l93;
@@ -1447,7 +1468,7 @@ module UartCtrlTx (
   wire                clockDivider_counter_willOverflowIfInc;
   wire                clockDivider_counter_willOverflow;
   reg        [2:0]    tickCounter_value;
-  reg        `UartCtrlTxState_binary_sequential_type stateMachine_state;
+  reg        [2:0]    stateMachine_state;
   reg                 stateMachine_parity;
   reg                 stateMachine_txd;
   wire                when_UartCtrlTx_l58;
@@ -1464,31 +1485,31 @@ module UartCtrlTx (
 
   assign _zz_clockDivider_counter_valueNext_1 = clockDivider_counter_willIncrement;
   assign _zz_clockDivider_counter_valueNext = {2'd0, _zz_clockDivider_counter_valueNext_1};
-  assign _zz_when_UartCtrlTx_l93_1 = ((io_configFrame_stop == `UartStopType_binary_sequential_ONE) ? 1'b0 : 1'b1);
+  assign _zz_when_UartCtrlTx_l93_1 = ((io_configFrame_stop == UartStopType_ONE) ? 1'b0 : 1'b1);
   assign _zz_when_UartCtrlTx_l93 = {2'd0, _zz_when_UartCtrlTx_l93_1};
   `ifndef SYNTHESIS
   always @(*) begin
     case(io_configFrame_stop)
-      `UartStopType_binary_sequential_ONE : io_configFrame_stop_string = "ONE";
-      `UartStopType_binary_sequential_TWO : io_configFrame_stop_string = "TWO";
+      UartStopType_ONE : io_configFrame_stop_string = "ONE";
+      UartStopType_TWO : io_configFrame_stop_string = "TWO";
       default : io_configFrame_stop_string = "???";
     endcase
   end
   always @(*) begin
     case(io_configFrame_parity)
-      `UartParityType_binary_sequential_NONE : io_configFrame_parity_string = "NONE";
-      `UartParityType_binary_sequential_EVEN : io_configFrame_parity_string = "EVEN";
-      `UartParityType_binary_sequential_ODD : io_configFrame_parity_string = "ODD ";
+      UartParityType_NONE : io_configFrame_parity_string = "NONE";
+      UartParityType_EVEN : io_configFrame_parity_string = "EVEN";
+      UartParityType_ODD : io_configFrame_parity_string = "ODD ";
       default : io_configFrame_parity_string = "????";
     endcase
   end
   always @(*) begin
     case(stateMachine_state)
-      `UartCtrlTxState_binary_sequential_IDLE : stateMachine_state_string = "IDLE  ";
-      `UartCtrlTxState_binary_sequential_START : stateMachine_state_string = "START ";
-      `UartCtrlTxState_binary_sequential_DATA : stateMachine_state_string = "DATA  ";
-      `UartCtrlTxState_binary_sequential_PARITY : stateMachine_state_string = "PARITY";
-      `UartCtrlTxState_binary_sequential_STOP : stateMachine_state_string = "STOP  ";
+      UartCtrlTxState_IDLE : stateMachine_state_string = "IDLE  ";
+      UartCtrlTxState_START : stateMachine_state_string = "START ";
+      UartCtrlTxState_DATA : stateMachine_state_string = "DATA  ";
+      UartCtrlTxState_PARITY : stateMachine_state_string = "PARITY";
+      UartCtrlTxState_STOP : stateMachine_state_string = "STOP  ";
       default : stateMachine_state_string = "??????";
     endcase
   end
@@ -1518,15 +1539,15 @@ module UartCtrlTx (
   always @(*) begin
     stateMachine_txd = 1'b1;
     case(stateMachine_state)
-      `UartCtrlTxState_binary_sequential_IDLE : begin
+      UartCtrlTxState_IDLE : begin
       end
-      `UartCtrlTxState_binary_sequential_START : begin
+      UartCtrlTxState_START : begin
         stateMachine_txd = 1'b0;
       end
-      `UartCtrlTxState_binary_sequential_DATA : begin
+      UartCtrlTxState_DATA : begin
         stateMachine_txd = io_write_payload[tickCounter_value];
       end
-      `UartCtrlTxState_binary_sequential_PARITY : begin
+      UartCtrlTxState_PARITY : begin
         stateMachine_txd = stateMachine_parity;
       end
       default : begin
@@ -1537,18 +1558,18 @@ module UartCtrlTx (
   always @(*) begin
     io_write_ready = io_break;
     case(stateMachine_state)
-      `UartCtrlTxState_binary_sequential_IDLE : begin
+      UartCtrlTxState_IDLE : begin
       end
-      `UartCtrlTxState_binary_sequential_START : begin
+      UartCtrlTxState_START : begin
       end
-      `UartCtrlTxState_binary_sequential_DATA : begin
+      UartCtrlTxState_DATA : begin
         if(clockDivider_counter_willOverflow) begin
           if(when_UartCtrlTx_l73) begin
             io_write_ready = 1'b1;
           end
         end
       end
-      `UartCtrlTxState_binary_sequential_PARITY : begin
+      UartCtrlTxState_PARITY : begin
       end
       default : begin
       end
@@ -1557,47 +1578,47 @@ module UartCtrlTx (
 
   assign when_UartCtrlTx_l58 = ((io_write_valid && (! io_cts)) && clockDivider_counter_willOverflow);
   assign when_UartCtrlTx_l73 = (tickCounter_value == io_configFrame_dataLength);
-  assign when_UartCtrlTx_l76 = (io_configFrame_parity == `UartParityType_binary_sequential_NONE);
+  assign when_UartCtrlTx_l76 = (io_configFrame_parity == UartParityType_NONE);
   assign when_UartCtrlTx_l93 = (tickCounter_value == _zz_when_UartCtrlTx_l93);
   assign io_txd = _zz_io_txd;
   always @(posedge clk or posedge reset) begin
     if(reset) begin
       clockDivider_counter_value <= 3'b000;
-      stateMachine_state <= `UartCtrlTxState_binary_sequential_IDLE;
+      stateMachine_state <= UartCtrlTxState_IDLE;
       _zz_io_txd <= 1'b1;
     end else begin
       clockDivider_counter_value <= clockDivider_counter_valueNext;
       case(stateMachine_state)
-        `UartCtrlTxState_binary_sequential_IDLE : begin
+        UartCtrlTxState_IDLE : begin
           if(when_UartCtrlTx_l58) begin
-            stateMachine_state <= `UartCtrlTxState_binary_sequential_START;
+            stateMachine_state <= UartCtrlTxState_START;
           end
         end
-        `UartCtrlTxState_binary_sequential_START : begin
+        UartCtrlTxState_START : begin
           if(clockDivider_counter_willOverflow) begin
-            stateMachine_state <= `UartCtrlTxState_binary_sequential_DATA;
+            stateMachine_state <= UartCtrlTxState_DATA;
           end
         end
-        `UartCtrlTxState_binary_sequential_DATA : begin
+        UartCtrlTxState_DATA : begin
           if(clockDivider_counter_willOverflow) begin
             if(when_UartCtrlTx_l73) begin
               if(when_UartCtrlTx_l76) begin
-                stateMachine_state <= `UartCtrlTxState_binary_sequential_STOP;
+                stateMachine_state <= UartCtrlTxState_STOP;
               end else begin
-                stateMachine_state <= `UartCtrlTxState_binary_sequential_PARITY;
+                stateMachine_state <= UartCtrlTxState_PARITY;
               end
             end
           end
         end
-        `UartCtrlTxState_binary_sequential_PARITY : begin
+        UartCtrlTxState_PARITY : begin
           if(clockDivider_counter_willOverflow) begin
-            stateMachine_state <= `UartCtrlTxState_binary_sequential_STOP;
+            stateMachine_state <= UartCtrlTxState_STOP;
           end
         end
         default : begin
           if(clockDivider_counter_willOverflow) begin
             if(when_UartCtrlTx_l93) begin
-              stateMachine_state <= (io_write_valid ? `UartCtrlTxState_binary_sequential_START : `UartCtrlTxState_binary_sequential_IDLE);
+              stateMachine_state <= (io_write_valid ? UartCtrlTxState_START : UartCtrlTxState_IDLE);
             end
           end
         end
@@ -1614,22 +1635,22 @@ module UartCtrlTx (
       stateMachine_parity <= (stateMachine_parity ^ stateMachine_txd);
     end
     case(stateMachine_state)
-      `UartCtrlTxState_binary_sequential_IDLE : begin
+      UartCtrlTxState_IDLE : begin
       end
-      `UartCtrlTxState_binary_sequential_START : begin
+      UartCtrlTxState_START : begin
         if(clockDivider_counter_willOverflow) begin
-          stateMachine_parity <= (io_configFrame_parity == `UartParityType_binary_sequential_ODD);
+          stateMachine_parity <= (io_configFrame_parity == UartParityType_ODD);
           tickCounter_value <= 3'b000;
         end
       end
-      `UartCtrlTxState_binary_sequential_DATA : begin
+      UartCtrlTxState_DATA : begin
         if(clockDivider_counter_willOverflow) begin
           if(when_UartCtrlTx_l73) begin
             tickCounter_value <= 3'b000;
           end
         end
       end
-      `UartCtrlTxState_binary_sequential_PARITY : begin
+      UartCtrlTxState_PARITY : begin
         if(clockDivider_counter_willOverflow) begin
           tickCounter_value <= 3'b000;
         end
@@ -1648,6 +1669,7 @@ module BufferCC (
   input               clk,
   input               reset
 );
+
   (* async_reg = "true" *) reg                 buffers_0;
   (* async_reg = "true" *) reg                 buffers_1;
 

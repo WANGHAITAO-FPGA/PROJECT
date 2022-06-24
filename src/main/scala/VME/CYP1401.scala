@@ -82,12 +82,12 @@ case class CYP1401_Init() extends Component{
   io.GSSL_MODE_C := 0
   io.GSSL_INSEL_A := True
   io.GSSL_INSEL_B := True
-  io.GSSL_INSEL_C := True
-  io.GSSL_LPEN_ABCD := False
+  io.GSSL_INSEL_C := True     //硬件回环，FALSE有效
+  io.GSSL_LPEN_ABCD := False   //软件回环，TRUE有效
   io.GSSL_SPDSEL_ABCD := True
 
   val gsslResetUnbuffered  = True
-  val GSSL_Reset_Counter = Reg(UInt(22 bits)) init 0
+  val GSSL_Reset_Counter = Reg(UInt(22 bits)) init 0         //22
   when(GSSL_Reset_Counter =/= U(GSSL_Reset_Counter.range -> true)){
     GSSL_Reset_Counter := GSSL_Reset_Counter + 1
     gsslResetUnbuffered := False

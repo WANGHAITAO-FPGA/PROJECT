@@ -1,6 +1,6 @@
 // Generator : SpinalHDL v1.6.1    git head : 3bf789d53b1b5a36974196e2d591342e15ddf28c
 // Component : GTP_TEST
-// Git hash  : e12463ecd71b83aebd7d90cc6cfe530450f7b623
+// Git hash  : faa136a5cd11b0754bd45144fa843c52609e72a5
 
 `timescale 1ns/1ps 
 
@@ -64,7 +64,7 @@ module GTP_TEST (
     .s_axi_tx_tvalid      (gtx_area_gtxtest_s_axi_tx_tvalid       ), //o
     .s_axi_tx_tready      (s_axi_tx_tready                        ), //i
     .tx_packet_gtxid      (32'h00000001                           ), //i
-    .tx_packet_head       (32'h0000013b                           ), //i
+    .tx_packet_head       (32'h00000304                           ), //i
     .tx_packet_req        (gtx_area_gtxtest_tx_packet_req         ), //i
     .tx_packet_trigger    (1'b0                                   ), //i
     .crc_data             (gtx_area_gtxtest_crc_data[31:0]        ), //o
@@ -150,6 +150,8 @@ module gtp_tx (
   wire                tx_area_fsm_wantKill;
   reg        [2:0]    tx_area_fsm_stateReg;
   reg        [2:0]    tx_area_fsm_stateNext;
+  reg                 tx_packet_req_regNext;
+  wire                when_gtp_tx_l52;
   wire                when_gtp_tx_l70;
   wire                when_gtp_tx_l73;
   wire                when_gtp_tx_l95;
@@ -245,7 +247,7 @@ module gtp_tx (
   end
 
   assign tx_area_fsm_wantKill = 1'b0;
-  assign crc_data = 32'h00001234;
+  assign crc_data = tx_area_crc32_io_nextcrc;
   assign tx_packet_addra = tx_area_rd_addr;
   assign tx_packet_rden = tx_area_rd_rden;
   assign s_axi_tx_tkeep = 4'b1111;
@@ -256,7 +258,7 @@ module gtp_tx (
     tx_area_fsm_stateNext = tx_area_fsm_stateReg;
     case(tx_area_fsm_stateReg)
       tx_area_fsm_enumDef_Wait_Start : begin
-        if(tx_packet_req) begin
+        if(when_gtp_tx_l52) begin
           tx_area_fsm_stateNext = tx_area_fsm_enumDef_Send_Head;
         end
       end
@@ -291,6 +293,7 @@ module gtp_tx (
     end
   end
 
+  assign when_gtp_tx_l52 = (tx_packet_req && (! tx_packet_req_regNext));
   assign when_gtp_tx_l70 = (tx_packet_head[15 : 0] == 16'h0001);
   assign when_gtp_tx_l73 = (tx_packet_head[15 : 8] == 8'h0);
   assign when_gtp_tx_l95 = (tx_area_length < _zz_when_gtp_tx_l95);
@@ -361,6 +364,10 @@ module gtp_tx (
         end
       endcase
     end
+  end
+
+  always @(posedge log_clk) begin
+    tx_packet_req_regNext <= tx_packet_req;
   end
 
 

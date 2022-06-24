@@ -9,10 +9,11 @@ import scala.util.Random.nextBoolean
 
 case class SsiInterface()  extends Bundle with IMasterSlave{
   val clk = Bool()
+  val ss = Bool()
   val data = Bool()
   val en = Bool()
   override def asMaster(): Unit = {
-    out(clk)
+    out(clk,ss)
     in(data,en)
   }
 }
@@ -36,6 +37,7 @@ case class SSI(ssi_clkToogle : Int,datawidth : Int, Wait_Tcnt : Int) extends Com
   }
 
   val ssi_clk = Reg(Bool()) init True
+  val ss = Reg(Bool()) init True
   val buffer = Reg(Bits(datawidth bits)) init 0
   val postion = Reg(Bits(datawidth bits)) init 0
 
@@ -48,7 +50,10 @@ case class SSI(ssi_clkToogle : Int,datawidth : Int, Wait_Tcnt : Int) extends Com
           timer.reset := True
           counter := 0
           buffer := 0
+          ss := False
           goto(Dummy_State)
+        }otherwise{
+          ss := True
         }
       }
     }
@@ -91,6 +96,7 @@ case class SSI(ssi_clkToogle : Int,datawidth : Int, Wait_Tcnt : Int) extends Com
       whenIsActive{
         ssi_clk := True
         counter := counter + 1
+        ss := True
         when(counter === Wait_Tcnt){
           counter := 0
           goto(Wait_Start)
@@ -100,6 +106,7 @@ case class SSI(ssi_clkToogle : Int,datawidth : Int, Wait_Tcnt : Int) extends Com
   }
   io.ssi.clk := ssi_clk
   io.postion := postion
+  io.ssi.ss := ss
 }
 
 object SSI{

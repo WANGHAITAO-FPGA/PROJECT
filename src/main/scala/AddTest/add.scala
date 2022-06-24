@@ -3,6 +3,8 @@ package AddTest
 import spinal.core._
 import spinal.lib._
 
+import java.time.{LocalDate, LocalDateTime}
+
 case class inPort(dataWidth : Int = 8) extends Bundle{
   val data1 = UInt(dataWidth bits)
   val data2 = UInt(dataWidth bits)

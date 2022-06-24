@@ -2,17 +2,17 @@ package VME
 
 import spinal.core._
 import spinal.core.sim.SimConfig
-import spinal.lib.io.TriState
+import spinal.lib.io.{InOutWrapper, TriState}
 import spinal.lib.{CounterFreeRun, master, slave}
 
-case class Top_Module(timer_cnt : Int) extends Component{
+case class Top_Module(datawidth : Int,timer_cnt : Int) extends Component{
   val io = new Bundle{
     val vme_clk = in Bool()
     val gssl_clk = in Bool()
     val reset = in Bool()
     /************VME INTERFACE*********************/
     val vme = master(VmeInterface())
-    val data = master(TriState(Bits(16 bits)))
+    //val data = master(TriState(Bits(datawidth bits)))
     val gap = in Bits(4 bits)
     val sw = in Bits(4 bits)
     val gap4 = in Bool()
@@ -27,11 +27,11 @@ case class Top_Module(timer_cnt : Int) extends Component{
   val vme_area = new ClockingArea(ClockDomain(io.vme_clk,io.reset)){
     val vme_data = Reg(Vec(Bits(32 bits),6))  addTag(crossClockDomain)
     val sensor_data = Reg(Vec(Bits(32 bits),12))  addTag(crossClockDomain)
-    val vme_module = new VME_TOP
+    val vme_module = new VME_TOP(datawidth)
     vme_module.io.clk := io.vme_clk
     vme_module.io.reset := io.reset
     vme_module.io.vme <> io.vme
-    vme_module.io.data <> io.data
+//    vme_module.io.data <> io.data
     vme_module.io.gap := io.gap
     vme_module.io.gap4 := io.gap4
     vme_module.io.sw := io.sw
@@ -60,9 +60,10 @@ case class Top_Module(timer_cnt : Int) extends Component{
 }
 
 object Top_Module extends App{
-  SpinalVerilog(new Top_Module(500))
+  SpinalVerilog(InOutWrapper(new Top_Module(32,5000)))
 }
-class Top_Module_Test extends Top_Module(5000){
+
+class Top_Module_Test extends Top_Module(32,5000){
   import spinal.core.sim._
   def init = {
     vme_area.clockDomain.forkStimulus(25)
@@ -90,7 +91,7 @@ class Top_Module_Test extends Top_Module(5000){
     vme_area.clockDomain.waitSamplingWhere(io.vme.dtack.toBoolean)
     io.vme.ds0 #= false
     io.vme.ds1 #= false
-    io.data.read #= data
+    io.vme.data.read #= data
     vme_area.clockDomain.waitSamplingWhere(!io.vme.dtack.toBoolean)
     io.vme.am #= 0
     io.vme.lword #= false
@@ -113,7 +114,7 @@ class Top_Module_Test extends Top_Module(5000){
     io.vme.ds0 #= false
     io.vme.ds1 #= false
     vme_area.clockDomain.waitSamplingWhere(!io.vme.dtack.toBoolean)
-    println(io.data.write)
+    println(io.vme.data.write)
     io.vme.am #= 0
     io.vme.lword #= false
     io.vme.iack #= false
@@ -174,7 +175,7 @@ object Top_Module_Sim{
       dut.vme_read(0x0042)
       dut.vme_read(0x0044)
       dut.vme_read(0x0046)
-      dut.wait(40000)
+      dut.wait(5000)
     }
   }
 }

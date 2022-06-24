@@ -1,0 +1,328 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Test_Regif
+    </title>
+    <style>
+      div{
+          text-align: center;
+      }
+
+      body{ font-size: 0.8em; }
+      p.regif-title{
+          font-weight:800;
+          font-size:1.2em;
+      }
+      td{
+          white-space:pre-line; word-wrap: break-word; word-break: break-all;
+      }
+      td.fixWidth{
+          min-width:50px;
+          max-width:300px;
+      }
+      td.fixWidth2{
+          min-width:50px;
+          max-width:400px;
+      }
+      footer div p.info{
+          font-weight:300;
+          font-size:0.7em;
+      }
+      a {
+        color:black;text-decoration:none;
+      }
+      a:hover {
+          color:#09f;
+      }
+
+
+      .theme-default {
+          border: 3px solid #000;
+          border-collapse: collapse;
+      }
+      .theme-default td,
+      .theme-default th{
+          border: 1px solid #000;
+          border-top: 1px dashed #555;
+          border-bottom: 1px dashed #555;
+          padding: 3px;
+      }
+      .theme-default th{
+          background: #bbb;
+      }
+      .theme-default tbody td.reserved{
+          color: #bbb;
+          font-weight:200;
+          background : #eee;
+          /* text-decoration:line-through; */
+          text-decoration-color:#888;
+      }
+      .theme-default tbody tr.reg{
+          border-top: 2px solid #000;
+      }
+
+
+      .theme-spring{
+          border-collapse: collapse;
+          font-size: 1.em;
+          min-width: 800px;
+          border-radius: 5px 5px 0 0 ;
+          overflow: hidden;
+          box-shadow: 0 -10px 20px rgba(0,0,0,0.15);
+      }
+      .theme-spring th,
+      .theme-spring td {
+          padding:5px 10px;
+      }
+      .theme-spring thead tr {
+          background-color: #009879;
+          color: #ffffff;
+          text-align:center;
+          font-weight: bold;
+      }
+      .theme-spring tbody tr{
+          border-bottom: 1px solid #ddd;
+      }
+      .theme-spring tbody td{
+          border: 1px solid #ddd;
+      }
+      .theme-spring tbody tr:last-of-type{
+          border-bottom: 3px solid #009879;
+      }
+      .theme-spring tbody tr.active-row {
+          font-weight: blod;
+          color: #009879;
+      }
+      .theme-spring tbody td.reserved{
+          color: #aaa;
+          background : #fffff0;
+          /* font-style:italic; */
+          font-weight:200;
+          font-size:1.0em;
+      }
+      .theme-spring tbody tr.green{
+          background :#fffff0 ;
+      }
+
+    </style>
+  </head>
+  <body>
+  <header align="center">
+  <p class="regif-title"> Test_Regif Interface Document </p>
+  </header>
+  <div class="table">
+  <table  align="center" class="theme-default">
+      <br/>
+
+      <thead>
+        <tr align="center" >
+          <th>AddressOffset</th>
+          <th>RegName</th>
+          <th>Description</th>
+          <th>Width</th>
+          <th>Section</th>
+          <th>FieldName</th>
+          <th>R/W</th>
+          <th>Reset value</th>
+          <th>Field-Description</th>
+        </tr>
+      <thead>
+
+      <tbody>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x0</td>
+            <td align="left" rowspan="1">MY_REG_HEADER</td>
+            <td class="fixWidth" align="center" rowspan="1">帧头 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >HEADER</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >帧头</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x4</td>
+            <td align="left" rowspan="1">MY_REG_SLAVEID</td>
+            <td class="fixWidth" align="center" rowspan="1">板卡识别号 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Slaveid</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >板卡识别号</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x8</td>
+            <td align="left" rowspan="1">MY_REG_ADDRESS</td>
+            <td class="fixWidth" align="center" rowspan="1">地址 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Address</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >地址</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x28</td>
+            <td align="left" rowspan="1">MY_REG_DATA1</td>
+            <td class="fixWidth" align="center" rowspan="1">数据 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Data1</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >数据</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x2c</td>
+            <td align="left" rowspan="1">MY_REG_DATA2</td>
+            <td class="fixWidth" align="center" rowspan="1">数据 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Data2</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >数据</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x30</td>
+            <td align="left" rowspan="1">MY_REG_DATA3</td>
+            <td class="fixWidth" align="center" rowspan="1">数据 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Data3</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >数据</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x34</td>
+            <td align="left" rowspan="1">MY_REG_DATA4</td>
+            <td class="fixWidth" align="center" rowspan="1">数据 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Data4</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >数据</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x38</td>
+            <td align="left" rowspan="1">MY_REG_DATA5</td>
+            <td class="fixWidth" align="center" rowspan="1">数据 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Data5</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >数据</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x3c</td>
+            <td align="left" rowspan="1">MY_REG_DATA6</td>
+            <td class="fixWidth" align="center" rowspan="1">数据 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Data6</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >数据</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x68</td>
+            <td align="left" rowspan="1">MY_REG1_DATA1</td>
+            <td class="fixWidth" align="center" rowspan="1">数据 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >E_Data1</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >数据</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x6c</td>
+            <td align="left" rowspan="1">MY_REG1_DATA2</td>
+            <td class="fixWidth" align="center" rowspan="1">数据 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >E_Data2</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >数据</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x70</td>
+            <td align="left" rowspan="1">MY_REG1_DATA3</td>
+            <td class="fixWidth" align="center" rowspan="1">数据 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >E_Data3</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >数据</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x74</td>
+            <td align="left" rowspan="1">MY_REG1_DATA4</td>
+            <td class="fixWidth" align="center" rowspan="1">数据 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >E_Data4</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >数据</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x78</td>
+            <td align="left" rowspan="1">MY_REG1_DATA5</td>
+            <td class="fixWidth" align="center" rowspan="1">数据 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >E_Data5</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >数据</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x7c</td>
+            <td align="left" rowspan="1">MY_REG1_DATA6</td>
+            <td class="fixWidth" align="center" rowspan="1">数据 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >E_Data6</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >数据</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x80</td>
+            <td align="left" rowspan="1">MY_REG_CRC</td>
+            <td class="fixWidth" align="center" rowspan="1">帧头 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >Crc</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >帧头</td>
+          </tr>
+          <tr class="reg" align="left">
+            <td align="center" rowspan="1">0x84</td>
+            <td align="left" rowspan="1">MY_REG_END</td>
+            <td class="fixWidth" align="center" rowspan="1">帧头 </td>
+            <td align="center" rowspan="1">32</td>
+            <td class="" >[31:0]</td>
+            <td class="" >End</td>
+            <td class="" align="center">RO</td>
+            <td class="" align="right">32'b0</td>
+            <td class=" fixWidth2" >帧头</td>
+          </tr>
+      </tbody>
+  </table>
+  </div>
+  <footer align="center">
+  <div> <p class="info">Powered By <a href="https://spinalhdl.github.io/SpinalDoc-RTD/"> SpinalHDL </a> </p> </div>
+  </footer>
+  </body>
+</html>

@@ -23,6 +23,8 @@ class Mdcb_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : 
     val clk_80M = in Bool()
     val clk_160M = in Bool()
     val slaveid = in Bits(datawidth bits)
+    val AD5544_DATA = Seq.fill(ad5544_num)(out (Vec(Bits(16 bits),4)))
+    val AD5544_TRIGER = Seq.fill(ad5544_num)(out Bool())
   }
   noIoPrefix()
 
@@ -35,6 +37,7 @@ class Mdcb_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : 
     val mdcbRxPreamble = new MdcbRxPreamble(datawidth)
     mdcbRxPreamble.io.addAttribute("keep","true")
     mdcbRxPreamble.io.input << io.intput
+    mdcbRxPreamble.io.slave_id := io.slaveid
 
     val mdcbrxsimplebus = new MdcbRxSimpleBus(addrwidth,datawidth)
     mdcbrxsimplebus.io.addAttribute("keep","true")
@@ -55,6 +58,14 @@ class Mdcb_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : 
     mdcbtxsimplebus.io.RDATA := mdcbregif.io.simplebus.RDATA
     mdcbregif.io.slaveid := io.slaveid
 
+    for(i <- 0 until ad5544_num){
+      io.AD5544_TRIGER(i) := mdcbregif.io.AD5544_TRIGER(i)
+      io.AD5544_DATA(i)(0) := mdcbregif.io.AD5544_DATA(i)(0)
+      io.AD5544_DATA(i)(1) := mdcbregif.io.AD5544_DATA(i)(1)
+      io.AD5544_DATA(i)(2) := mdcbregif.io.AD5544_DATA(i)(2)
+      io.AD5544_DATA(i)(3) := mdcbregif.io.AD5544_DATA(i)(3)
+    }
+
     val adda_area = new ClockingArea(adda_clkdomain){
       val ad5544 = Seq.fill(ad5544_num)(new dac_ad5544)
       for(i <- 0 until ad5544_num){
@@ -71,6 +82,7 @@ class Mdcb_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : 
         ad5544(i).io.AD5544_DATA_IN3 := mdcbregif.io.AD5544_DATA(i)(2).asUInt
         ad5544(i).io.AD5544_DATA_IN4 := mdcbregif.io.AD5544_DATA(i)(3).asUInt
         ad5544(i).io.ad5544_trig := mdcbregif.io.AD5544_TRIGER(i)
+
       }
 
       val ad7606 = Seq.fill(ad7606_num)(new AD7606_DATA)
@@ -111,7 +123,7 @@ class Mdcb_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : 
         mdcbregif.io.BissC_Pos(i) := bissc(i).enc_position_out.asBits
       }
 
-      val encoder = Seq.fill(endcoder_num)(new Encoder_Top)
+      val encoder = Seq.fill(endcoder_num)(new Encoder_Top(false))
       for(i <- 0 until endcoder_num){
         encoder(i).io.clk := io.clk_80M
         encoder(i).io.reset := io.reset
@@ -137,7 +149,7 @@ class Mdcb_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : 
 
 object Mdcb_Top extends App{
   //SpinalConfig().addStandardMemBlackboxing(blackboxAll).generateVerilog(new Mdcb_Top(8,32,500,0,50,3,2,4,4))
-  SpinalVerilog(new Mdcb_Top(9,32,500,0,50,3,2,4,4))
+  SpinalVerilog(new Mdcb_Top(12,32,500,0,50,3,2,4,4))
 }
 
 object Mdcb_Test{
@@ -145,15 +157,88 @@ object Mdcb_Test{
   def main(args: Array[String]): Unit = {
     SimConfig.withWave.doSim(new Mdcb_Top(9,32,500,0,50,3,2,4,4)){dut=>
       dut.mdcb_area.clockDomain.forkStimulus(10)
+      dut.mdcb_area.adda_area.clockDomain.forkStimulus(20)
       dut.io.slaveid #= 0x03
       dut.io.ENCODER(0).encoder_iphase #= false
       dut.io.ENCODER(1).encoder_iphase #= false
       dut.io.ENCODER(2).encoder_iphase #= false
+      dut.io.intput.payload.last #= false
+      dut.io.intput.valid #= false
+      dut.io.slaveid #= 0x0000000f
       dut.io.M_Fault_TTL #= 0x55
       dut.io.FPGA_DI #= 0x5555
       dut.mdcb_area.clockDomain.waitSampling(20)
       dut.io.output.ready #= true
-      dut.mdcb_area.clockDomain.waitSampling(2000)
+      dut.io.intput.valid #= false
+      dut.io.intput.payload.last #= false
+      dut.mdcb_area.clockDomain.waitSampling()
+      dut.io.intput.valid #= true
+      dut.io.intput.payload.fragment #= 0x00f1f2f3
+      dut.mdcb_area.clockDomain.waitSampling()
+      dut.io.intput.valid #= true
+      dut.io.intput.payload.fragment #= 0x0000000f
+      dut.mdcb_area.clockDomain.waitSampling()
+      dut.io.intput.valid #= true
+      dut.io.intput.payload.fragment #= 0x20220527
+      dut.mdcb_area.clockDomain.waitSampling()
+      dut.io.intput.valid #= true
+      dut.io.intput.payload.fragment #= 0x70008000
+      dut.mdcb_area.clockDomain.waitSampling()
+      dut.io.intput.valid #= true
+      dut.io.intput.payload.fragment #= 0x70018002
+      dut.mdcb_area.clockDomain.waitSampling()
+      dut.io.intput.valid #= true
+      dut.io.intput.payload.fragment #= 0x00000001
+      dut.mdcb_area.clockDomain.waitSampling()
+      dut.io.intput.valid #= true
+      dut.io.intput.payload.fragment #= 0x00000001
+      dut.mdcb_area.clockDomain.waitSampling()
+      dut.io.intput.valid #= true
+      dut.io.intput.payload.fragment #= 0x00000001
+      dut.mdcb_area.clockDomain.waitSampling()
+      dut.io.intput.valid #= true
+      dut.io.intput.payload.fragment #= 0x00000001
+      dut.mdcb_area.clockDomain.waitSampling()
+      dut.io.intput.valid #= true
+      dut.io.intput.payload.fragment #= 0x00000001
+      dut.mdcb_area.clockDomain.waitSampling()
+      dut.io.intput.valid #= true
+      dut.io.intput.payload.fragment #= 0x00000001
+      dut.mdcb_area.clockDomain.waitSampling()
+      dut.io.intput.valid #= true
+      dut.io.intput.payload.fragment #= 0x00000001
+      dut.mdcb_area.clockDomain.waitSampling()
+      dut.io.intput.valid #= true
+      dut.io.intput.payload.fragment #= 0x00000001
+      dut.mdcb_area.clockDomain.waitSampling()
+      dut.io.intput.valid #= true
+      dut.io.intput.payload.fragment #= 0x00000001
+      dut.mdcb_area.clockDomain.waitSampling()
+      dut.io.intput.valid #= true
+      dut.io.intput.payload.fragment #= 0x00000001
+      dut.mdcb_area.clockDomain.waitSampling()
+      dut.io.intput.valid #= true
+      dut.io.intput.payload.fragment #= 0x00000001
+      dut.mdcb_area.clockDomain.waitSampling()
+      dut.io.intput.valid #= true
+      dut.io.intput.payload.fragment #= 0x00000001
+      dut.mdcb_area.clockDomain.waitSampling()
+      dut.io.intput.valid #= true
+      dut.io.intput.payload.fragment #= 0x00000001
+      dut.mdcb_area.clockDomain.waitSampling()
+      dut.io.intput.valid #= true
+      dut.io.intput.payload.fragment #= 0x00000001
+      dut.mdcb_area.clockDomain.waitSampling()
+      dut.io.intput.valid #= true
+      dut.io.intput.payload.fragment #= 0x00000001
+      dut.mdcb_area.clockDomain.waitSampling()
+      dut.io.intput.valid #= true
+      dut.io.intput.payload.fragment #= 0x00000001
+      dut.io.intput.payload.last #= true
+      dut.mdcb_area.clockDomain.waitSampling()
+      dut.io.intput.valid #= false
+      dut.io.intput.payload.last #= false
+      dut.mdcb_area.clockDomain.waitSampling(20000)
     }
   }
 }

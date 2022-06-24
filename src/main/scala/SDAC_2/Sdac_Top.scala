@@ -2,18 +2,20 @@ package SDAC_2
 
 import ENDAT.{Endat, EndatInterface}
 import MDCB_2.{MdcbRxPreamble, MdcbRxSimpleBus, MdcbTxSimpleBus, Mdcb_Ioin_Filter, Mdcb_Regif}
-import PHPA82.{AD7606_DATA, Ad7606Interface, BISS_Position, BissCInterface, EncoderInterface, Encoder_Top, dac_ad5544}
+import PHPA82.{AD7606_DATA, Ad5544Interface, Ad7606Interface, BISS_Position, BissCInterface, EncoderInterface, Encoder_Top, dac_ad5544}
 import spinal.core._
+import spinal.lib.com.uart.Uart
 import spinal.lib.io.InOutWrapper
 import spinal.lib.{Fragment, Stream, master, slave}
 
-class Sdac_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : Int, data_length : Int, endat_num : Int, ad7606_num : Int, bissc_num : Int, endcoder_num : Int, ssi_num : Int) extends Component{
+class Sdac_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : Int, data_length : Int, endat_num : Int, ad7606_num : Int, bissc_num : Int, endcoder_num : Int, ssi_num : Int,  uartreg_num : Int, ad5544_num : Int) extends Component{
   val io = new Bundle{
     val intput = slave(Stream(Fragment(Bits(datawidth bits))))
     val output = master(Stream(Fragment(Bits(datawidth bits))))
     val AD7606 = Seq.fill(ad7606_num)(master(Ad7606Interface()))
     val BISSC = Seq.fill(bissc_num)(master(BissCInterface()))
     val ENCODER = Seq.fill(endcoder_num)(master(EncoderInterface()))
+    val AD5544 = Seq.fill(ad5544_num)(master(Ad5544Interface()))
     val M_Fault_TTL = in Bits(8 bits)
     val FPGA_DI = in  Bits(16 bits)
     val M_EN_TTL = out Bits(8 bits)
@@ -24,6 +26,9 @@ class Sdac_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : 
     val clk_160M = in Bool()
     val slaveid = in Bits(datawidth bits)
     val ENDAT = Seq.fill(endat_num)(master(EndatInterface()))
+    //val uart  = master(Uart())
+    val EtherCAT_DATA = in (Vec(Bits(32 bits),12))
+    val uart_regin = in (Vec(Bits(16 bits),uartreg_num))
   }
   noIoPrefix()
 
@@ -35,6 +40,7 @@ class Sdac_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : 
     val sdacRxPreamble = new SdacRxPreamble(datawidth)
     sdacRxPreamble.io.addAttribute("keep","true")
     sdacRxPreamble.io.input << io.intput
+    sdacRxPreamble.io.slave_id := io.slaveid
 
     val sdacrxsimplebus = new SdacRxSimpleBus(addrwidth,datawidth)
     sdacrxsimplebus.io.addAttribute("keep","true")
@@ -45,7 +51,10 @@ class Sdac_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : 
     io.output << sdactxsimplebus.io.output
     sdactxsimplebus.io.timer_tick := True
 
-    val sdacregif = new Sdac_Regif(addrwidth,datawidth,endat_num,ad7606_num,bissc_num,endcoder_num)
+    /*val sdacurat = new Sdac_Uart(32,32,4000,uartreg_num,false)
+    sdacurat.io.uart <> io.uart*/
+
+    val sdacregif = new Sdac_Regif(addrwidth,datawidth,endat_num,ad7606_num,bissc_num,endcoder_num, uartreg_num, ad5544_num)
     sdacregif.io.addAttribute("keep","true")
     sdacregif.io.simplebus.WADDR := sdacrxsimplebus.io.waddr
     sdacregif.io.simplebus.WDATA := sdacrxsimplebus.io.wdata
@@ -54,6 +63,9 @@ class Sdac_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : 
     sdacregif.io.simplebus.RENABLE := sdactxsimplebus.io.RENABLE
     sdactxsimplebus.io.RDATA := sdacregif.io.simplebus.RDATA
     sdacregif.io.slaveid := io.slaveid
+    //sdacregif.io.uart_regin := sdacurat.io.uart_regout
+    sdacregif.io.uart_regin := io.uart_regin
+    sdacregif.io.EtherCAT_DATA := io.EtherCAT_DATA
 
     val ad_area = new ClockingArea(ad_clkdomain){
       val ad7606 = Seq.fill(ad7606_num)(new AD7606_DATA)
@@ -94,7 +106,7 @@ class Sdac_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : 
         sdacregif.io.BissC_Pos(i) := bissc(i).enc_position_out.asBits
       }
 
-      val encoder = Seq.fill(endcoder_num)(new Encoder_Top)
+      val encoder = Seq.fill(endcoder_num)(new Encoder_Top(false))
       for(i <- 0 until endcoder_num){
         encoder(i).io.clk := io.clk_80M
         encoder(i).io.reset := io.reset
@@ -113,6 +125,25 @@ class Sdac_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : 
         endat(i).io.sample := True
         sdacregif.io.Endat_Data(i) := endat(i).io.postion(33 downto 2)  addTag(crossClockDomain)
       }
+
+      val ad5544 = Seq.fill(ad5544_num)(new dac_ad5544)
+      for(i <- 0 until ad5544_num){
+        ad5544(i).io.clk := io.clk_80M
+        ad5544(i).io.reset := io.reset
+        io.AD5544(i).AD5544_SCLK := ad5544(i).io.AD5544_SCLK
+        io.AD5544(i).AD5544_CS := ad5544(i).io.AD5544_CS
+        io.AD5544(i).AD5544_LDAC := ad5544(i).io.AD5544_LDAC
+        io.AD5544(i).AD5544_RS := ad5544(i).io.AD5544_RS
+        io.AD5544(i).AD5544_SDIN := ad5544(i).io.AD5544_SDIN
+        io.AD5544(i).AD5544_MSB := ad5544(i).io.AD5544_MSB
+        ad5544(i).io.AD5544_DATA_IN1 := sdacregif.io.AD5544_DATA(i)(0).asUInt
+        ad5544(i).io.AD5544_DATA_IN2 := sdacregif.io.AD5544_DATA(i)(1).asUInt
+        ad5544(i).io.AD5544_DATA_IN3 := sdacregif.io.AD5544_DATA(i)(2).asUInt
+        ad5544(i).io.AD5544_DATA_IN4 := sdacregif.io.AD5544_DATA(i)(3).asUInt
+        ad5544(i).io.ad5544_trig := sdacregif.io.AD5544_TRIGER(i)
+      }
+
+
     }
 
     val mdcb_iofilter = new Mdcb_Ioin_Filter(4)
@@ -127,5 +158,5 @@ class Sdac_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : 
 }
 
 object Sdac_Top extends App{
-  SpinalVerilog(InOutWrapper(new Sdac_Top(8,32,500,0,100,4,3,4,4,0)))
+  SpinalVerilog((new Sdac_Top(10,32,6250,0,62,4,3,4,4,0,8,0)))
 }

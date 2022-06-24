@@ -1,5 +1,6 @@
 // Generator : SpinalHDL v1.6.1    git head : 3bf789d53b1b5a36974196e2d591342e15ddf28c
 // Component : FiberTest
+// Git hash  : faa136a5cd11b0754bd45144fa843c52609e72a5
 
 `timescale 1ns/1ps 
 
@@ -15,7 +16,8 @@ module FiberTest (
   input               timer_tick,
   input               clk,
   input               reset,
-  output              led
+  output              led,
+  input      [31:0]   slave_id
 );
 
   wire                fiberarea_fiberrxpreamble_input_ready;
@@ -97,7 +99,7 @@ module FiberTest (
     .input_ready                (fiberarea_fiberrxpreamble_input_ready                    ), //o
     .input_payload_last         (input_payload_last                                       ), //i
     .input_payload_fragment     (input_payload_fragment[31:0]                             ), //i
-    .slave_id                   (32'h00000001                                             ), //i
+    .slave_id                   (slave_id[31:0]                                           ), //i
     .output_valid               (fiberarea_fiberrxpreamble_output_valid                   ), //o
     .output_ready               (fiberarea_fiberrxbuffer_push_stream_ready                ), //i
     .output_payload_last        (fiberarea_fiberrxpreamble_output_payload_last            ), //o
@@ -262,6 +264,7 @@ module FiberTest (
     .io_output_ready               (fiberarea_fibertxpadder_input_ready                       ), //i
     .io_output_payload_last        (fiberarea_fibertxheader_io_output_payload_last            ), //o
     .io_output_payload_fragment    (fiberarea_fibertxheader_io_output_payload_fragment[31:0]  ), //o
+    .io_slave_id                   (slave_id[31:0]                                            ), //i
     .clk                           (clk                                                       ), //i
     .reset                         (reset                                                     )  //i
   );
@@ -406,6 +409,7 @@ module FiberTxHeader (
   input               io_output_ready,
   output              io_output_payload_last,
   output reg [31:0]   io_output_payload_fragment,
+  input      [31:0]   io_slave_id,
   input               clk,
   input               reset
 );
@@ -414,10 +418,10 @@ module FiberTxHeader (
   wire       [0:0]    _zz_io_output_payload_fragment_1;
   wire       [63:0]   header;
   reg        [1:0]    state;
-  wire                when_FiberTxHeader_l18;
+  wire                when_FiberTxHeader_l19;
   wire                io_output_fire;
   wire                io_input_fire;
-  wire                when_FiberTxHeader_l30;
+  wire                when_FiberTxHeader_l31;
 
   assign _zz_io_output_payload_fragment_1 = state[0:0];
   always @(*) begin
@@ -431,19 +435,19 @@ module FiberTxHeader (
     endcase
   end
 
-  assign header = 64'h00f1f2f300000001;
+  assign header = {32'h00f1f2f3,io_slave_id};
   assign io_output_valid = io_input_valid;
   assign io_output_payload_last = io_input_payload_last;
   always @(*) begin
     io_input_ready = 1'b0;
-    if(when_FiberTxHeader_l18) begin
+    if(when_FiberTxHeader_l19) begin
       io_input_ready = io_output_ready;
     end
   end
 
-  assign when_FiberTxHeader_l18 = (state == 2'b10);
+  assign when_FiberTxHeader_l19 = (state == 2'b10);
   always @(*) begin
-    if(when_FiberTxHeader_l18) begin
+    if(when_FiberTxHeader_l19) begin
       io_output_payload_fragment = io_input_payload_fragment;
     end else begin
       io_output_payload_fragment = _zz_io_output_payload_fragment;
@@ -452,17 +456,17 @@ module FiberTxHeader (
 
   assign io_output_fire = (io_output_valid && io_output_ready);
   assign io_input_fire = (io_input_valid && io_input_ready);
-  assign when_FiberTxHeader_l30 = (io_input_fire && io_input_payload_last);
+  assign when_FiberTxHeader_l31 = (io_input_fire && io_input_payload_last);
   always @(posedge clk or posedge reset) begin
     if(reset) begin
       state <= 2'b00;
     end else begin
-      if(!when_FiberTxHeader_l18) begin
+      if(!when_FiberTxHeader_l19) begin
         if(io_output_fire) begin
           state <= (state + 2'b01);
         end
       end
-      if(when_FiberTxHeader_l30) begin
+      if(when_FiberTxHeader_l31) begin
         state <= 2'b00;
       end
     end

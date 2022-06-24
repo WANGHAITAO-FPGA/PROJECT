@@ -58,16 +58,16 @@ case class FiberRxBuffer(pushCd : ClockDomain,popCd : ClockDomain,pushWidth : In
         when(io.pop.stream.ready) {
           spliter := spliter - 1
           when(spliter === 0){
-            fifo_pop_ready := True
-            fif_payload_temp := fifo.io.pop.payload
+            when(fifo.io.popOccupancy === 0){
+              fifo_pop_ready := False
+              state := State.START
+              io.pop.stream.last := True
+            }otherwise{
+              fifo_pop_ready := True
+              fif_payload_temp := fifo.io.pop.payload
+            }
           }otherwise{
             fifo_pop_ready := False
-          }
-          when(fifo.io.popOccupancy === 0 && spliter === 0) {
-            state := State.START
-            //fifo.io.pop.ready := True
-            //fifo_pop_ready := True
-            io.pop.stream.last := True
           }
         }
       }
@@ -86,22 +86,43 @@ object FiberRxBuffer{
       dut.io.push.stream.payload.last #= false
       dut.popCd.forkStimulus(10)
       dut.pushCd.waitSampling(10)
-      dut.io.push.stream.valid #= true
-      dut.io.push.stream.payload.fragment #= 0x11223344
-      dut.io.push.stream.payload.last #= false
-      dut.pushCd.waitSampling()
-      dut.io.push.stream.valid #= true
-      dut.io.push.stream.payload.fragment #= 0x01020304
-      dut.io.push.stream.payload.last #= false
-      dut.pushCd.waitSampling()
-      dut.io.push.stream.valid #= true
-      dut.io.push.stream.payload.fragment #= 0x123456
-      dut.io.push.stream.payload.last #= true
-      dut.pushCd.waitSampling()
-      dut.io.push.stream.valid #= false
-      dut.io.push.stream.payload.last #= false
-      dut.pushCd.waitSampling(500)
-
+      for(i<- 0 until 10){
+        dut.io.push.stream.valid #= true
+        dut.io.push.stream.payload.fragment #= 0x11223344
+        dut.io.push.stream.payload.last #= false
+        dut.pushCd.waitSampling()
+        dut.io.push.stream.valid #= true
+        dut.io.push.stream.payload.fragment #= 0x11223344
+        dut.io.push.stream.payload.last #= false
+        dut.pushCd.waitSampling()
+        dut.io.push.stream.valid #= true
+        dut.io.push.stream.payload.fragment #= 0x11223344
+        dut.io.push.stream.payload.last #= false
+        dut.pushCd.waitSampling()
+        dut.io.push.stream.valid #= true
+        dut.io.push.stream.payload.fragment #= 0x11223344
+        dut.io.push.stream.payload.last #= false
+        dut.pushCd.waitSampling()
+        dut.io.push.stream.valid #= true
+        dut.io.push.stream.payload.fragment #= 0x11223344
+        dut.io.push.stream.payload.last #= false
+        dut.pushCd.waitSampling()
+        dut.io.push.stream.valid #= true
+        dut.io.push.stream.payload.fragment #= 0x11223344
+        dut.io.push.stream.payload.last #= false
+        dut.pushCd.waitSampling()
+        dut.io.push.stream.valid #= true
+        dut.io.push.stream.payload.fragment #= 0x01020304
+        dut.io.push.stream.payload.last #= false
+        dut.pushCd.waitSampling()
+        dut.io.push.stream.valid #= true
+        dut.io.push.stream.payload.fragment #= 0x123456
+        dut.io.push.stream.payload.last #= true
+        dut.pushCd.waitSampling()
+        dut.io.push.stream.valid #= false
+        dut.io.push.stream.payload.last #= false
+        dut.pushCd.waitSampling(500)
+      }
     }
   }
 }

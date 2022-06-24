@@ -1,5 +1,6 @@
 // Generator : SpinalHDL v1.6.1    git head : 3bf789d53b1b5a36974196e2d591342e15ddf28c
 // Component : FiberRxBuffer
+// Git hash  : faa136a5cd11b0754bd45144fa843c52609e72a5
 
 `timescale 1ns/1ps 
 
@@ -33,7 +34,7 @@ module FiberRxBuffer (
   reg        [31:0]   pop_fif_payload_temp;
   wire                when_FiberRxBuffer_l50;
   wire                when_FiberRxBuffer_l60;
-  wire                when_FiberRxBuffer_l66;
+  wire                when_FiberRxBuffer_l61;
   `ifndef SYNTHESIS
   reg [47:0] pop_state_1_string;
   `endif
@@ -104,8 +105,10 @@ module FiberRxBuffer (
       end
       default : begin
         if(pop_stream_ready) begin
-          if(when_FiberRxBuffer_l66) begin
-            pop_stream_payload_last = 1'b1;
+          if(when_FiberRxBuffer_l60) begin
+            if(when_FiberRxBuffer_l61) begin
+              pop_stream_payload_last = 1'b1;
+            end
           end
         end
       end
@@ -114,7 +117,7 @@ module FiberRxBuffer (
 
   assign when_FiberRxBuffer_l50 = (! push_stream_payload_last);
   assign when_FiberRxBuffer_l60 = (pop_spliter == 2'b00);
-  assign when_FiberRxBuffer_l66 = ((fifo_io_popOccupancy == 5'h0) && (pop_spliter == 2'b00));
+  assign when_FiberRxBuffer_l61 = (fifo_io_popOccupancy == 5'h0);
   assign pop_stream_payload_fragment = _zz_pop_stream_payload_fragment;
   always @(posedge popclk_clk or posedge popclk_reset) begin
     if(popclk_reset) begin
@@ -138,12 +141,14 @@ module FiberRxBuffer (
           if(pop_stream_ready) begin
             pop_spliter <= (pop_spliter - 2'b01);
             if(when_FiberRxBuffer_l60) begin
-              pop_fifo_pop_ready <= 1'b1;
+              if(when_FiberRxBuffer_l61) begin
+                pop_fifo_pop_ready <= 1'b0;
+                pop_state_1 <= pop_State_START;
+              end else begin
+                pop_fifo_pop_ready <= 1'b1;
+              end
             end else begin
               pop_fifo_pop_ready <= 1'b0;
-            end
-            if(when_FiberRxBuffer_l66) begin
-              pop_state_1 <= pop_State_START;
             end
           end
         end
@@ -163,7 +168,9 @@ module FiberRxBuffer (
       default : begin
         if(pop_stream_ready) begin
           if(when_FiberRxBuffer_l60) begin
-            pop_fif_payload_temp <= fifo_io_pop_payload;
+            if(!when_FiberRxBuffer_l61) begin
+              pop_fif_payload_temp <= fifo_io_pop_payload;
+            end
           end
         end
       end

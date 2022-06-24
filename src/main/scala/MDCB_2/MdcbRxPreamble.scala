@@ -7,11 +7,12 @@ import spinal.lib.fsm.{EntryPoint, State, StateMachine}
 case class MdcbRxPreamble(datawidth : Int) extends Component{
   val io = new Bundle{
     val input = slave(Stream(Fragment(Bits(datawidth bits))))
+    val slave_id = in Bits(datawidth bits)
     val output = master(Stream(Fragment(Bits(datawidth bits))))
   }
   noIoPrefix()
 
-  val startDelimiter = B"x0000000100F1F2F3"
+  val startDelimiter = io.slave_id##B"x00F1F2F3"
   val startDelimiterWidth = datawidth*2
   val history = History(io.input, 0 until startDelimiterWidth/datawidth, when = io.input.fire)
   val historyDataCat = B(Cat(history.map(_.payload.fragment).reverse))
