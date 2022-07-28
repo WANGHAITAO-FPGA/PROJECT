@@ -20,6 +20,7 @@ case class X300_SdacRegif(addrwidth : Int, datawidth : Int, endat_num : Int, ad7
     val Encoder_Clr = Seq.fill(endcoder_num)(out Bits(1 bits))
     val Encoder_lock_Pos = Seq.fill(endcoder_num)(in Bits(32 bits))
     val Endat_Data = Seq.fill(endat_num)(in Bits(32 bits))*/
+    val Start_Send = out Bool()
   }
   noIoPrefix()
 
@@ -157,4 +158,8 @@ case class X300_SdacRegif(addrwidth : Int, datawidth : Int, endat_num : Int, ad7
   val My_Reg_tail = busslave.newRegAt(252,"帧尾")
   val tail = My_Reg_tail.field(32 bits,RO,0,"帧头")
   tail := 0x0000FFBD
+
+  val My_Reg_Start = busslave.newRegAt(address = 0x010c,doc="启动光纤传输")
+  val Start_Send = My_Reg_Start.fieldAt(0,bc = 1 bits,RW,0,"外部TTL1输出信号，M_EN_TTL1")
+  io.Start_Send := Start_Send.asBool
 }

@@ -3,10 +3,11 @@ package MDCB_2
 import CRCCORE.CRCCombinationalCore.Register
 import PHPA82.{AD7606_DATA, Ad5544Interface, Ad7606Interface, BISS_Position, BissCInterface, EncoderInterface, Encoder_Top, dac_ad5544}
 import spinal.core._
-import spinal.lib.{BufferCC, Fragment, Stream, master, slave}
+import spinal.lib.misc.Timer
+import spinal.lib.{BufferCC, Delay, Fragment, Stream, master, slave}
 
 
-class Mdcb_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : Int, data_length : Int, ad5544_num : Int, ad7606_num : Int, bissc_num : Int, endcoder_num : Int) extends Component{
+class Mdcb_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : Int, data_length : Int, ad5544_num : Int, ad7606_num : Int, bissc_num : Int, endcoder_num : Int, demo_test : Boolean) extends Component{
   val io = new Bundle{
     val intput = slave(Stream(Fragment(Bits(datawidth bits))))
     val output = master(Stream(Fragment(Bits(datawidth bits))))
@@ -33,6 +34,19 @@ class Mdcb_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : 
   val adda_clkdomain = ClockDomain(io.clk_80M,io.reset)
 
   val mdcb_area = new ClockingArea(mdcb_clkdomain){
+
+    val demo_ticker = Reg(Bool) init False
+    if(demo_test){
+      val timer_A = Timer(32)
+      timer_A.io.tick := True
+      timer_A.io.limit := 100000
+      when(timer_A.io.value >= timer_A.io.limit){
+        timer_A.io.clear := True
+      }otherwise{
+        timer_A.io.clear := False
+      }
+      demo_ticker := timer_A.io.full|Delay(timer_A.io.full,1,init = False)|Delay(timer_A.io.full,2,init = False)
+    }
 
     val mdcbRxPreamble = new MdcbRxPreamble(datawidth)
     mdcbRxPreamble.io.addAttribute("keep","true")
@@ -77,12 +91,21 @@ class Mdcb_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : 
         io.AD5544(i).AD5544_RS := ad5544(i).io.AD5544_RS
         io.AD5544(i).AD5544_SDIN := ad5544(i).io.AD5544_SDIN
         io.AD5544(i).AD5544_MSB := ad5544(i).io.AD5544_MSB
-        ad5544(i).io.AD5544_DATA_IN1 := mdcbregif.io.AD5544_DATA(i)(0).asUInt
-        ad5544(i).io.AD5544_DATA_IN2 := mdcbregif.io.AD5544_DATA(i)(1).asUInt
-        ad5544(i).io.AD5544_DATA_IN3 := mdcbregif.io.AD5544_DATA(i)(2).asUInt
-        ad5544(i).io.AD5544_DATA_IN4 := mdcbregif.io.AD5544_DATA(i)(3).asUInt
-        ad5544(i).io.ad5544_trig := mdcbregif.io.AD5544_TRIGER(i)
 
+        if(demo_test){
+          ad5544(i).io.AD5544_DATA_IN1 := 0x7000
+          ad5544(i).io.AD5544_DATA_IN2 := 0x7000
+          ad5544(i).io.AD5544_DATA_IN3 := 0x7000
+          ad5544(i).io.AD5544_DATA_IN4 := 0x7000
+          ad5544(i).io.ad5544_trig := demo_ticker
+        }
+        else{
+          ad5544(i).io.AD5544_DATA_IN1 := mdcbregif.io.AD5544_DATA(i)(0).asUInt
+          ad5544(i).io.AD5544_DATA_IN2 := mdcbregif.io.AD5544_DATA(i)(1).asUInt
+          ad5544(i).io.AD5544_DATA_IN3 := mdcbregif.io.AD5544_DATA(i)(2).asUInt
+          ad5544(i).io.AD5544_DATA_IN4 := mdcbregif.io.AD5544_DATA(i)(3).asUInt
+          ad5544(i).io.ad5544_trig := mdcbregif.io.AD5544_TRIGER(i)
+        }
       }
 
       val ad7606 = Seq.fill(ad7606_num)(new AD7606_DATA)
@@ -149,13 +172,13 @@ class Mdcb_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : 
 
 object Mdcb_Top extends App{
   //SpinalConfig().addStandardMemBlackboxing(blackboxAll).generateVerilog(new Mdcb_Top(8,32,500,0,50,3,2,4,4))
-  SpinalVerilog(new Mdcb_Top(12,32,500,0,50,3,2,4,4))
+  SpinalVerilog(new Mdcb_Top(12,32,500,0,50,3,2,4,4,true))
 }
 
 object Mdcb_Test{
   import spinal.core.sim._
   def main(args: Array[String]): Unit = {
-    SimConfig.withWave.doSim(new Mdcb_Top(9,32,500,0,50,3,2,4,4)){dut=>
+    SimConfig.withWave.doSim(new Mdcb_Top(9,32,500,0,50,3,2,4,4,false)){dut=>
       dut.mdcb_area.clockDomain.forkStimulus(10)
       dut.mdcb_area.adda_area.clockDomain.forkStimulus(20)
       dut.io.slaveid #= 0x03

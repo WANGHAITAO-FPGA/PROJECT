@@ -47,6 +47,8 @@ case class X300_SDAC_TOP(addrwidth : Int, datawidth : Int, timerl_imit: Int, sta
       tx_tick := True
     }
 
+    val start_send = Reg(Bool()) init False
+
     val sdacRxPreamble = new X300_RxPreamble(datawidth)
     sdacRxPreamble.io.addAttribute("keep","true")
     sdacRxPreamble.io.input << io.intput
@@ -58,7 +60,7 @@ case class X300_SDAC_TOP(addrwidth : Int, datawidth : Int, timerl_imit: Int, sta
     val sdactxsimplebus = new X300_TxSimpleBus(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : Int, data_length : Int)
     sdactxsimplebus.io.addAttribute("keep","true")
     io.output << sdactxsimplebus.io.output
-    sdactxsimplebus.io.timer_tick := tx_tick
+    sdactxsimplebus.io.timer_tick := tx_tick && start_send
 
     val sdacregif = new X300_SdacRegif(addrwidth,datawidth,endat_num,ad7606_num,bissc_num,endcoder_num)
     sdacregif.io.addAttribute("keep","true")
@@ -69,6 +71,7 @@ case class X300_SDAC_TOP(addrwidth : Int, datawidth : Int, timerl_imit: Int, sta
     sdacregif.io.simplebus.RENABLE := sdactxsimplebus.io.RENABLE
     sdactxsimplebus.io.RDATA := sdacregif.io.simplebus.RDATA
     sdacregif.io.slaveid := io.slaveid
+    start_send := sdacregif.io.Start_Send
 
     val ad_area = new ClockingArea(ad_clkdomain) {
       val ad7606 = Seq.fill(ad7606_num)(new AD7606_DATA)
@@ -103,7 +106,7 @@ case class X300_SDAC_TOP(addrwidth : Int, datawidth : Int, timerl_imit: Int, sta
 }
 
 object X300_SDAC_TOP extends App{
-  SpinalVerilog(InOutWrapper(new X300_SDAC_TOP(8,32,6250,0,60,0,3,0,0,0)))
+  SpinalVerilog(InOutWrapper(new X300_SDAC_TOP(9,32,3125,0,60,0,3,0,0,0)))
 }
 
 object X300_SDAC_Sim{

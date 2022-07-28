@@ -57,7 +57,7 @@ case class SdacRxSimpleBus(addrwidth : Int, datawidth : Int) extends Component{
       whenIsActive{
         when(io.input.valid){
           //waddr := io.input.payload.fragment(15 downto 8).asUInt.resized
-          waddr := 3
+          waddr := 67
           flag := False
           goto(Get_Data)
         }

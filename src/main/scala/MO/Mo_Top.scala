@@ -1,6 +1,7 @@
 package MO
 
 import EMIF.{EMIF32_Apb, SramInterface, SramLayout}
+import PHPA82.ila_test.ila
 import spinal.core._
 import spinal.core.sim.SimConfig
 import spinal.lib.bus.amba3.apb.{Apb3, Apb3Config, Apb3Decoder}
@@ -128,117 +129,122 @@ class Mo_Code(sramLayout : SramLayout) extends Component {
       master = emif32_toapb.io.apb,
       slaves = apbMapping
     )
+    val ila_probe=ila("0",io.emif.emif_cs,io.emif.emif_oe,io.emif.emif_we,io.emif.emif_data.read,io.emif.emif_data.write,io.emif.emif_data.writeEnable,io.emif.emif_addr,emif32_toapb.io.apb.PADDR,emif32_toapb.io.apb.PENABLE,
+          emif32_toapb.io.apb.PREADY,emif32_toapb.io.apb.PSEL,emif32_toapb.io.apb.PWDATA,emif32_toapb.io.apb.PRDATA,emif32_toapb.io.apb.PWRITE)
   }
 }
 
-case class MO_TEST(sramLayout : SramLayout) extends Component{
+class MO_TEST(sramLayout : SramLayout) extends Component{
   val io = new Bundle{
     val emif = master(SramInterface(sramLayout))
-    val hssl1_gtx_clk = in Bool()
     val clk = in Bool()
     val reset = in Bool()
-    val hssl1_input = slave(Stream(Fragment(Bits(32 bits))))
-    val hssl1_output = master(Stream(Fragment(Bits(32 bits))))
+    //val hssl1_gtx_clk = in Bool()
     val hssl_sts = in Vec(Bits(32 bits),1)
+    //val hssl1_output = master(Stream(Fragment(Bits(32 bits))))
   }
   noIoPrefix()
 
   val area = new ClockingArea(ClockDomain(io.clk,io.reset)){
     val emif32_toapb = new EMIF32_Apb(sramLayout)
     emif32_toapb.io.emif <> io.emif
-
     val apbMapping = ArrayBuffer[(Apb3, SizeMapping)]()
 
     val hssl1_csr_reg = new Apb_CsrReg
     hssl1_csr_reg.io.hssl_sts := io.hssl_sts(0)
     apbMapping += hssl1_csr_reg.io.apb-> (0x010000, 16 Bytes)
 
-
-    val hssl1_rxram = new Apb_RxRAM(8)
-    hssl1_rxram.io.rx_clk := io.hssl1_gtx_clk
-    hssl1_rxram.io.clk := io.clk
-    hssl1_rxram.io.reset := io.reset
-    hssl1_rxram.io.rx_id := 0x000000b1
-    hssl1_rxram.io.input << io.hssl1_input
-    apbMapping += hssl1_rxram.io.apb -> (0x0010800, 1024 Bytes)
-
-    val hssl1_txram = new Apb_TxRam(8)
-    hssl1_txram.io.tx_clk := io.hssl1_gtx_clk
-    hssl1_txram.io.clk := io.clk
-    hssl1_txram.io.reset := io.reset
-    hssl1_txram.io.tx_id := 0x000000b1
-    hssl1_txram.io.tx_packet_req := hssl1_csr_reg.io.hssl_ctl_send
-    io.hssl1_output << hssl1_txram.io.output
-    apbMapping += hssl1_txram.io.apb -> (0x0010c00, 1024 Bytes)
+//    val hssl2_csr_reg = new Apb_CsrReg
+//    hssl2_csr_reg.io.hssl_sts := io.hssl_sts(1)
+//    apbMapping += hssl2_csr_reg.io.apb-> (0x010040, 16 Bytes)
+//
+//    val hssl3_csr_reg = new Apb_CsrReg
+//    hssl3_csr_reg.io.hssl_sts := io.hssl_sts(2)
+//    apbMapping += hssl3_csr_reg.io.apb-> (0x010080, 16 Bytes)
+//
+//    val hssl4_csr_reg = new Apb_CsrReg
+//    hssl4_csr_reg.io.hssl_sts := io.hssl_sts(3)
+//    apbMapping += hssl4_csr_reg.io.apb-> (0x0100c0, 16 Bytes)
+//
+//    val hssl1_txram = new Apb_TxRam(8)
+//    hssl1_txram.io.tx_clk := io.hssl1_gtx_clk
+//    hssl1_txram.io.clk := io.clk
+//    hssl1_txram.io.reset := io.reset
+//    hssl1_txram.io.tx_id := 0x000000b1
+//    hssl1_txram.io.tx_packet_req := hssl1_csr_reg.io.hssl_ctl_send
+//    io.hssl1_output << hssl1_txram.io.output
+//    apbMapping += hssl1_txram.io.apb -> (0x0010c00, 1024 Bytes)
 
     val apbDecoder = Apb3Decoder(
       master = emif32_toapb.io.apb,
       slaves = apbMapping
     )
+
+//    val ila_probe=ila("1",io.emif.emif_cs,io.emif.emif_oe,io.emif.emif_we,io.emif.emif_data.read,io.emif.emif_data.write,io.emif.emif_data.writeEnable,io.emif.emif_addr,emif32_toapb.io.apb.PADDR,emif32_toapb.io.apb.PENABLE,
+//      emif32_toapb.io.apb.PREADY,emif32_toapb.io.apb.PSEL,emif32_toapb.io.apb.PWDATA,emif32_toapb.io.apb.PRDATA,emif32_toapb.io.apb.PWRITE)
   }
-//  io.emif.addAttribute("MARK_DEBUG","TRUE")
-//  io.apb.addAttribute("MARK_DEBUG","TRUE")
 }
 
 object MO_TEST extends App{
-  SpinalVerilog(InOutWrapper(new MO_TEST(SramLayout(24,16))))
+  SpinalVerilog(InOutWrapper(new MO_TEST(SramLayout(24,16))) )
 }
+
 
 
 object Mo_Top extends App{
   //SpinalConfig(oneFilePerComponent = true).generateVerilog(InOutWrapper(new Mo_Code(SramLayout(24,16))))
 
-  SpinalVerilog(InOutWrapper(new Mo_Code(SramLayout(24,16))))
+  SpinalConfig(headerWithDate = true,targetDirectory = "E:/WORK_OK/MO/X300_MO_REFACTOR_1.02/X300_MO/X300_MO.srcs/sources_1/imports/SRIO").generateVerilog(InOutWrapper(new Mo_Code(SramLayout(24,16))))
 }
 
-case class Mo_Top_Test(period:Int) extends Mo_Code(SramLayout(24,16)){
+case class Mo_Top_Test(period:Int) extends MO_TEST(SramLayout(24,16)){
   def init = {
-    clockDomain.forkStimulus(period)
+    area.clockDomain.forkStimulus(period)
     io.emif.emif_cs #= true
     io.emif.emif_oe #= true
     io.emif.emif_we #= true
     io.emif.emif_addr #= 0
-    clockDomain.waitSampling(10)
+    area.clockDomain.waitSampling(10)
   }
   def emif_write(addr:Int,data:Int) = {
-    clockDomain.waitSampling()
+    area.clockDomain.waitSampling()
     io.emif.emif_cs #= true
     io.emif.emif_oe #= true
     io.emif.emif_we #= true
-    clockDomain.waitSampling()
+    area.clockDomain.waitSampling()
     io.emif.emif_cs #= false
     io.emif.emif_oe #= true
     io.emif.emif_we #= true
     io.emif.emif_addr #= addr
-    clockDomain.waitSampling()
+    area.clockDomain.waitSampling()
     io.emif.emif_we #= false
     io.emif.emif_data.read #= data
-    clockDomain.waitSampling(2)
+    area.clockDomain.waitSampling(2)
     io.emif.emif_cs #= true
     io.emif.emif_oe #= true
     io.emif.emif_we #= true
-    clockDomain.waitSampling()
+    area.clockDomain.waitSampling()
   }
 
   def emif_read(addr:Int)= {
-    clockDomain.waitSampling()
+    area.clockDomain.waitSampling()
     io.emif.emif_cs #= true
     io.emif.emif_oe #= true
     io.emif.emif_we #= true
-    clockDomain.waitSampling()
+    area.clockDomain.waitSampling()
     io.emif.emif_cs #= false
     io.emif.emif_oe #= true
     io.emif.emif_we #= true
     io.emif.emif_addr #= addr
-    clockDomain.waitSampling()
+    area.clockDomain.waitSampling()
     io.emif.emif_oe #= false
-    clockDomain.waitSampling()
+    area.clockDomain.waitSampling()
     println(io.emif.emif_data.write)
-    clockDomain.waitSampling()
+    area.clockDomain.waitSampling()
     io.emif.emif_cs #= true
     io.emif.emif_oe #= true
     io.emif.emif_we #= true
-    clockDomain.waitSampling()
+    area.clockDomain.waitSampling()
   }
 }
 
@@ -248,26 +254,15 @@ object EMIF32_Apb{
     val dut = SimConfig.withWave.compile(Mo_Top_Test(10))
     dut.doSim { dut =>
       dut.init
-      dut.emif_write(0x004001,0xffff)
-      dut.emif_write(0x804001,0xffff)
-      dut.clockDomain.waitSampling(10)
-      dut.emif_read(0x004000)
-      dut.emif_read(0x804000)
-      dut.clockDomain.waitSampling(10)
-      dut.emif_read(0x004001)
-      dut.emif_read(0x804001)
-
-      dut.clockDomain.waitSampling(10)
-      dut.emif_write(0x004021,0x4321)
-      dut.emif_write(0x804021,0x8765)
-      dut.clockDomain.waitSampling(10)
-      dut.emif_read(0x004021)
-      dut.emif_read(0x804021)
-      dut.clockDomain.waitSampling(10)
-
-      dut.emif_write(0x0043ff,0x4321)
-      dut.emif_write(0x8043ff,0x8765)
-      dut.clockDomain.waitSampling(1000)
+      dut.emif_write(0x004001,0x04)
+      dut.emif_write(0x804001,0x00)
+      dut.area.clockDomain.waitSampling(1000)
+      dut.emif_write(0x004021,0x04)
+      dut.emif_write(0x804021,0x00)
+      dut.area.clockDomain.waitSampling(1000)
+      dut.emif_write(0x004001,0x04)
+      dut.emif_write(0x804001,0x00)
+      dut.area.clockDomain.waitSampling(1000)
     }
   }
 }

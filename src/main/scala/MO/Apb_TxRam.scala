@@ -1,5 +1,6 @@
 package MO
 
+import PHPA82.ila_test.ila
 import Test.gtp_tx
 import spinal.core._
 import spinal.lib.bus.amba3.apb.{Apb3, Apb3Config, Apb3SlaveFactory}
@@ -37,7 +38,7 @@ case class Apb_TxRam(addrwidth : Int) extends Component{
     val memAddress = busctrl.writeAddress(mapping) >> log2Up(32 / 8)
     xilinx_bram.io.wr_clk := io.clk
     xilinx_bram.io.wr_addr := memAddress.asBits
-    xilinx_bram.io.wr_en := busctrl.doWrite
+    xilinx_bram.io.wr_en := RegNext(busctrl.doWrite)
     xilinx_bram.io.wr_data := io.apb.PWDATA
 
 //    busctrl.writeMemWordAligned(rams,0)
@@ -62,6 +63,8 @@ case class Apb_TxRam(addrwidth : Int) extends Component{
     hssl_tx.io.tx_packet_data := xilinx_bram.io.rd_data
 //    hssl_tx.io.tx_packet_data := busarea.rams.readSync(hssl_tx.io.tx_packet_addra.asUInt,!hssl_tx.io.tx_packet_rden)
   }
+
+//  val ila_probe=ila("2",xilinx_bram.io.wr_en,xilinx_bram.io.wr_addr,xilinx_bram.io.wr_data,busarea.tx_frame,xilinx_bram.io.rd_en,xilinx_bram.io.rd_addr,xilinx_bram.io.rd_data)
 }
 
 object Apb_TxRam extends App{

@@ -27,3 +27,31 @@ object testtakeRight{
     }
   }
 }
+
+class reset_wait() extends Component{
+  val io = new Bundle{
+    val reset_out = out Bool()
+  }
+  noIoPrefix()
+
+  val reset_out = Reg(Bool()) init  True
+
+  val ResetCounter = Reg(UInt(30 bits)) init(0)
+  when(ResetCounter =/= U(ResetCounter.range -> true)){
+    ResetCounter := ResetCounter + 1
+    reset_out := True
+  }otherwise{
+    reset_out := False
+  }
+  io.reset_out := reset_out
+}
+
+object reset_wait{
+  import spinal.core.sim._
+  def main(args: Array[String]): Unit = {
+    SimConfig.withWave.doSim(new reset_wait){dut=>
+      dut.clockDomain.forkStimulus(10)
+      dut.clockDomain.waitSampling(10000)
+    }
+  }
+}

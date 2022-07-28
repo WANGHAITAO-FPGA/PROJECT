@@ -118,10 +118,10 @@ class Sdac_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : 
         sdacregif.io.Encoder_lock_Pos(i) := encoder(i).io.encoder_lock_pos
       }
 
-      val endat = Seq.fill(endat_num)((new Endat(10,8,34,500)))
+      val endat = Seq.fill(endat_num)((new Endat(20,6,38,3000)))
       for(i <- 0 until endat_num){
         endat(i).io.endat <> io.ENDAT(i)
-        endat(i).io.endat_mode := B"x1C"
+        endat(i).io.endat_mode := B"000111"
         endat(i).io.sample := True
         sdacregif.io.Endat_Data(i) := endat(i).io.postion(33 downto 2)  addTag(crossClockDomain)
       }
@@ -142,11 +142,9 @@ class Sdac_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : 
         ad5544(i).io.AD5544_DATA_IN4 := sdacregif.io.AD5544_DATA(i)(3).asUInt
         ad5544(i).io.ad5544_trig := sdacregif.io.AD5544_TRIGER(i)
       }
-
-
     }
 
-    val mdcb_iofilter = new Mdcb_Ioin_Filter(4)
+    val mdcb_iofilter = new Mdcb_Ioin_Filter(40)
     mdcb_iofilter.io.M_Fault_TTL := io.M_Fault_TTL
     mdcb_iofilter.io.FPGA_DI := io.FPGA_DI
     sdacregif.io.M_Fault_TTL_Filter := mdcb_iofilter.io.M_Fault_TTL_Filter
@@ -158,5 +156,5 @@ class Sdac_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : 
 }
 
 object Sdac_Top extends App{
-  SpinalVerilog((new Sdac_Top(10,32,6250,0,62,4,3,4,4,0,8,0)))
+  SpinalConfig(headerWithDate = true,targetDirectory = "E:/E200I/OLD_VERSION/E200I_SDAC_V1.05/MDCB_2.srcs/sources_1/imports/untitled2/").generateVerilog((new Sdac_Top(10,32,6250,0,62,4,3,4,4,0,8,0)))
 }

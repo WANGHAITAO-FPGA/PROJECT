@@ -1,6 +1,6 @@
 // Generator : SpinalHDL v1.6.1    git head : 3bf789d53b1b5a36974196e2d591342e15ddf28c
 // Component : FiberTest
-// Git hash  : faa136a5cd11b0754bd45144fa843c52609e72a5
+// Git hash  : 7b19f4fe54d68aa8d3eaabd67f2c036bf7e647b0
 
 `timescale 1ns/1ps 
 
@@ -1707,9 +1707,9 @@ module ModusTop_1 (
 endmodule
 
 module ModusTop (
-  input               input_valid,
-  output              input_ready,
-  input      [7:0]    input_payload,
+  (* MARK_DEBUG = "TRUE" *) input               input_valid,
+  (* MARK_DEBUG = "TRUE" *) output              input_ready,
+  (* MARK_DEBUG = "TRUE" *) input      [7:0]    input_payload,
   input      [7:0]    slaveid,
   input      [4:0]    reads_addr,
   output     [7:0]    reads_dataOut,
@@ -1816,10 +1816,10 @@ module ModusTop (
 endmodule
 
 module FiberRxStream (
-  input               input_valid,
-  output              input_ready,
-  input               input_payload_last,
-  input      [7:0]    input_payload_fragment,
+  (* MARK_DEBUG = "TRUE" *) input               input_valid,
+  (* MARK_DEBUG = "TRUE" *) output              input_ready,
+  (* MARK_DEBUG = "TRUE" *) input               input_payload_last,
+  (* MARK_DEBUG = "TRUE" *) input      [7:0]    input_payload_fragment,
   output              output_0_valid,
   input               output_0_ready,
   output     [7:0]    output_0_payload,
@@ -1986,8 +1986,8 @@ module FiberRxBuffer (
   wire                fifo_io_push_ready;
   wire                fifo_io_pop_valid;
   wire       [31:0]   fifo_io_pop_payload;
-  wire       [6:0]    fifo_io_pushOccupancy;
-  wire       [6:0]    fifo_io_popOccupancy;
+  wire       [8:0]    fifo_io_pushOccupancy;
+  wire       [8:0]    fifo_io_popOccupancy;
   reg        [7:0]    _zz_pop_stream_payload_fragment;
   reg        [1:0]    pop_state_2;
   reg        [1:0]    pop_spliter;
@@ -1995,7 +1995,7 @@ module FiberRxBuffer (
   reg        [31:0]   pop_fif_payload_temp;
   wire                when_FiberRxBuffer_l50;
   wire                when_FiberRxBuffer_l60;
-  wire                when_FiberRxBuffer_l66;
+  wire                when_FiberRxBuffer_l61;
   `ifndef SYNTHESIS
   reg [47:0] pop_state_2_string;
   `endif
@@ -2008,8 +2008,8 @@ module FiberRxBuffer (
     .io_pop_valid        (fifo_io_pop_valid                   ), //o
     .io_pop_ready        (pop_fifo_pop_ready                  ), //i
     .io_pop_payload      (fifo_io_pop_payload[31:0]           ), //o
-    .io_pushOccupancy    (fifo_io_pushOccupancy[6:0]          ), //o
-    .io_popOccupancy     (fifo_io_popOccupancy[6:0]           ), //o
+    .io_pushOccupancy    (fifo_io_pushOccupancy[8:0]          ), //o
+    .io_popOccupancy     (fifo_io_popOccupancy[8:0]           ), //o
     .clk                 (clk                                 ), //i
     .reset               (reset                               )  //i
   );
@@ -2064,8 +2064,10 @@ module FiberRxBuffer (
       end
       default : begin
         if(pop_stream_ready) begin
-          if(when_FiberRxBuffer_l66) begin
-            pop_stream_payload_last = 1'b1;
+          if(when_FiberRxBuffer_l60) begin
+            if(when_FiberRxBuffer_l61) begin
+              pop_stream_payload_last = 1'b1;
+            end
           end
         end
       end
@@ -2074,7 +2076,7 @@ module FiberRxBuffer (
 
   assign when_FiberRxBuffer_l50 = (! push_stream_payload_last);
   assign when_FiberRxBuffer_l60 = (pop_spliter == 2'b00);
-  assign when_FiberRxBuffer_l66 = ((fifo_io_popOccupancy == 7'h0) && (pop_spliter == 2'b00));
+  assign when_FiberRxBuffer_l61 = (fifo_io_popOccupancy == 9'h0);
   assign pop_stream_payload_fragment = _zz_pop_stream_payload_fragment;
   always @(posedge clk or posedge reset) begin
     if(reset) begin
@@ -2098,12 +2100,14 @@ module FiberRxBuffer (
           if(pop_stream_ready) begin
             pop_spliter <= (pop_spliter - 2'b01);
             if(when_FiberRxBuffer_l60) begin
-              pop_fifo_pop_ready <= 1'b1;
+              if(when_FiberRxBuffer_l61) begin
+                pop_fifo_pop_ready <= 1'b0;
+                pop_state_2 <= pop_State_START;
+              end else begin
+                pop_fifo_pop_ready <= 1'b1;
+              end
             end else begin
               pop_fifo_pop_ready <= 1'b0;
-            end
-            if(when_FiberRxBuffer_l66) begin
-              pop_state_2 <= pop_State_START;
             end
           end
         end
@@ -2123,7 +2127,9 @@ module FiberRxBuffer (
       default : begin
         if(pop_stream_ready) begin
           if(when_FiberRxBuffer_l60) begin
-            pop_fif_payload_temp <= fifo_io_pop_payload;
+            if(!when_FiberRxBuffer_l61) begin
+              pop_fif_payload_temp <= fifo_io_pop_payload;
+            end
           end
         end
       end
@@ -2139,10 +2145,10 @@ module FiberRxPreamble (
   input               input_payload_last,
   input      [31:0]   input_payload_fragment,
   input      [31:0]   slave_id,
-  output reg          output_valid,
-  input               output_ready,
-  output              output_payload_last,
-  output     [31:0]   output_payload_fragment,
+  (* MARK_DEBUG = "TRUE" *) output reg          output_valid,
+  (* MARK_DEBUG = "TRUE" *) input               output_ready,
+  (* MARK_DEBUG = "TRUE" *) output              output_payload_last,
+  (* MARK_DEBUG = "TRUE" *) output     [31:0]   output_payload_fragment,
   input               clk,
   input               reset
 );
@@ -2249,18 +2255,18 @@ module FiberTxBuffer (
   reg        [31:0]   _zz_ram_port1;
   wire                popToPush_io_input_ready;
   wire                popToPush_io_output_valid;
-  wire       [6:0]    popToPush_io_output_payload;
+  wire       [8:0]    popToPush_io_output_payload;
   wire                pushToPop_io_input_ready;
   wire                pushToPop_io_output_valid;
-  wire       [6:0]    pushToPop_io_output_payload;
+  wire       [8:0]    pushToPop_io_output_payload;
   reg                 _zz_1;
-  reg        [6:0]    push_currentPtr;
-  reg        [6:0]    push_popPtr;
-  (* async_reg = "true" *) reg        [6:0]    push_length;
+  reg        [8:0]    push_currentPtr;
+  reg        [8:0]    push_popPtr;
+  (* async_reg = "true" *) reg        [8:0]    push_length;
   reg        [23:0]   push_buffer;
   reg        [1:0]    push_state;
   reg                 push_port_valid;
-  reg        [5:0]    push_port_payload_address;
+  reg        [7:0]    push_port_payload_address;
   reg        [31:0]   push_port_payload_data;
   reg                 push_drop;
   reg                 push_doWrite;
@@ -2274,11 +2280,11 @@ module FiberTxBuffer (
   (* async_reg = "true" *) reg                 push_cleanup;
   reg                 push_commit;
   wire                when_FiberTxBuffer_l86;
-  reg        [6:0]    pop_currentPtr;
-  reg        [6:0]    pop_pushPtr;
+  reg        [8:0]    pop_currentPtr;
+  reg        [8:0]    pop_pushPtr;
   wire                pop_cmd_valid;
   wire                pop_cmd_ready;
-  wire       [5:0]    pop_cmd_payload;
+  wire       [7:0]    pop_cmd_payload;
   reg        [0:0]    pop_state_2;
   reg        [6:0]    pop_send_number;
   wire                io_push_stream_fire_2;
@@ -2292,7 +2298,7 @@ module FiberTxBuffer (
   reg [39:0] pop_state_2_string;
   `endif
 
-  reg [31:0] ram [0:63];
+  reg [31:0] ram [0:255];
 
   always @(posedge clk) begin
     if(_zz_1) begin
@@ -2309,20 +2315,20 @@ module FiberTxBuffer (
   StreamCCByToggle popToPush (
     .io_input_valid       (1'b1                              ), //i
     .io_input_ready       (popToPush_io_input_ready          ), //o
-    .io_input_payload     (pop_currentPtr[6:0]               ), //i
+    .io_input_payload     (pop_currentPtr[8:0]               ), //i
     .io_output_valid      (popToPush_io_output_valid         ), //o
     .io_output_ready      (1'b1                              ), //i
-    .io_output_payload    (popToPush_io_output_payload[6:0]  ), //o
+    .io_output_payload    (popToPush_io_output_payload[8:0]  ), //o
     .clk                  (clk                               ), //i
     .reset                (reset                             )  //i
   );
   StreamCCByToggle pushToPop (
     .io_input_valid       (1'b1                              ), //i
     .io_input_ready       (pushToPop_io_input_ready          ), //o
-    .io_input_payload     (push_currentPtr[6:0]              ), //i
+    .io_input_payload     (push_currentPtr[8:0]              ), //i
     .io_output_valid      (pushToPop_io_output_valid         ), //o
     .io_output_ready      (1'b1                              ), //i
-    .io_output_payload    (pushToPop_io_output_payload[6:0]  ), //o
+    .io_output_payload    (pushToPop_io_output_payload[8:0]  ), //o
     .clk                  (clk                               ), //i
     .reset                (reset                             )  //i
   );
@@ -2353,10 +2359,10 @@ module FiberTxBuffer (
   end
 
   always @(*) begin
-    push_port_payload_address = 6'bxxxxxx;
+    push_port_payload_address = 8'bxxxxxxxx;
     if(push_doWrite) begin
       if(!push_full) begin
-        push_port_payload_address = push_currentPtr[5:0];
+        push_port_payload_address = push_currentPtr[7:0];
       end
     end
   end
@@ -2387,7 +2393,7 @@ module FiberTxBuffer (
   assign when_FiberTxBuffer_l61_1 = (push_state == 2'b01);
   assign when_FiberTxBuffer_l61_2 = (push_state == 2'b10);
   assign when_FiberTxBuffer_l64 = (push_state == 2'b11);
-  assign push_full = ((push_currentPtr[6] != push_popPtr[6]) && (push_currentPtr[5 : 0] == push_popPtr[5 : 0]));
+  assign push_full = ((push_currentPtr[8] != push_popPtr[8]) && (push_currentPtr[7 : 0] == push_popPtr[7 : 0]));
   assign io_push_stream_fire_1 = (io_push_stream_valid && io_push_stream_ready);
   assign io_push_stream_ready = ((! push_cleanup) && (! push_commit));
   assign when_FiberTxBuffer_l86 = (push_cleanup && (push_state != 2'b00));
@@ -2396,7 +2402,7 @@ module FiberTxBuffer (
   assign pop_cmd_fire = (pop_cmd_valid && pop_cmd_ready);
   assign when_FiberTxBuffer_l119 = (pop_send_number == 7'h38);
   assign pop_cmd_valid = ((! (pop_currentPtr == pop_pushPtr)) && (pop_state_2 == pop_State_1_DATA));
-  assign pop_cmd_payload = pop_currentPtr[5:0];
+  assign pop_cmd_payload = pop_currentPtr[7:0];
   assign pop_cmd_ready = ((! _zz_io_pop_stream_valid) || _zz_pop_cmd_ready);
   assign _zz_io_pop_stream_valid = _zz_io_pop_stream_valid_1;
   assign io_pop_stream_valid = _zz_io_pop_stream_valid;
@@ -2405,15 +2411,15 @@ module FiberTxBuffer (
   assign io_pop_last = ((pop_send_number == 7'h38) && (pop_state_2 == pop_State_1_DATA));
   always @(posedge clk or posedge reset) begin
     if(reset) begin
-      push_currentPtr <= 7'h0;
-      push_popPtr <= 7'h0;
-      push_length <= 7'h0;
+      push_currentPtr <= 9'h0;
+      push_popPtr <= 9'h0;
+      push_length <= 9'h0;
       push_state <= 2'b00;
       push_drop <= 1'b0;
       push_cleanup <= 1'b0;
       push_commit <= 1'b0;
-      pop_currentPtr <= 7'h0;
-      pop_pushPtr <= 7'h0;
+      pop_currentPtr <= 9'h0;
+      pop_pushPtr <= 9'h0;
       pop_state_2 <= pop_State_1_START;
       _zz_io_pop_stream_valid_1 <= 1'b0;
     end else begin
@@ -2423,22 +2429,22 @@ module FiberTxBuffer (
       if(io_push_stream_fire) begin
         push_state <= (push_state + 2'b01);
         if(when_FiberTxBuffer_l64) begin
-          push_length <= (push_length + 7'h01);
+          push_length <= (push_length + 9'h001);
         end
       end
       if(push_doWrite) begin
         if(push_full) begin
           push_drop <= 1'b1;
         end else begin
-          push_currentPtr <= (push_currentPtr + 7'h01);
+          push_currentPtr <= (push_currentPtr + 9'h001);
         end
       end
       push_cleanup <= (io_push_stream_fire_1 && io_push_stream_payload_last);
       push_commit <= push_cleanup;
       if(when_FiberTxBuffer_l86) begin
-        push_length <= 7'h0;
-        push_currentPtr <= 7'h0;
-        push_popPtr <= 7'h0;
+        push_length <= 9'h0;
+        push_currentPtr <= 9'h0;
+        push_popPtr <= 9'h0;
         push_state <= 2'b00;
       end
       if(pushToPop_io_output_valid) begin
@@ -2452,7 +2458,7 @@ module FiberTxBuffer (
         end
         default : begin
           if(pop_cmd_fire) begin
-            pop_currentPtr <= (pop_currentPtr + 7'h01);
+            pop_currentPtr <= (pop_currentPtr + 9'h001);
           end
           if(when_FiberTxBuffer_l119) begin
             pop_state_2 <= pop_State_1_START;
@@ -4349,8 +4355,8 @@ module uartctrl_stream (
   UartCtrl uartCtrl_7 (
     .io_config_frame_dataLength    (3'b111                           ), //i
     .io_config_frame_stop          (UartStopType_ONE                 ), //i
-    .io_config_frame_parity        (UartParityType_NONE              ), //i
-    .io_config_clockDivider        (20'h00010                        ), //i
+    .io_config_frame_parity        (UartParityType_EVEN              ), //i
+    .io_config_clockDivider        (20'h00004                        ), //i
     .io_write_valid                (txfifo_io_pop_valid              ), //i
     .io_write_ready                (uartCtrl_7_io_write_ready        ), //o
     .io_write_payload              (txfifo_io_pop_payload[7:0]       ), //i
@@ -4756,30 +4762,30 @@ module StreamFifoCC (
   output              io_pop_valid,
   input               io_pop_ready,
   output     [31:0]   io_pop_payload,
-  output     [6:0]    io_pushOccupancy,
-  output     [6:0]    io_popOccupancy,
+  output     [8:0]    io_pushOccupancy,
+  output     [8:0]    io_popOccupancy,
   input               clk,
   input               reset
 );
 
   reg        [31:0]   _zz_ram_port1;
-  wire       [6:0]    popToPushGray_buffercc_io_dataOut;
-  wire       [6:0]    pushToPopGray_buffercc_io_dataOut;
-  wire       [6:0]    _zz_pushCC_pushPtrGray;
-  wire       [5:0]    _zz_ram_port;
-  wire       [6:0]    _zz_popCC_popPtrGray;
-  wire       [5:0]    _zz_ram_port_1;
+  wire       [8:0]    popToPushGray_buffercc_io_dataOut;
+  wire       [8:0]    pushToPopGray_buffercc_io_dataOut;
+  wire       [8:0]    _zz_pushCC_pushPtrGray;
+  wire       [7:0]    _zz_ram_port;
+  wire       [8:0]    _zz_popCC_popPtrGray;
+  wire       [7:0]    _zz_ram_port_1;
   wire                _zz_ram_port_2;
-  wire       [5:0]    _zz_io_pop_payload_1;
+  wire       [7:0]    _zz_io_pop_payload_1;
   wire                _zz_io_pop_payload_2;
   reg                 _zz_1;
-  wire       [6:0]    popToPushGray;
-  wire       [6:0]    pushToPopGray;
-  reg        [6:0]    pushCC_pushPtr;
-  wire       [6:0]    pushCC_pushPtrPlus;
+  wire       [8:0]    popToPushGray;
+  wire       [8:0]    pushToPopGray;
+  reg        [8:0]    pushCC_pushPtr;
+  wire       [8:0]    pushCC_pushPtrPlus;
   wire                io_push_fire;
-  reg        [6:0]    pushCC_pushPtrGray;
-  wire       [6:0]    pushCC_popPtrGray;
+  reg        [8:0]    pushCC_pushPtrGray;
+  wire       [8:0]    pushCC_popPtrGray;
   wire                pushCC_full;
   wire                io_push_fire_1;
   wire                _zz_io_pushOccupancy;
@@ -4788,14 +4794,16 @@ module StreamFifoCC (
   wire                _zz_io_pushOccupancy_3;
   wire                _zz_io_pushOccupancy_4;
   wire                _zz_io_pushOccupancy_5;
-  reg        [6:0]    popCC_popPtr;
-  wire       [6:0]    popCC_popPtrPlus;
+  wire                _zz_io_pushOccupancy_6;
+  wire                _zz_io_pushOccupancy_7;
+  reg        [8:0]    popCC_popPtr;
+  wire       [8:0]    popCC_popPtrPlus;
   wire                io_pop_fire;
-  reg        [6:0]    popCC_popPtrGray;
-  wire       [6:0]    popCC_pushPtrGray;
+  reg        [8:0]    popCC_popPtrGray;
+  wire       [8:0]    popCC_pushPtrGray;
   wire                popCC_empty;
   wire                io_pop_fire_1;
-  wire       [6:0]    _zz_io_pop_payload;
+  wire       [8:0]    _zz_io_pop_payload;
   wire                io_pop_fire_2;
   wire                _zz_io_popOccupancy;
   wire                _zz_io_popOccupancy_1;
@@ -4803,12 +4811,14 @@ module StreamFifoCC (
   wire                _zz_io_popOccupancy_3;
   wire                _zz_io_popOccupancy_4;
   wire                _zz_io_popOccupancy_5;
-  reg [31:0] ram [0:63];
+  wire                _zz_io_popOccupancy_6;
+  wire                _zz_io_popOccupancy_7;
+  reg [31:0] ram [0:255];
 
   assign _zz_pushCC_pushPtrGray = (pushCC_pushPtrPlus >>> 1'b1);
-  assign _zz_ram_port = pushCC_pushPtr[5:0];
+  assign _zz_ram_port = pushCC_pushPtr[7:0];
   assign _zz_popCC_popPtrGray = (popCC_popPtrPlus >>> 1'b1);
-  assign _zz_io_pop_payload_1 = _zz_io_pop_payload[5:0];
+  assign _zz_io_pop_payload_1 = _zz_io_pop_payload[7:0];
   assign _zz_io_pop_payload_2 = 1'b1;
   always @(posedge clk) begin
     if(_zz_1) begin
@@ -4823,14 +4833,14 @@ module StreamFifoCC (
   end
 
   BufferCC_11 popToPushGray_buffercc (
-    .io_dataIn     (popToPushGray[6:0]                      ), //i
-    .io_dataOut    (popToPushGray_buffercc_io_dataOut[6:0]  ), //o
+    .io_dataIn     (popToPushGray[8:0]                      ), //i
+    .io_dataOut    (popToPushGray_buffercc_io_dataOut[8:0]  ), //o
     .clk           (clk                                     ), //i
     .reset         (reset                                   )  //i
   );
   BufferCC_11 pushToPopGray_buffercc (
-    .io_dataIn     (pushToPopGray[6:0]                      ), //i
-    .io_dataOut    (pushToPopGray_buffercc_io_dataOut[6:0]  ), //o
+    .io_dataIn     (pushToPopGray[8:0]                      ), //i
+    .io_dataOut    (pushToPopGray_buffercc_io_dataOut[8:0]  ), //o
     .clk           (clk                                     ), //i
     .reset         (reset                                   )  //i
   );
@@ -4841,10 +4851,10 @@ module StreamFifoCC (
     end
   end
 
-  assign pushCC_pushPtrPlus = (pushCC_pushPtr + 7'h01);
+  assign pushCC_pushPtrPlus = (pushCC_pushPtr + 9'h001);
   assign io_push_fire = (io_push_valid && io_push_ready);
   assign pushCC_popPtrGray = popToPushGray_buffercc_io_dataOut;
-  assign pushCC_full = ((pushCC_pushPtrGray[6 : 5] == (~ pushCC_popPtrGray[6 : 5])) && (pushCC_pushPtrGray[4 : 0] == pushCC_popPtrGray[4 : 0]));
+  assign pushCC_full = ((pushCC_pushPtrGray[8 : 7] == (~ pushCC_popPtrGray[8 : 7])) && (pushCC_pushPtrGray[6 : 0] == pushCC_popPtrGray[6 : 0]));
   assign io_push_ready = (! pushCC_full);
   assign io_push_fire_1 = (io_push_valid && io_push_ready);
   assign _zz_io_pushOccupancy = (pushCC_popPtrGray[1] ^ _zz_io_pushOccupancy_1);
@@ -4852,9 +4862,11 @@ module StreamFifoCC (
   assign _zz_io_pushOccupancy_2 = (pushCC_popPtrGray[3] ^ _zz_io_pushOccupancy_3);
   assign _zz_io_pushOccupancy_3 = (pushCC_popPtrGray[4] ^ _zz_io_pushOccupancy_4);
   assign _zz_io_pushOccupancy_4 = (pushCC_popPtrGray[5] ^ _zz_io_pushOccupancy_5);
-  assign _zz_io_pushOccupancy_5 = pushCC_popPtrGray[6];
-  assign io_pushOccupancy = (pushCC_pushPtr - {_zz_io_pushOccupancy_5,{_zz_io_pushOccupancy_4,{_zz_io_pushOccupancy_3,{_zz_io_pushOccupancy_2,{_zz_io_pushOccupancy_1,{_zz_io_pushOccupancy,(pushCC_popPtrGray[0] ^ _zz_io_pushOccupancy)}}}}}});
-  assign popCC_popPtrPlus = (popCC_popPtr + 7'h01);
+  assign _zz_io_pushOccupancy_5 = (pushCC_popPtrGray[6] ^ _zz_io_pushOccupancy_6);
+  assign _zz_io_pushOccupancy_6 = (pushCC_popPtrGray[7] ^ _zz_io_pushOccupancy_7);
+  assign _zz_io_pushOccupancy_7 = pushCC_popPtrGray[8];
+  assign io_pushOccupancy = (pushCC_pushPtr - {_zz_io_pushOccupancy_7,{_zz_io_pushOccupancy_6,{_zz_io_pushOccupancy_5,{_zz_io_pushOccupancy_4,{_zz_io_pushOccupancy_3,{_zz_io_pushOccupancy_2,{_zz_io_pushOccupancy_1,{_zz_io_pushOccupancy,(pushCC_popPtrGray[0] ^ _zz_io_pushOccupancy)}}}}}}}});
+  assign popCC_popPtrPlus = (popCC_popPtr + 9'h001);
   assign io_pop_fire = (io_pop_valid && io_pop_ready);
   assign popCC_pushPtrGray = pushToPopGray_buffercc_io_dataOut;
   assign popCC_empty = (popCC_popPtrGray == popCC_pushPtrGray);
@@ -4868,16 +4880,18 @@ module StreamFifoCC (
   assign _zz_io_popOccupancy_2 = (popCC_pushPtrGray[3] ^ _zz_io_popOccupancy_3);
   assign _zz_io_popOccupancy_3 = (popCC_pushPtrGray[4] ^ _zz_io_popOccupancy_4);
   assign _zz_io_popOccupancy_4 = (popCC_pushPtrGray[5] ^ _zz_io_popOccupancy_5);
-  assign _zz_io_popOccupancy_5 = popCC_pushPtrGray[6];
-  assign io_popOccupancy = ({_zz_io_popOccupancy_5,{_zz_io_popOccupancy_4,{_zz_io_popOccupancy_3,{_zz_io_popOccupancy_2,{_zz_io_popOccupancy_1,{_zz_io_popOccupancy,(popCC_pushPtrGray[0] ^ _zz_io_popOccupancy)}}}}}} - popCC_popPtr);
+  assign _zz_io_popOccupancy_5 = (popCC_pushPtrGray[6] ^ _zz_io_popOccupancy_6);
+  assign _zz_io_popOccupancy_6 = (popCC_pushPtrGray[7] ^ _zz_io_popOccupancy_7);
+  assign _zz_io_popOccupancy_7 = popCC_pushPtrGray[8];
+  assign io_popOccupancy = ({_zz_io_popOccupancy_7,{_zz_io_popOccupancy_6,{_zz_io_popOccupancy_5,{_zz_io_popOccupancy_4,{_zz_io_popOccupancy_3,{_zz_io_popOccupancy_2,{_zz_io_popOccupancy_1,{_zz_io_popOccupancy,(popCC_pushPtrGray[0] ^ _zz_io_popOccupancy)}}}}}}}} - popCC_popPtr);
   assign pushToPopGray = pushCC_pushPtrGray;
   assign popToPushGray = popCC_popPtrGray;
   always @(posedge clk or posedge reset) begin
     if(reset) begin
-      pushCC_pushPtr <= 7'h0;
-      pushCC_pushPtrGray <= 7'h0;
-      popCC_popPtr <= 7'h0;
-      popCC_popPtrGray <= 7'h0;
+      pushCC_pushPtr <= 9'h0;
+      pushCC_pushPtrGray <= 9'h0;
+      popCC_popPtr <= 9'h0;
+      popCC_popPtrGray <= 9'h0;
     end else begin
       if(io_push_fire) begin
         pushCC_pushPtrGray <= (_zz_pushCC_pushPtrGray ^ pushCC_pushPtrPlus);
@@ -4902,10 +4916,10 @@ endmodule
 module StreamCCByToggle (
   input               io_input_valid,
   output              io_input_ready,
-  input      [6:0]    io_input_payload,
+  input      [8:0]    io_input_payload,
   output              io_output_valid,
   input               io_output_ready,
-  output     [6:0]    io_output_payload,
+  output     [8:0]    io_output_payload,
   input               clk,
   input               reset
 );
@@ -4916,11 +4930,11 @@ module StreamCCByToggle (
   wire                pushArea_hit;
   wire                pushArea_accept;
   reg                 pushArea_target;
-  reg        [6:0]    pushArea_data;
+  reg        [8:0]    pushArea_data;
   wire                io_input_fire;
   wire                popArea_stream_valid;
   wire                popArea_stream_ready;
-  wire       [6:0]    popArea_stream_payload;
+  wire       [8:0]    popArea_stream_payload;
   wire                popArea_target;
   wire                popArea_stream_fire;
   reg                 popArea_hit;
@@ -4953,7 +4967,7 @@ module StreamCCByToggle (
     if(reset) begin
       pushArea_target <= 1'b0;
       popArea_hit <= 1'b0;
-      pushArea_data <= 7'h0;
+      pushArea_data <= 9'h0;
     end else begin
       if(pushArea_accept) begin
         pushArea_target <= (! pushArea_target);
@@ -5291,20 +5305,20 @@ endmodule
 //BufferCC_11 replaced by BufferCC_11
 
 module BufferCC_11 (
-  input      [6:0]    io_dataIn,
-  output     [6:0]    io_dataOut,
+  input      [8:0]    io_dataIn,
+  output     [8:0]    io_dataOut,
   input               clk,
   input               reset
 );
 
-  (* async_reg = "true" *) reg        [6:0]    buffers_0;
-  (* async_reg = "true" *) reg        [6:0]    buffers_1;
+  (* async_reg = "true" *) reg        [8:0]    buffers_0;
+  (* async_reg = "true" *) reg        [8:0]    buffers_1;
 
   assign io_dataOut = buffers_1;
   always @(posedge clk or posedge reset) begin
     if(reset) begin
-      buffers_0 <= 7'h0;
-      buffers_1 <= 7'h0;
+      buffers_0 <= 9'h0;
+      buffers_1 <= 9'h0;
     end else begin
       buffers_0 <= io_dataIn;
       buffers_1 <= buffers_0;

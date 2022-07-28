@@ -1,7 +1,9 @@
 package MO
 
+import PHPA82.ila_test.ila
 import spinal.core._
 import spinal.lib.bus.amba3.apb._
+import spinal.lib.bus.amba3.apb.sim.Apb3Driver
 import spinal.lib.bus.regif.AccessType.{RO, RW}
 import spinal.lib.bus.regif.BusInterface
 import spinal.lib.{Delay, DelayWithInit, slave}
@@ -117,14 +119,21 @@ case class Apb_CsrReg() extends Component{
   val hssl_ctl_reg = Reg(Bits(32 bits)) init 0
   val hssl_sr_reg = Reg(Bits(32 bits)) init 0
 
+
+  val Bus_isWrite4 = Reg(Bool()) init False
+  Bus_isWrite4 := busCtrl.isWriting(4)
+  val Write4_Delay = Reg(Bool()) init False
+  Write4_Delay := Delay(Bus_isWrite4,2,init = False)
+
+
   val Hssl_CTL_RST = Reg(Bits(1 bits)) init 0
-  Hssl_CTL_RST := (hssl_ctl_reg(0)& busCtrl.isWriting(0)).asBits
+  Hssl_CTL_RST := (hssl_ctl_reg(0) && Write4_Delay).asBits
 
   val Hssl_CTL_SEND = Reg(Bits(1 bits)) init 0  addTag(crossClockDomain)
-  Hssl_CTL_SEND := (hssl_ctl_reg(2) & busCtrl.isWriting(4)).asBits
+  Hssl_CTL_SEND := (hssl_ctl_reg(2) && Write4_Delay).asBits
 
   val Hssl_CTL_TRIGGER = Reg(Bits(1 bits)) init 0
-  Hssl_CTL_TRIGGER := (hssl_ctl_reg(7) & busCtrl.isWriting(8)).asBits
+  Hssl_CTL_TRIGGER := (hssl_ctl_reg(7) && Write4_Delay).asBits
 
 
   busCtrl.read(hssl_sts,0,0,"光纤状态寄存器")
@@ -134,6 +143,8 @@ case class Apb_CsrReg() extends Component{
   io.hssl_ctl_rst := Hssl_CTL_RST.asBool|Delay(Hssl_CTL_RST,1,init = B"0").asBool|Delay(Hssl_CTL_RST,2,init = B"0").asBool
   io.hssl_ctl_send := Hssl_CTL_SEND.asBool|Delay(Hssl_CTL_SEND,1,init = B"0").asBool|Delay(Hssl_CTL_SEND,2,init = B"0").asBool
   io.hssl_ctl_trigger := Hssl_CTL_TRIGGER.asBool|Delay(Hssl_CTL_TRIGGER,1,init = B"0").asBool|Delay(Hssl_CTL_TRIGGER,2,init = B"0").asBool
+
+//  val ila_probe=ila("0",Bus_isWrite4,Write4_Delay,Hssl_CTL_SEND,io.apb.PWDATA,io.apb.PADDR)
 }
 
 case class Apb_TxFrameReg() extends Component{
@@ -149,4 +160,20 @@ case class Apb_TxFrameReg() extends Component{
   busCtrl.driveAndRead(hssl_txframe,0,0,"光纤帧头寄存器")
 
   io.hssl_txframe := hssl_txframe
+}
+
+object Apb_CsrReg{
+  import spinal.core.sim._
+
+  def main(args: Array[String]): Unit = {
+    SimConfig.withWave.doSim(new Apb_CsrReg){dut=>
+      dut.clockDomain.forkStimulus(10)
+      dut.clockDomain.waitSampling(10)
+      val apbsim = Apb3Driver(dut.io.apb,dut.clockDomain)
+      apbsim.write(4,4)
+      dut.clockDomain.waitSampling(100)
+      apbsim.write(4,4)
+      dut.clockDomain.waitSampling(100)
+    }
+  }
 }

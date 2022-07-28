@@ -95,14 +95,16 @@ case class Encoder_Top(inclr : Boolean) extends Component{
 
   val encoderclockdomain = ClockDomain(io.clk,io.reset)
   val encoderarea = new ClockingArea(encoderclockdomain){
-    if(!inclr){
-      val encoder_clr = new Encoder_Clr
-      encoder_clr.io.encoder_clr_in := io.encoder_clr_in
 
-      val zerosensor = new ZeroSensor
-      zerosensor.io.zerosensor_in := io.encoderinterface.encoder_iphase
-      io.encoder_iphase_out := zerosensor.io.zerosensor_out
-    }
+    val encoder_clr = new Encoder_Clr
+    encoder_clr.io.encoder_clr_in := io.encoder_clr_in
+
+    val zerosensor = new ZeroSensor
+    zerosensor.io.zerosensor_in := io.encoderinterface.encoder_iphase
+    io.encoder_iphase_out := zerosensor.io.zerosensor_out
+//    if(!inclr){
+//
+//    }
     val encoder_iphase = Reg(Bool()) init False
     encoder_iphase := io.encoderinterface.encoder_iphase
 
@@ -118,7 +120,7 @@ case class Encoder_Top(inclr : Boolean) extends Component{
     if(inclr){
       Encoder.enc_rstn := !encoder_iphase.rise()
     }else{
-      Encoder.enc_rstn := io.encoder_clr_in
+      Encoder.enc_rstn := encoder_clr.io.encoder_clr_out
       val encoder_lock_pos = Reg(Bits(32 bits)) init 0  addTag(crossClockDomain)
       when(io.encoderinterface.encoder_iphase.rise()){
         encoder_lock_pos := Encoder.encoder_position_out

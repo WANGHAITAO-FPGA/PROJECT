@@ -44,9 +44,14 @@ case class DFF() extends Component{
 
   val dff_area = new ClockingArea(dff_clkdomain){
     val buffer = Reg(Bool())  addTag(crossClockDomain)
-    buffer := io.d
+    when(!io.clrn){
+      buffer := False
+    }otherwise{
+      buffer := io.d
+    }
   }
-  io.q := Mux(!io.clrn,False,dff_area.buffer)
+  //io.q := Mux(!io.clrn,False,dff_area.buffer)
+  io.q := dff_area.buffer
 }
 
 case class oneshot_count() extends Component{
@@ -82,6 +87,24 @@ object oneshot_count extends App{
   SpinalVerilog(new oneshot_count)
 }
 
+object oneshot_countsim{
+  import spinal.core.sim._
+
+  def main(args: Array[String]): Unit = {
+    SimConfig.withWave.doSim(new oneshot_count){dut=>
+      dut.oneshot_negdomain.forkStimulus(10)
+      dut.io.shot_clk #= false
+      dut.io.count #= 5
+      dut.oneshot_negdomain.waitSampling(10)
+      dut.io.shot_clk #= true
+      dut.oneshot_negdomain.waitSampling(10)
+      dut.io.shot_clk #= false
+      dut.oneshot_negdomain.waitSampling(1000)
+    }
+  }
+
+}
+
 case class Vme(datawidth : Int) extends Component{
   val io = new Bundle{
     val clk = in Bool()
@@ -101,31 +124,36 @@ case class Vme(datawidth : Int) extends Component{
   noIoPrefix()
 
   val vme_area = new ClockingArea(ClockDomain(io.clk,io.reset)){
+    val vme_realaddr = (io.vme.addr<<1).resized
     val sloterr = (io.gap === io.sw)
-    val addr_pass_data1 = (((io.vme.am === B"6'x39")||(io.vme.am === B"6'x3D"))&&io.vme.lword&&io.vme.iack)
-    val addr_pass_int1 = (((io.vme.am === B"6'x29")||(io.vme.am === B"6'x2D"))&&io.vme.lword&&(!io.vme.iack))
-    val addr_pass_data = addr_pass_data1&& (!io.vme.as)&&(io.vme.addr(19 downto 16) === (~io.gap))&&sloterr&&(io.vme.addr(23 downto 21) === B"3'x6")&&(io.vme.addr(20) === ~io.gap4)
+    //val addr_pass_data1 = (((io.vme.am === B"6'x3c")||(io.vme.am === B"6'x3f"))&&(!io.vme.lword)&&io.vme.iack)
+    //val addr_pass_int1 = (((io.vme.am === B"6'x29")||(io.vme.am === B"6'x2D"))&&(!io.vme.lword)&&(!io.vme.iack))
+    val addr_pass_data1 = (((io.vme.am === B"6'x3c"))&&(io.vme.iack))
+    val addr_pass_int1 = (((io.vme.am === B"6'x29")||(io.vme.am === B"6'x2D"))&&(!io.vme.iack))
+    val addr_pass_data = addr_pass_data1&& (!io.vme.as)&&(io.vme.addr(19 downto 16) === (((~io.gap)<<1).resize(4 bits)))&&(vme_realaddr(24) === ~io.gap4)
     val addr_pass_int = addr_pass_int1&& (!io.vme.as)
 
-    io.laddr := Mux(addr_pass_data1&(!io.vme.as),io.vme.addr(15 downto 1),B"15'x7fff")
+    io.laddr := Mux(addr_pass_data1&(!io.vme.as),vme_realaddr(14 downto 0),B"15'x7fff")
 
     val ds = io.vme.ds0 && io.vme.ds1
-    io.lwr := Mux(addr_pass_data&(!io.vme.write),ds,True)
-    io.lrd := Mux(addr_pass_data&io.vme.write,ds,True)
+    io.lwr := Mux(addr_pass_data&&(!io.vme.write),ds,True)
+    io.lrd := Mux(addr_pass_data&&io.vme.write,ds,True)
 
-    val os_count = new oneshot_count()
-    os_count.io.clk := io.clk
-    os_count.io.shot_clk := !(io.lwr&io.lrd)
-    os_count.io.count := 2
-    val dtack = Reg(Bool()) init True
-    val dtack_delay = os_count.io.shot_out
-    when(dtack_delay.fall()||ds.rise()){
-      when(ds){
-        dtack := True
-      }otherwise{
-        dtack := False
-      }
+    val counter = Reg(UInt(4 bits)) init 0
+    when(!(io.lwr&&io.lrd)){
+      counter := counter + 1
+    }otherwise{
+      counter := 0
     }
+    val dtack = Reg(Bool()) init True
+    when((counter > 6)&&addr_pass_data){
+      dtack := False
+    }elsewhen(io.vme.ds0 && io.vme.ds1){
+      dtack := True
+    }otherwise{
+      dtack := True
+    }
+
     io.vme.dtack := dtack
 
     io.apb.PADDR := io.laddr.asUInt
@@ -137,9 +165,9 @@ case class Vme(datawidth : Int) extends Component{
     io.apb.PWDATA := io.vme.data.read
 
     val ila_probe = ila("0",io.vme.addr,io.vme.data.read,io.vme.data.write,io.vme.data.writeEnable,io.vme.ds0,io.vme.ds1,io.vme.am,io.vme.as,io.vme.dtack,io.vme.write,io.vme.lword,
-    io.apb.PWDATA,io.apb.PWRITE,io.apb.PADDR,io.apb.PENABLE,io.apb.PRDATA,io.apb.PSEL,io.gap,io.gap4,io.sw)
+    io.gap,io.gap4,io.sw,io.vme.iack,io.vme.iackin,io.vme.iackout,io.datadir,io.lwr,io.lrd,counter)
   }
-  io.datadir := Mux(vme_area.addr_pass_data & io.vme.write,True,False)
+  io.datadir := Mux((vme_area.addr_pass_data||vme_area.addr_pass_int) & io.vme.write,True,False)
 
   io.vme.iackout := io.vme.iackin
 
@@ -297,76 +325,76 @@ case class VME_REG(datawidth : Int) extends Component{
   }
   else if(datawidth == 32){
     val My_Reg0 = busslave.newRegAt(0x0000,doc="My_Reg0")
-    val VME_Reg0 = My_Reg0.field(32 bits,RW,0x0000,"VME_Reg0")
+    val VME_Reg0 = My_Reg0.field(32 bits,RW,0x50A48601,"VME_Reg0")
     io.vme_data(0) := RegNextWhen(VME_Reg0,My_Reg0.hitDoWrite)
 
 
     val My_Reg1 = busslave.newRegAt(0x0004,doc="My_Reg1")
-    val VME_Reg1 = My_Reg1.field(32 bits,RW,0x0000,"VME_Reg1")
+    val VME_Reg1 = My_Reg1.field(32 bits,RW,0x01020304,"VME_Reg1")
     io.vme_data(1) := RegNextWhen(VME_Reg1,My_Reg1.hitDoWrite)
 
     val My_Reg2 = busslave.newRegAt(0x0008,doc="My_Reg2")
-    val VME_Reg2 = My_Reg2.field(32 bits,RW,0x0000,"VME_Reg2")
+    val VME_Reg2 = My_Reg2.field(32 bits,RW,0x01020304,"VME_Reg2")
     io.vme_data(2) := RegNextWhen(VME_Reg2,My_Reg2.hitDoWrite)
 
     val My_Reg3 = busslave.newRegAt(0x000c,doc="My_Reg3")
-    val VME_Reg3 = My_Reg3.field(32 bits,RW,0x0000,"VME_Reg3")
+    val VME_Reg3 = My_Reg3.field(32 bits,RW,0x01020304,"VME_Reg3")
     io.vme_data(3) := RegNextWhen(VME_Reg3,My_Reg3.hitDoWrite)
 
     val My_Reg4 = busslave.newRegAt(0x0010,doc="My_Reg4")
-    val VME_Reg4 = My_Reg4.field(32 bits,RW,0x0000,"VME_Reg4")
+    val VME_Reg4 = My_Reg4.field(32 bits,RW,0x01020304,"VME_Reg4")
     io.vme_data(4) := RegNextWhen(VME_Reg4,My_Reg4.hitDoWrite)
 
     val My_Reg5 = busslave.newRegAt(0x0014,doc="My_Reg5")
-    val VME_Reg5 = My_Reg5.field(32 bits,RW,0x0000,"VME_Reg5")
+    val VME_Reg5 = My_Reg5.field(32 bits,RW,0x01020304,"VME_Reg5")
     io.vme_data(5) := RegNextWhen(VME_Reg5,My_Reg5.hitDoWrite)
     /*****************************SENSOR REG ****************************************************/
     val My_Reg6 = busslave.newRegAt(0x0018,doc="My_Reg6")
-    val SENSOR_Reg0 = My_Reg6.field(32 bits,RO,0x0000,"SENSOR_Reg0")
+    val SENSOR_Reg0 = My_Reg6.field(32 bits,RO,0x01020304,"SENSOR_Reg0")
     SENSOR_Reg0 := io.sensor_data(0)
 
     val My_Reg7 = busslave.newRegAt(0x001c,doc="My_Reg7")
-    val SENSOR_Reg1 = My_Reg7.field(32 bits,RO,0x0000,"SENSOR_Reg1")
+    val SENSOR_Reg1 = My_Reg7.field(32 bits,RO,0x01020304,"SENSOR_Reg1")
     SENSOR_Reg1 := io.sensor_data(1)
 
     val My_Reg8 = busslave.newRegAt(0x0020,doc="My_Reg8")
-    val SENSOR_Reg2 = My_Reg8.field(32 bits,RO,0x0000,"SENSOR_Reg2")
+    val SENSOR_Reg2 = My_Reg8.field(32 bits,RO,0x01020304,"SENSOR_Reg2")
     SENSOR_Reg2 := io.sensor_data(2)
 
     val My_Reg9 = busslave.newRegAt(0x0024,doc="My_Reg9")
-    val SENSOR_Reg3 = My_Reg9.field(32 bits,RO,0x0000,"SENSOR_Reg3")
+    val SENSOR_Reg3 = My_Reg9.field(32 bits,RO,0x01020304,"SENSOR_Reg3")
     SENSOR_Reg3 := io.sensor_data(3)
 
     val My_Reg10 = busslave.newRegAt(0x0028,doc="My_Reg10")
-    val SENSOR_Reg4 = My_Reg10.field(32 bits,RO,0x0000,"SENSOR_Reg4")
+    val SENSOR_Reg4 = My_Reg10.field(32 bits,RO,0x01020304,"SENSOR_Reg4")
     SENSOR_Reg4 := io.sensor_data(4)
     /******************************************************************************************/
     val My_Reg11 = busslave.newRegAt(0x002c,doc="My_Reg11")
-    val SENSOR_Reg5 = My_Reg11.field(32 bits,RO,0x0000,"SENSOR_Reg5")
+    val SENSOR_Reg5 = My_Reg11.field(32 bits,RO,0x01020304,"SENSOR_Reg5")
     SENSOR_Reg5 := io.sensor_data(5)
 
     val My_Reg12 = busslave.newRegAt(0x0030,doc="My_Reg12")
-    val SENSOR_Reg6 = My_Reg12.field(32 bits,RO,0x0000,"SENSOR_Reg6")
+    val SENSOR_Reg6 = My_Reg12.field(32 bits,RO,0x01020304,"SENSOR_Reg6")
     SENSOR_Reg6 := io.sensor_data(6)
 
     val My_Reg13 = busslave.newRegAt(0x0034,doc="My_Reg13")
-    val SENSOR_Reg7 = My_Reg13.field(32 bits,RO,0x0000,"SENSOR_Reg7")
+    val SENSOR_Reg7 = My_Reg13.field(32 bits,RO,0x01020304,"SENSOR_Reg7")
     SENSOR_Reg7 := io.sensor_data(7)
     /******************************************************************************************/
     val My_Reg14 = busslave.newRegAt(0x0038,doc="My_Reg14")
-    val SENSOR_Reg8 = My_Reg14.field(32 bits,RO,0x0000,"SENSOR_Reg8")
+    val SENSOR_Reg8 = My_Reg14.field(32 bits,RO,0x01020304,"SENSOR_Reg8")
     SENSOR_Reg8 := io.sensor_data(8)
 
     val My_Reg15 = busslave.newRegAt(0x003c,doc="My_Reg15")
-    val SENSOR_Reg9 = My_Reg15.field(32 bits,RO,0x0000,"SENSOR_Reg9")
+    val SENSOR_Reg9 = My_Reg15.field(32 bits,RO,0x01020304,"SENSOR_Reg9")
     SENSOR_Reg9 := io.sensor_data(9)
 
     val My_Reg16 = busslave.newRegAt(0x0040,doc="My_Reg16")
-    val SENSOR_Reg10 = My_Reg16.field(32 bits,RO,0x0000,"SENSOR_Reg10")
+    val SENSOR_Reg10 = My_Reg16.field(32 bits,RO,0x01020304,"SENSOR_Reg10")
     SENSOR_Reg10 := io.sensor_data(10)
 
     val My_Reg17 = busslave.newRegAt(0x0044,doc="My_Reg17")
-    val SENSOR_Reg11 = My_Reg17.field(32 bits,RO,0x0000,"SENSOR_Reg11")
+    val SENSOR_Reg11 = My_Reg17.field(32 bits,RO,0x01020304,"SENSOR_Reg11")
     SENSOR_Reg11 := io.sensor_data(11)
   }
 

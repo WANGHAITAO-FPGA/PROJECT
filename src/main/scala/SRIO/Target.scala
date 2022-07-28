@@ -1,11 +1,15 @@
 package SRIO
 
+import PHPA82.ila_test.ila
+import SimpleBus.{SimpleBus, SimpleBusConfig}
 import spinal.core._
-import spinal.lib.master
+import spinal.lib.{master, slave}
 
 case class Target(addressWidth : Int, addressLowBit : Int) extends Component{
   val io = new Bundle{
     val target = master(Target_Interface())
+    val simplebus = master(SimpleBus(SimpleBusConfig(addressWidth,64)))
+    val doorbell_info = out Bits(16 bits)
   }
   noIoPrefix()
 
@@ -19,6 +23,10 @@ case class Target(addressWidth : Int, addressLowBit : Int) extends Component{
 
   val response_data_in_d = current_srcid ## current_addr(addressLowBit+addressWidth-1 downto addressLowBit) ## current_prio ## current_tid ## current_ftype ## current_size  addTag(crossClockDomain)
   val response_data_in = RegNext(response_data_in_d)
+
+  val doorbell_info_d = io.target.target_req_stream.payload.fragment(31 downto 16)
+  val doorbell_info = RegNextWhen(doorbell_info_d,current_ftype === srio_ftype.DOORB.asBits)
+  io.doorbell_info := doorbell_info
 
   val first_beat = Reg(Bool()) init True
 
@@ -55,7 +63,7 @@ case class Target(addressWidth : Int, addressLowBit : Int) extends Component{
   when(first_beat && io.target.target_req_stream.fire){
     data_store_waddr := current_addr(addressLowBit+addressWidth-1 downto addressLowBit)
   }elsewhen(io.target.target_req_stream.fire){
-    data_store_waddr := (data_store_waddr.asUInt + 1).asBits
+    data_store_waddr := (data_store_waddr.asUInt + 8).asBits
   }otherwise{
     data_store_waddr := data_store_waddr
   }
@@ -107,7 +115,7 @@ case class Target(addressWidth : Int, addressLowBit : Int) extends Component{
   when(pull_from_store && (current_beat_cnt === 0) && (!io.target.target_resp_stream.fire)){
     data_store_raddr := starting_read_addr
   }elsewhen(pull_from_store && io.target.target_resp_stream.fire){
-    data_store_raddr := (data_store_raddr.asUInt + 1).asBits
+    data_store_raddr := (data_store_raddr.asUInt + 8).asBits
   }
 
 
@@ -139,12 +147,12 @@ case class Target(addressWidth : Int, addressLowBit : Int) extends Component{
   rspmem.write(data_store_waddr.asUInt,io.target.target_resp_stream.payload.fragment,data_store_wen)
   rspmem.addAttribute("ram_style", "block")*/
 
-  val srio_reg = new Srio_Regif(addressWidth)
-  srio_reg.io.simplebus.RADDR := data_store_raddr.asUInt
-  srio_reg.io.simplebus.RENABLE := True
-  srio_reg.io.simplebus.WENABLE := data_store_wen
-  srio_reg.io.simplebus.WADDR := data_store_waddr.asUInt
-  srio_reg.io.simplebus.WDATA := io.target.target_resp_stream.payload.fragment
+  //val srio_reg = new Srio_Regif(addressWidth)
+  io.simplebus.RADDR := data_store_raddr.asUInt
+  io.simplebus.RENABLE := True
+  io.simplebus.WENABLE := data_store_wen
+  io.simplebus.WADDR := data_store_waddr.asUInt
+  io.simplebus.WDATA := io.target.target_req_stream.payload.fragment
 
   val tresp_tdata = Reg(Bits(64 bits))
   val data_store_dout = Reg(Bits(64 bits))
@@ -152,7 +160,7 @@ case class Target(addressWidth : Int, addressLowBit : Int) extends Component{
     tresp_tdata := header_beat
   }elsewhen(pull_from_store && io.target.target_resp_stream.fire){
     //tresp_tdata := rspmem.readAsync(data_store_raddr.asUInt)
-    tresp_tdata := srio_reg.io.simplebus.RDATA
+    tresp_tdata := io.simplebus.RDATA
   }otherwise{
     tresp_tdata := tresp_tdata
   }
@@ -160,6 +168,8 @@ case class Target(addressWidth : Int, addressLowBit : Int) extends Component{
 
   io.target.target_resp_common.tkeep := B"xFF"
   io.target.target_resp_common.tuser := B"x000000FF"
+
+  val ila_probe=ila("1",io.doorbell_info)
 }
 
 object Target_Demo extends App{

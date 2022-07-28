@@ -23,7 +23,7 @@ case class Srio_Regif(addrwidth : Int) extends Component{
 
   val My_Reg_Version = busslave.newReg(doc="软件版本号")
   val Version = My_Reg_Version.field(64 bits,RO,0,"软件版本号")
-  Version := B"x00202206011514"
+  Version := B"x0000202206011514"
 }
 
 object Srio_Regif extends App {

@@ -49,4 +49,5 @@ object CRC8 {
 
 object CRC5 {
   def USB = new CRCPolynomial(polynomial = p"5'x05", initValue = BigInt("1F", 16), inputReflected = true, outputReflected = true, finalXor = BigInt("1F", 16))
+  def ENDAT = new CRCPolynomial(polynomial = p"5'x0B", initValue = BigInt("1F", 16), inputReflected = false, outputReflected = false, finalXor = BigInt("1F", 16))
 }

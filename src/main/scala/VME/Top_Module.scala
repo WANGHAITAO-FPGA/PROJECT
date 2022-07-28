@@ -60,7 +60,8 @@ case class Top_Module(datawidth : Int,timer_cnt : Int) extends Component{
 }
 
 object Top_Module extends App{
-  SpinalVerilog(InOutWrapper(new Top_Module(32,5000)))
+  SpinalConfig(headerWithDate = true,targetDirectory = "E:/6DOF/6DOF_FPGA/6DOF_FPGA.srcs/sources_1/imports/SRIO").generateVerilog(InOutWrapper(new Top_Module(32,5000)))
+//  SpinalVerilog(InOutWrapper(new Top_Module(32,5000)))
 }
 
 class Top_Module_Test extends Top_Module(32,5000){

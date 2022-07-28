@@ -218,7 +218,7 @@ object CRCCombinationalCore {
 object crc_test{
   import spinal.core.sim._
   def main(args: Array[String]): Unit = {
-    SimConfig.withWave.doSim(new CRCCombinational(CRCCombinationalConfig(CRC32.MPEG2, 32 bits))){dut=>
+    SimConfig.withWave.doSim(new CRCCombinational(CRCCombinationalConfig(CRC5.ENDAT, 1 bits))){dut=>
       dut.clockDomain.forkStimulus(10)
       dut.io.cmd.valid #= false
       dut.clockDomain.waitSampling(10)
@@ -226,9 +226,136 @@ object crc_test{
       dut.io.cmd.valid #= true
       dut.clockDomain.waitSampling()
       dut.io.cmd.mode #= CRCCombinationalCmdMode.UPDATE
+
       dut.io.cmd.valid #= true
-      dut.io.cmd.data #= 0x01020304
+      dut.io.cmd.data #= 1
       dut.clockDomain.waitSampling()
+
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 0
+      dut.clockDomain.waitSampling()
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 0
+      dut.clockDomain.waitSampling()
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 1
+      dut.clockDomain.waitSampling()
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 1
+      dut.clockDomain.waitSampling()
+
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 0
+      dut.clockDomain.waitSampling()
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 0
+      dut.clockDomain.waitSampling()
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 0
+      dut.clockDomain.waitSampling()
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 1
+      dut.clockDomain.waitSampling()
+
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 0
+      dut.clockDomain.waitSampling()
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 0
+      dut.clockDomain.waitSampling()
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 1
+      dut.clockDomain.waitSampling()
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 1
+      dut.clockDomain.waitSampling()
+
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 1
+      dut.clockDomain.waitSampling()
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 1
+      dut.clockDomain.waitSampling()
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 1
+      dut.clockDomain.waitSampling()
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 1
+      dut.clockDomain.waitSampling()
+
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 0
+      dut.clockDomain.waitSampling()
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 0
+      dut.clockDomain.waitSampling()
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 1
+      dut.clockDomain.waitSampling()
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 0
+      dut.clockDomain.waitSampling()
+
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 0
+      dut.clockDomain.waitSampling()
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 0
+      dut.clockDomain.waitSampling()
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 1
+      dut.clockDomain.waitSampling()
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 0
+      dut.clockDomain.waitSampling()
+
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 1
+      dut.clockDomain.waitSampling()
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 0
+      dut.clockDomain.waitSampling()
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 0
+      dut.clockDomain.waitSampling()
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 0
+      dut.clockDomain.waitSampling()
+
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 0
+      dut.clockDomain.waitSampling()
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 0
+      dut.clockDomain.waitSampling()
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 0
+      dut.clockDomain.waitSampling()
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 0
+      dut.clockDomain.waitSampling()
+
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 0
+      dut.clockDomain.waitSampling()
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 0
+      dut.clockDomain.waitSampling()
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 0
+      dut.clockDomain.waitSampling()
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 0
+      dut.clockDomain.waitSampling()
+
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 0
+      dut.clockDomain.waitSampling()
+      dut.io.cmd.valid #= true
+      dut.io.cmd.data #= 0
+      dut.clockDomain.waitSampling()
+
+
       dut.io.cmd.valid #= false
       dut.clockDomain.waitSampling(200)
     }

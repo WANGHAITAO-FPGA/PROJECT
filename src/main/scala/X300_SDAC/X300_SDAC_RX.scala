@@ -11,7 +11,7 @@ case class X300_RxPreamble(datawidth : Int) extends Component{
   }
   noIoPrefix()
 
-  val startDelimiter = B"x0000FFBC00000000"
+  val startDelimiter = B"x0000000F0000FFBC"
   val startDelimiterWidth = datawidth*2
   val history = History(io.input, 0 until startDelimiterWidth/datawidth, when = io.input.fire)
   val historyDataCat = B(Cat(history.map(_.payload.fragment).reverse))
@@ -55,8 +55,8 @@ case class X300_RxSimpleBus(addrwidth : Int, datawidth : Int) extends Component{
     val Get_Header: State = new State with EntryPoint {
       whenIsActive{
         when(io.input.valid){
-          waddr := io.input.payload.fragment(15 downto 8).asUInt.resized
-          //waddr := 3
+          //waddr := io.input.payload.fragment(15 downto 8).asUInt.resized
+          waddr := 67
           flag := False
           goto(Get_Data)
         }

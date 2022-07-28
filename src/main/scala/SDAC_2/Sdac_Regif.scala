@@ -3,6 +3,7 @@ package SDAC_2
 import SimpleBus._
 import spinal.core._
 import spinal.lib.bus.regif.AccessType.{RO, RW}
+import spinal.lib.bus.regif.HtmlGenerator
 import spinal.lib.{Delay, slave}
 
 import java.time.LocalDate
@@ -414,45 +415,60 @@ case class Sdac_Regif(addrwidth : Int, datawidth : Int, endat_num : Int, ad7606_
 
   val My_Reg_FPGA_DO = busslave.newReg(doc="16路外部输出光耦信号），FPGA_DO(FPGA_B33_IO_OUT)")
   val FPGA_DO_0 = My_Reg_FPGA_DO.fieldAt(0,bc = 1 bits,RW,0,"外部光耦1输入信号，FPGA_DO1")
-  io.FPGA_DO(0) := FPGA_DO_0.asBool
+  io.FPGA_DO(0) := ~FPGA_DO_0.asBool
   val FPGA_DO_1 = My_Reg_FPGA_DO.fieldAt(2,bc = 1 bits,RW,0,"外部光耦2输入信号，FPGA_DO2")
-  io.FPGA_DO(1) := FPGA_DO_1.asBool
+  io.FPGA_DO(1) := ~FPGA_DO_1.asBool
   val FPGA_DO_2 = My_Reg_FPGA_DO.fieldAt(4,bc = 1 bits,RW,0,"外部光耦3输入信号，FPGA_DO3")
-  io.FPGA_DO(2) := FPGA_DO_2.asBool
+  io.FPGA_DO(2) := ~FPGA_DO_2.asBool
   val FPGA_DO_3 = My_Reg_FPGA_DO.fieldAt(6,bc = 1 bits,RW,0,"外部光耦4输入信号，FPGA_DO4")
-  io.FPGA_DO(3) := FPGA_DO_3.asBool
+  io.FPGA_DO(3) := ~FPGA_DO_3.asBool
   val FPGA_DO_4 = My_Reg_FPGA_DO.fieldAt(8,bc = 1 bits,RW,0,"外部光耦5输入信号，FPGA_DO5")
-  io.FPGA_DO(4) := FPGA_DO_4.asBool
+  io.FPGA_DO(4) := ~FPGA_DO_4.asBool
   val FPGA_DO_5 = My_Reg_FPGA_DO.fieldAt(10,bc = 1 bits,RW,0,"外部光耦6输入信号，FPGA_DO6")
-  io.FPGA_DO(5) := FPGA_DO_5.asBool
+  io.FPGA_DO(5) := ~FPGA_DO_5.asBool
   val FPGA_DO_6 = My_Reg_FPGA_DO.fieldAt(12,bc = 1 bits,RW,0,"外部光耦7输入信号，FPGA_DO7")
-  io.FPGA_DO(6) := FPGA_DO_6.asBool
+  io.FPGA_DO(6) := ~FPGA_DO_6.asBool
   val FPGA_DO_7 = My_Reg_FPGA_DO.fieldAt(14,bc = 1 bits,RW,0,"外部光耦8输入信号，FPGA_DO8")
-  io.FPGA_DO(7) := FPGA_DO_7.asBool
+  io.FPGA_DO(7) := ~FPGA_DO_7.asBool
   val FPGA_DO_8 = My_Reg_FPGA_DO.fieldAt(16,bc = 1 bits,RW,0,"外部光耦9输入信号，FPGA_DO9")
-  io.FPGA_DO(8) := FPGA_DO_8.asBool
+  io.FPGA_DO(8) := ~FPGA_DO_8.asBool
   val FPGA_DO_9 = My_Reg_FPGA_DO.fieldAt(18,bc = 1 bits,RW,0,"外部光耦10输入信号，FPGA_DO10")
-  io.FPGA_DO(9) := FPGA_DO_9.asBool
+  io.FPGA_DO(9) := ~FPGA_DO_9.asBool
   val FPGA_DO_10 = My_Reg_FPGA_DO.fieldAt(20,bc = 1 bits,RW,0,"外部光耦11输入信号，FPGA_DO11")
-  io.FPGA_DO(10) := FPGA_DO_10.asBool
+  io.FPGA_DO(10) := ~FPGA_DO_10.asBool
   val FPGA_DO_11 = My_Reg_FPGA_DO.fieldAt(22,bc = 1 bits,RW,0,"外部光耦12输入信号，FPGA_DO12")
-  io.FPGA_DO(11) := FPGA_DO_11.asBool
+  io.FPGA_DO(11) := ~FPGA_DO_11.asBool
   val FPGA_DO_12 = My_Reg_FPGA_DO.fieldAt(24,bc = 1 bits,RW,0,"外部光耦13输入信号，FPGA_DO13")
-  io.FPGA_DO(12) := FPGA_DO_12.asBool
+  io.FPGA_DO(12) := ~FPGA_DO_12.asBool
   val FPGA_DO_13 = My_Reg_FPGA_DO.fieldAt(26,bc = 1 bits,RW,0,"外部光耦14输入信号，FPGA_DO14")
-  io.FPGA_DO(13) := FPGA_DO_13.asBool
+  io.FPGA_DO(13) := ~FPGA_DO_13.asBool
   val FPGA_DO_14 = My_Reg_FPGA_DO.fieldAt(28,bc = 1 bits,RW,0,"外部光耦15输入信号，FPGA_DO15")
-  io.FPGA_DO(14) := FPGA_DO_14.asBool
+  io.FPGA_DO(14) := ~FPGA_DO_14.asBool
   val FPGA_DO_15 = My_Reg_FPGA_DO.fieldAt(30,bc = 1 bits,RW,0,"外部光耦16输入信号，FPGA_DO16")
-  io.FPGA_DO(15) := FPGA_DO_15.asBool
+  io.FPGA_DO(15) := ~FPGA_DO_15.asBool
+
+  val Encoder_Clr0 = Reg(Bool()) init False
+  val Encoder_Clr1 = Reg(Bool()) init False
+  val Encoder_Clr2 = Reg(Bool()) init False
+  val Encoder_Clr3 = Reg(Bool()) init False
 
   val My_Reg_Encoder_Pos_Clr = busslave.newReg(doc="4路增量式光栅尺位置清零控制信号")
   val Encoder1_Pos_Clr = My_Reg_Encoder_Pos_Clr.fieldAt(0,bc = 1 bits,RW,0,"Encoder1位置清零")
-  io.Encoder_Clr(0) := Encoder1_Pos_Clr & (My_Reg_Encoder_Pos_Clr.hitDoWrite.asBits)
+  Encoder_Clr0 := Encoder1_Pos_Clr.asBool & (My_Reg_Encoder_Pos_Clr.hitDoWrite)
+  io.Encoder_Clr(0) := (Encoder_Clr0 | Delay(Encoder_Clr0,1,init = False) | Delay(Encoder_Clr0,2,init = False)  | Delay(Encoder_Clr0,3,init = False)).asBits
+  //io.Encoder_Clr(0) := Encoder1_Pos_Clr & (My_Reg_Encoder_Pos_Clr.hitDoWrite.asBits)
   val Encoder2_Pos_Clr = My_Reg_Encoder_Pos_Clr.fieldAt(8,bc = 1 bits,RW,0,"Encoder2位置清零")
-  io.Encoder_Clr(1):= Encoder2_Pos_Clr & (My_Reg_Encoder_Pos_Clr.hitDoWrite.asBits)
+  Encoder_Clr1 := Encoder2_Pos_Clr.asBool & (My_Reg_Encoder_Pos_Clr.hitDoWrite)
+  io.Encoder_Clr(1):= (Encoder_Clr1 | Delay(Encoder_Clr1,1,init = False) | Delay(Encoder_Clr1,2,init = False)  | Delay(Encoder_Clr1,3,init = False)).asBits
+  //io.Encoder_Clr(1):= Encoder2_Pos_Clr & (My_Reg_Encoder_Pos_Clr.hitDoWrite.asBits)
   val Encoder3_Pos_Clr = My_Reg_Encoder_Pos_Clr.fieldAt(16,bc = 1 bits,RW,0,"Encoder3位置清零")
-  io.Encoder_Clr(2) := Encoder3_Pos_Clr & (My_Reg_Encoder_Pos_Clr.hitDoWrite.asBits)
+  Encoder_Clr2 := Encoder3_Pos_Clr.asBool & (My_Reg_Encoder_Pos_Clr.hitDoWrite)
+  io.Encoder_Clr(2):= (Encoder_Clr2 | Delay(Encoder_Clr2,1,init = False) | Delay(Encoder_Clr2,2,init = False)  | Delay(Encoder_Clr2,3,init = False)).asBits
+
+  //io.Encoder_Clr(2) := Encoder3_Pos_Clr & (My_Reg_Encoder_Pos_Clr.hitDoWrite.asBits)
   val Encoder4_Pos_Clr = My_Reg_Encoder_Pos_Clr.fieldAt(24,bc = 1 bits,RW,0,"Encoder4位置清零")
-  io.Encoder_Clr(3) := Encoder4_Pos_Clr & (My_Reg_Encoder_Pos_Clr.hitDoWrite.asBits)
+  Encoder_Clr3 := Encoder4_Pos_Clr.asBool & (My_Reg_Encoder_Pos_Clr.hitDoWrite)
+  io.Encoder_Clr(3):= (Encoder_Clr3 | Delay(Encoder_Clr3,1,init = False) | Delay(Encoder_Clr3,2,init = False)  | Delay(Encoder_Clr3,3,init = False)).asBits
+  //io.Encoder_Clr(3) := Encoder4_Pos_Clr & (My_Reg_Encoder_Pos_Clr.hitDoWrite.asBits)
+  busslave.accept(HtmlGenerator("Sdac_Reg", "Sdac_Reg"))
 }

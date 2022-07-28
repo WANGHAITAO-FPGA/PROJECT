@@ -174,7 +174,7 @@ class Phpa_Top(sramLayout : SramLayout) extends Component {
 
 
     //ad7606_ctrl.io.ad7606Interface.addAttribute("MARK_DEBUG","TRUE")
-//    val gtx_ctrl = new Apb3_Gtx(axiclkdomain,256,256)
+    //val gtx_ctrl = new Apb3_Gtx(axiclkdomain,256,256)
 //    gtx_ctrl.io.axiw <> io.axiw
 //    gtx_ctrl.io.axir <> io.axir
     /*gtx_ctrl.io.axir.payload.fragment := gtx_ctrl.io.axiw.payload.fragment
