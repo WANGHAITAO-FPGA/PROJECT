@@ -115,7 +115,7 @@ case class Apb_CsrReg() extends Component{
   val busCtrl = Apb3SlaveFactory(io.apb)
 
   val hssl_sts = Reg(Bits(32 bits)) init 0
-  hssl_sts := io.hssl_sts
+  hssl_sts := RegNextWhen(io.hssl_sts,busCtrl.isReading(0))
   val hssl_ctl_reg = Reg(Bits(32 bits)) init 0
   val hssl_sr_reg = Reg(Bits(32 bits)) init 0
 

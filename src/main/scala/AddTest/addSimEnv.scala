@@ -1,9 +1,10 @@
 package AddTest
-/*
+
 import spinal.core._
 import spinal.core.sim._
 import scala.collection.mutable
-import org.
+import org._
+
 
 case class data(
                data1:Int,
@@ -85,6 +86,15 @@ case class addSimEnv(period:Int,dataWidth:Int) extends add(dataWidth){
 }
 
 
-class addSimTab extends FunSuite{
+object addsimEnvAPP extends App{
+  val dut = SimConfig.withWave.compile(addSimEnv(10,8))
+  dut.doSim{dut=>
+    dut.simEnvStart()
+    dut.insertData(data(3,5))
+    dut.waitSimDone()
+  }
+}
 
-}*/
+//class addSimTb extends FunSuite{
+//
+//}

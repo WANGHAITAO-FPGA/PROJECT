@@ -3,6 +3,7 @@ package MDCB_2
 import SimpleBus._
 import spinal.core._
 import spinal.lib.bus.regif.AccessType.{RO, RW}
+import spinal.lib.bus.regif.HtmlGenerator
 import spinal.lib.{Delay, slave}
 
 import java.time.LocalDate
@@ -330,6 +331,9 @@ case class Mdcb_Regif(addrwidth : Int, datawidth : Int, ad5544_num : Int, ad7606
   io.Encoder_Clr(2) := Encoder3_Pos_Clr & (My_Reg_Encoder_Pos_Clr.hitDoWrite.asBits)
   val Encoder4_Pos_Clr = My_Reg_Encoder_Pos_Clr.fieldAt(24,bc = 1 bits,RW,0,"Encoder4位置清零，预留")
   io.Encoder_Clr(3) := Encoder4_Pos_Clr & (My_Reg_Encoder_Pos_Clr.hitDoWrite.asBits)
+
+  busslave.accept(HtmlGenerator("mdcb.html", "AP"))
+
 }
 
 object Mdcb_Regif extends App{

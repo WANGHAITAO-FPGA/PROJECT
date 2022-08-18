@@ -1,102 +1,97 @@
-package FIBERTOUART
+package Axilite4
 
-import UART.uartctrl_stream
+import FIBERTOUART.{DecodeRxStream, FiberRxBuffer, FiberRxPreamble, FiberRxStream, FiberTxHeader}
 import spinal.core._
 import spinal.lib.com.uart.Uart
-import spinal.lib.{CounterFreeRun, Fragment, Stream, StreamFragmentWidthAdapter, master, slave}
+import spinal.lib.misc.Timer
+import spinal.lib.{Fragment, Stream, StreamFifo, master, slave}
 
 import scala.util.Random
 
-/*********************************************************************************************************************************/
-/************portcount 转换的MODUS通道数量）*********************************************/
-/************datawidth 光纤传输数据宽度*********************************************/
-/************distrib_length 分配的单个MODUS指令所占的寄存器长度（32位寄存器）*********************************************/
-/************txfifodepth MODUS串口FIFO发送深度*********************************************/
-/************rxfifodepth MODUS串口FIFO接受深度*********************************************/
-/************rx_waittime MODUS串口认定接受完成一帧数据所等待的时间*********************************************/
-/************timerl_imit 光纤定时传输时间*********************************************/
-/*********************************************************************************************************************************/
+case class Modus_StreamTop(fifodepth : Int,lookback : Boolean, cycles_number: Int) extends Component{
+  val io = new Bundle{
+    val input = slave Stream (Bits(8 bit))
+    val output = master(Stream(Fragment(Bits(32 bits))))
+    val slaveid = in Bits(8 bit)
+    val uart  = if(!lookback) master(Uart()) else null
+  }
+  noIoPrefix()
 
-class FiberTop(portcount : Int, datawidth : Int, distrib_length : Int, txfifodepth: Int, rxfifodepth : Int, rx_waittime : Int, timerl_imit: Int,lookback : Boolean) extends Component{
+  val decoderxstream = new DecodeRxStream()
+  decoderxstream.io.input << io.input
+  decoderxstream.io.slaveid := io.slaveid
+
+  val uartctrl_stream = new Uart_Stream(fifodepth,cycles_number)
+  if(!lookback) uartctrl_stream.io.uart <> io.uart
+  else uartctrl_stream.io.uart.rxd := uartctrl_stream.io.uart.txd
+
+  uartctrl_stream.io.stream_in << decoderxstream.io.output
+  io.output << uartctrl_stream.io.stream_out
+}
+
+class Fiber_StreamTop(portcount : Int, datawidth : Int, fifodepth: Int, timerl_imit: Int,lookback : Boolean,cycles_number : Int) extends Component{
   val io = new Bundle{
     val input = slave(Stream(Fragment(Bits(datawidth bits))))
-    val output = master(Stream(Fragment(Bits(datawidth bits))))
+    val output = master(Stream(Fragment((Bits(datawidth bits)))))
     val timer_tick = in Bool()
     val clk = in Bool()
     val reset = in Bool()
     val uart = if(!lookback) Seq.fill(portcount)(master(Uart())) else null
-    val led = out Bool()
     val slave_id = in Bits(datawidth bits)
-    //val test_output = master(Stream(Fragment(Bits(datawidth bits))))
   }
   noIoPrefix()
 
   val fiberclkdomain = ClockDomain(io.clk,io.reset,frequency = FixedFrequency(125 MHz))
 
   val fiberarea = new ClockingArea(fiberclkdomain){
-//    val test_uart = Uart_Test(32)
-//    io.test_output << test_uart.io.output
-//    test_uart.io.slave_id := io.slave_id
-
     val fiberrxpreamble = new FiberRxPreamble(32)
     fiberrxpreamble.io.input << io.input
-    //fiberrxpreamble.io.input << test_uart.io.output
     fiberrxpreamble.io.slave_id := io.slave_id
 
     val fiberrxbuffer = new FiberRxBuffer(fiberclkdomain,fiberclkdomain,datawidth,8,1024)
     fiberrxbuffer.io.push.stream << fiberrxpreamble.io.output
     fiberrxpreamble.io.output.addAttribute("MARK_DEBUG","TRUE")
 
-    val fiberrxstream = new FiberRxStream(portcount,8,portcount*distrib_length*datawidth/8)
+    val fiberrxstream = new FiberRxStream(portcount,8,portcount*datawidth)
     fiberrxstream.io.input << fiberrxbuffer.io.pop.stream
     fiberrxstream.io.input.addAttribute("MARK_DEBUG","TRUE")
 
-    val modbus = Seq.fill(portcount)(new ModusTop(txfifodepth,rxfifodepth,rx_waittime,lookback))
+    val modbus = Seq.fill(portcount)(new Modus_StreamTop(fifodepth,lookback,cycles_number))
 
-    val fibertxstream = new FiberTxStream(fiberclkdomain,fiberclkdomain,portcount,datawidth,portcount*distrib_length*datawidth/8,rxfifodepth,timerl_imit)
+    val stream_connect = new Stream_Connect(datawidth,portcount,cycles_number/4,fifodepth)
 
     for(i <- 0 until portcount){
       if(!lookback) io.uart(i) <> modbus(i).io.uart
       modbus(i).io.input << fiberrxstream.io.output(i)
       modbus(i).io.slaveid := i + 1
-      modbus(i).io.reads.en := fibertxstream.io.reads(i).en
-      modbus(i).io.reads.addr := fibertxstream.io.reads(i).addr
-      fibertxstream.io.reads(i).dataOut := modbus(i).io.reads.dataOut
+      stream_connect.io.inputs(i) << modbus(i).io.output
     }
 
-    modbus(0).io.input.addAttribute("MARK_DEBUG","TRUE")
+    val timer = Timer(32)
+    timer.io.tick := io.timer_tick
+    timer.io.limit := timerl_imit
+    when(timer.io.value >= timer.io.limit){
+      timer.io.clear := True
+    }otherwise{
+      timer.io.clear := False
+    }
+    stream_connect.io.tick := timer.io.full
+
+    val streamfifo = new StreamFifo(Bits(datawidth bits),64)
+    streamfifo.io.push << stream_connect.io.output
 
     val fibertxheader = new FiberTxHeader(32)
-    fibertxheader.io.input << fibertxstream.io.output
+    fibertxheader.io.input.payload.fragment := streamfifo.io.pop.payload
+    fibertxheader.io.input.payload.last := (streamfifo.io.occupancy === 1) && fibertxheader.io.input.fire
+    fibertxheader.io.input.valid := streamfifo.io.pop.valid
+    streamfifo.io.pop.ready := fibertxheader.io.input.ready
+
     fibertxheader.io.slave_id := io.slave_id
-    //io.output << fibertxheader.io.output
-
-    val fibertxpadder = new FiberTxPadder(32,58)
-    fibertxpadder.io.input << fibertxheader.io.output
-    io.output << fibertxpadder.io.output
-
-    fibertxstream.io.timer_tick := io.timer_tick
-
-    val ledtemp = Reg(Bool()) init False
-
-    val counter =  CounterFreeRun(62500000)
-    when(counter.willOverflow){
-      counter.clear()
-      ledtemp := ~ledtemp;
-    }
-    io.led := ledtemp
+    io.output << fibertxheader.io.output
   }
 }
 
-object FiberTop_v extends App{
-  SpinalConfig(
-    //oneFilePerComponent = true,
-    defaultClockDomainFrequency=FixedFrequency(125 MHz)
-  ).generateVerilog(new FiberTop(7,32,8,32,32,4000,6250,false))
-}
-
-
-case class FiberTest() extends FiberTop(7,32,8,32,32,4000,6000,true){
+case class FiberTest_() extends Fiber_StreamTop(7,32,16,5000,true,32){
   import spinal.core.sim._
   def init: Unit ={
     fiberarea.clockDomain.forkStimulus(10)
@@ -183,7 +178,7 @@ case class FiberTest() extends FiberTop(7,32,8,32,32,4000,6000,true){
 object FiberTop{
   import spinal.core.sim._
   def main(args: Array[String]): Unit = {
-    val dut = SimConfig.withWave.compile(new FiberTest())
+    val dut = SimConfig.withWave.compile(new FiberTest_())
     dut.doSim{dut=>
       dut.init
       dut.io.slave_id #= 2
@@ -196,7 +191,7 @@ object FiberTop{
       dut.modbus_write(6,16,300,1,85,340,false)
       dut.modbus_write(7,16,300,1,85,340,true)
       dut.reset
-      dut.fiberarea.clockDomain.waitSampling(100000)
+      dut.fiberarea.clockDomain.waitSampling(10000)
       for(i <- 0 until 10000){
         dut.io.output.ready #= Random.nextBoolean()
         dut.fiberarea.clockDomain.waitSampling()
@@ -204,15 +199,3 @@ object FiberTop{
     }
   }
 }
-
-//object Uart_TT{
-//  import spinal.core.sim._
-//
-//  def main(args: Array[String]): Unit = {
-//    SimConfig.withWave.doSim(new FiberTop(7,32,8,32,32,4000,6000,false)){dut=>
-//      dut.fiberarea.clockDomain.forkStimulus(8)
-//      dut.fiberarea.clockDomain.waitSampling(20)
-//      dut.fiberarea.clockDomain.waitSampling(20000)
-//    }
-//  }
-//}

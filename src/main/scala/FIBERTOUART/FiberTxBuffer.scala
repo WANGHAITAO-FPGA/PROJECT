@@ -4,7 +4,7 @@ import spinal.core._
 import spinal.lib.com.eth.MacRxBuffer
 import spinal.lib._
 
-case class FiberTxBuffer(pushCd : ClockDomain,popCd : ClockDomain,pushWidth : Int,popWidth : Int,byteSize : Int) extends Component{
+case class FiberTxBuffer(pushCd : ClockDomain,popCd : ClockDomain,pushWidth : Int,popWidth : Int, byteSize : Int, numSize : Int) extends Component{
   assert(isPow2(byteSize))
   assert(isPow2(popWidth/pushWidth))
   assert(popWidth >= pushWidth)
@@ -116,7 +116,7 @@ case class FiberTxBuffer(pushCd : ClockDomain,popCd : ClockDomain,pushWidth : In
           currentPtr := currentPtr + 1
           send_number := send_number + 1
         }
-        when(send_number === 56){
+        when(send_number === numSize){
           state := State.START
         }
       }
@@ -124,14 +124,14 @@ case class FiberTxBuffer(pushCd : ClockDomain,popCd : ClockDomain,pushWidth : In
     cmd.valid := !isEmpty(currentPtr, pushPtr) && (state === State.DATA)
     cmd.payload := currentPtr.resized
     io.pop.stream << ram.streamReadSync(cmd)
-    io.pop.last := (send_number === 56)&&(state === State.DATA)
+    io.pop.last := (send_number === numSize)&&(state === State.DATA)
   }
 }
 
 object FiberTxBuffer{
   import spinal.core.sim._
   def main(args: Array[String]): Unit = {
-    SimConfig.withWave.doSim(new FiberTxBuffer(ClockDomain.external("pushclk"),ClockDomain.external("popclk"),8,32,256)){dut=>
+    SimConfig.withWave.doSim(new FiberTxBuffer(ClockDomain.external("pushclk"),ClockDomain.external("popclk"),8,32,256,56)){dut=>
       dut.pushCd.forkStimulus(10)
       dut.popCd.forkStimulus(10)
       dut.io.push.stream.payload.last #= false

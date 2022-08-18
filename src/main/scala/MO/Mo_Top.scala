@@ -12,6 +12,12 @@ import spinal.core.sim._
 
 import scala.collection.mutable.ArrayBuffer
 
+/**
+ * 实现功能：1)与DSP进行EMIF通讯
+ *         2)实现4通道光纤数据收发功能
+ * @param Mo_Code Top主函数入口
+ */
+
 class Mo_Code(sramLayout : SramLayout) extends Component {
   val io = new Bundle{
     val emif = master(SramInterface(sramLayout))
@@ -28,6 +34,8 @@ class Mo_Code(sramLayout : SramLayout) extends Component {
     val hssl3_output = master(Stream(Fragment(Bits(32 bits))))
     val hssl4_input = slave(Stream(Fragment(Bits(32 bits))))
     val hssl4_output = master(Stream(Fragment(Bits(32 bits))))
+    val hssl_rxdone = out Vec(Bool(),4)
+    val test_data = out Bits(32 bits)
   }
   noIoPrefix()
 
@@ -62,6 +70,7 @@ class Mo_Code(sramLayout : SramLayout) extends Component {
     hssl1_txram.io.reset := io.reset
     hssl1_txram.io.tx_id := 0x000000b1
     hssl1_txram.io.tx_packet_req := hssl1_csr_reg.io.hssl_ctl_send
+    hssl1_txram.io.tx_packet_trigger := hssl1_csr_reg.io.hssl_ctl_trigger
     io.hssl1_output << hssl1_txram.io.output
     apbMapping += hssl1_txram.io.apb -> (0x0010c00, 1024 Bytes)
     //hssl1_txram.io.apb.addAttribute("MARK_DEBUG","TRUE")
@@ -73,6 +82,7 @@ class Mo_Code(sramLayout : SramLayout) extends Component {
     hssl1_rxram.io.rx_id := 0x000000b1
     hssl1_rxram.io.input << io.hssl1_input
     apbMapping += hssl1_rxram.io.apb -> (0x0010800, 1024 Bytes)
+    io.hssl_rxdone(0) := hssl1_rxram.io.gtp_rx_done
 
     val hssl2_txram = new Apb_TxRam(8)
     hssl2_txram.io.tx_clk := io.hssl2_gtx_clk
@@ -80,6 +90,7 @@ class Mo_Code(sramLayout : SramLayout) extends Component {
     hssl2_txram.io.reset := io.reset
     hssl2_txram.io.tx_id := 0x000000b2
     hssl2_txram.io.tx_packet_req := hssl2_csr_reg.io.hssl_ctl_send
+    hssl2_txram.io.tx_packet_trigger := hssl2_csr_reg.io.hssl_ctl_trigger
     io.hssl2_output << hssl2_txram.io.output
     apbMapping += hssl2_txram.io.apb -> (0x0011400, 1024 Bytes)
 
@@ -90,6 +101,9 @@ class Mo_Code(sramLayout : SramLayout) extends Component {
     hssl2_rxram.io.rx_id := 0x000000b2
     hssl2_rxram.io.input << io.hssl2_input
     apbMapping += hssl2_rxram.io.apb -> (0x0011000, 1024 Bytes)
+    io.hssl_rxdone(1) := hssl2_rxram.io.gtp_rx_done
+
+    io.test_data := hssl2_rxram.io.test_dataout
 
     val hssl3_txram = new Apb_TxRam(8)
     hssl3_txram.io.tx_clk := io.hssl2_gtx_clk
@@ -97,6 +111,7 @@ class Mo_Code(sramLayout : SramLayout) extends Component {
     hssl3_txram.io.reset := io.reset
     hssl3_txram.io.tx_id := 0x000000b3
     hssl3_txram.io.tx_packet_req := hssl3_csr_reg.io.hssl_ctl_send
+    hssl3_txram.io.tx_packet_trigger := hssl3_csr_reg.io.hssl_ctl_trigger
     io.hssl3_output << hssl3_txram.io.output
     apbMapping += hssl3_txram.io.apb -> (0x0011c00, 1024 Bytes)
 
@@ -107,6 +122,7 @@ class Mo_Code(sramLayout : SramLayout) extends Component {
     hssl3_rxram.io.rx_id := 0x000000b3
     hssl3_rxram.io.input << io.hssl3_input
     apbMapping += hssl3_rxram.io.apb -> (0x0011800, 1024 Bytes)
+    io.hssl_rxdone(2) := hssl3_rxram.io.gtp_rx_done
 
     val hssl4_txram = new Apb_TxRam(8)
     hssl4_txram.io.tx_clk := io.hssl2_gtx_clk
@@ -114,6 +130,7 @@ class Mo_Code(sramLayout : SramLayout) extends Component {
     hssl4_txram.io.reset := io.reset
     hssl4_txram.io.tx_id := 0x000000b4
     hssl4_txram.io.tx_packet_req := hssl4_csr_reg.io.hssl_ctl_send
+    hssl4_txram.io.tx_packet_trigger := hssl4_csr_reg.io.hssl_ctl_trigger
     io.hssl4_output << hssl4_txram.io.output
     apbMapping += hssl4_txram.io.apb -> (0x0012400, 1024 Bytes)
 
@@ -124,13 +141,14 @@ class Mo_Code(sramLayout : SramLayout) extends Component {
     hssl4_rxram.io.rx_id := 0x000000b4
     hssl4_rxram.io.input << io.hssl4_input
     apbMapping += hssl4_rxram.io.apb -> (0x0012000, 1024 Bytes)
+    io.hssl_rxdone(3) := hssl4_rxram.io.gtp_rx_done
 
     val apbDecoder = Apb3Decoder(
       master = emif32_toapb.io.apb,
       slaves = apbMapping
     )
     val ila_probe=ila("0",io.emif.emif_cs,io.emif.emif_oe,io.emif.emif_we,io.emif.emif_data.read,io.emif.emif_data.write,io.emif.emif_data.writeEnable,io.emif.emif_addr,emif32_toapb.io.apb.PADDR,emif32_toapb.io.apb.PENABLE,
-          emif32_toapb.io.apb.PREADY,emif32_toapb.io.apb.PSEL,emif32_toapb.io.apb.PWDATA,emif32_toapb.io.apb.PRDATA,emif32_toapb.io.apb.PWRITE)
+      emif32_toapb.io.apb.PREADY,emif32_toapb.io.apb.PSEL,emif32_toapb.io.apb.PWDATA,emif32_toapb.io.apb.PRDATA,emif32_toapb.io.apb.PWRITE,io.hssl_sts(1))
   }
 }
 
@@ -192,9 +210,9 @@ object MO_TEST extends App{
 
 
 object Mo_Top extends App{
-  //SpinalConfig(oneFilePerComponent = true).generateVerilog(InOutWrapper(new Mo_Code(SramLayout(24,16))))
+  //SpinalConfig(anonymSignalPrefix = "temp",oneFilePerComponent = true).generateVerilog(InOutWrapper(new Mo_Code(SramLayout(24,16))))
 
-  SpinalConfig(headerWithDate = true,targetDirectory = "E:/WORK_OK/MO/X300_MO_REFACTOR_1.02/X300_MO/X300_MO.srcs/sources_1/imports/SRIO").generateVerilog(InOutWrapper(new Mo_Code(SramLayout(24,16))))
+  SpinalConfig(anonymSignalPrefix = "temp",headerWithDate = true,targetDirectory = "E:/WORK_OK/X300_MO_REFACTOR_1.02/X300_MO/X300_MO.srcs/sources_1/imports/SRIO/").generateVerilog(InOutWrapper(new Mo_Code(SramLayout(24,16))))
 }
 
 case class Mo_Top_Test(period:Int) extends MO_TEST(SramLayout(24,16)){

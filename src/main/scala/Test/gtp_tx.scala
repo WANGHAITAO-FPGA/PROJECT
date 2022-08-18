@@ -1,9 +1,12 @@
 package Test
 
 import CRCCORE.{CRC32, CRCCombinational, CRCCombinationalCmdMode, CRCCombinationalConfig}
+import PHPA82.ila_test.ila
 import spinal.core._
 import spinal.lib.{Fragment, Stream, StreamFifo}
 import spinal.lib.fsm.{EntryPoint, State, StateMachine}
+
+import scala.util.Random
 
 case class gtp_tx() extends Component{
   val io = new Bundle{
@@ -47,6 +50,9 @@ case class gtp_tx() extends Component{
     val tx_packet_req = Reg(Bool()) init False  addTag(crossClockDomain)
     tx_packet_req := io.tx_packet_req
 
+    val tx_packet_trigger = Reg(Bool()) init False  addTag(crossClockDomain)
+    tx_packet_trigger := io.tx_packet_trigger
+
     val fsm = new StateMachine{
       val Wait_Start: State = new State with EntryPoint {
         whenIsActive{
@@ -54,9 +60,19 @@ case class gtp_tx() extends Component{
           last := False
           when(tx_packet_req.rise()){
             goto(Send_Head)
+          }elsewhen(tx_packet_trigger.rise()){
+            goto(Send_TriggerHead)
           }otherwise{
             goto(Wait_Start)
           }
+        }
+      }
+      val Send_TriggerHead: State = new State{
+        whenIsActive{
+          mode := False
+          valid := True
+          data := 0x0000FFBA
+          goto(Send_End)
         }
       }
       val Send_Head: State = new State{
@@ -139,7 +155,9 @@ case class gtp_tx() extends Component{
     io.s_axi_tx_tdata := streamfifo.io.pop.payload
     io.s_axi_tx_tvalid := streamfifo.io.pop.valid
     streamfifo.io.pop.ready := io.s_axi_tx_tready
-    io.s_axi_tx_tlast := (streamfifo.io.occupancy === 1) & io.s_axi_tx_tready & io.s_axi_tx_tvalid
+    io.s_axi_tx_tlast := (streamfifo.io.occupancy === 1) && io.s_axi_tx_tready && io.s_axi_tx_tvalid
+
+//    val ila_probe=ila("3",streamfifo.io.push.payload,streamfifo.io.push.valid,streamfifo.io.push.ready,io.s_axi_tx_tdata,io.s_axi_tx_tvalid,io.s_axi_tx_tlast,io.s_axi_tx_tready)
 
   }
 }
@@ -148,4 +166,40 @@ object gtp_tx extends App {
   SpinalConfig(
     enumPrefixEnable = false
   ).generateVerilog(new gtp_tx())
+}
+
+object gtp_tx_sim{
+  import spinal.core.sim._
+
+  def main(args: Array[String]): Unit = {
+    SimConfig.withWave.doSim(new gtp_tx){dut=>
+      dut.tx_area.clockDomain.forkStimulus(10)
+      dut.io.tx_packet_req #= false
+      dut.io.tx_packet_trigger #= false
+      dut.tx_area.clockDomain.waitSampling(10)
+      dut.io.s_axi_tx_tready #= Random.nextBoolean()
+      dut.io.tx_packet_trigger #= true
+      dut.tx_area.clockDomain.waitSampling()
+      dut.io.s_axi_tx_tready #= Random.nextBoolean()
+      dut.io.tx_packet_trigger #= false
+      for(i <- 0 until 100) {
+        dut.io.s_axi_tx_tready #= Random.nextBoolean()
+        dut.tx_area.clockDomain.waitSampling()
+      }
+      dut.io.tx_packet_trigger #= true
+      dut.tx_area.clockDomain.waitSampling()
+      dut.io.tx_packet_trigger #= false
+      for(i <- 0 until 100) {
+        dut.io.s_axi_tx_tready #= Random.nextBoolean()
+        dut.tx_area.clockDomain.waitSampling()
+      }
+      dut.io.tx_packet_trigger #= true
+      dut.tx_area.clockDomain.waitSampling()
+      dut.io.tx_packet_trigger #= false
+      for(i <- 0 until 100) {
+        dut.io.s_axi_tx_tready #= Random.nextBoolean()
+        dut.tx_area.clockDomain.waitSampling()
+      }
+    }
+  }
 }

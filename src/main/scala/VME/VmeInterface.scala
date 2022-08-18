@@ -328,17 +328,16 @@ case class VME_REG(datawidth : Int) extends Component{
     val VME_Reg0 = My_Reg0.field(32 bits,RW,0x50A48601,"VME_Reg0")
     io.vme_data(0) := RegNextWhen(VME_Reg0,My_Reg0.hitDoWrite)
 
-
     val My_Reg1 = busslave.newRegAt(0x0004,doc="My_Reg1")
     val VME_Reg1 = My_Reg1.field(32 bits,RW,0x01020304,"VME_Reg1")
     io.vme_data(1) := RegNextWhen(VME_Reg1,My_Reg1.hitDoWrite)
 
     val My_Reg2 = busslave.newRegAt(0x0008,doc="My_Reg2")
-    val VME_Reg2 = My_Reg2.field(32 bits,RW,0x01020304,"VME_Reg2")
+    val VME_Reg2 = My_Reg2.field(32 bits,RW,0x05060708,"VME_Reg2")
     io.vme_data(2) := RegNextWhen(VME_Reg2,My_Reg2.hitDoWrite)
 
     val My_Reg3 = busslave.newRegAt(0x000c,doc="My_Reg3")
-    val VME_Reg3 = My_Reg3.field(32 bits,RW,0x01020304,"VME_Reg3")
+    val VME_Reg3 = My_Reg3.field(32 bits,RW,0x090a0b0c,"VME_Reg3")
     io.vme_data(3) := RegNextWhen(VME_Reg3,My_Reg3.hitDoWrite)
 
     val My_Reg4 = busslave.newRegAt(0x0010,doc="My_Reg4")
@@ -397,7 +396,6 @@ case class VME_REG(datawidth : Int) extends Component{
     val SENSOR_Reg11 = My_Reg17.field(32 bits,RO,0x01020304,"SENSOR_Reg11")
     SENSOR_Reg11 := io.sensor_data(11)
   }
-
 }
 
 case class VME_TOP(datawidth : Int) extends Component{

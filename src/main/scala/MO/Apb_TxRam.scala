@@ -18,6 +18,7 @@ case class Apb_TxRam(addrwidth : Int) extends Component{
     val reset = in Bool()
     val tx_id = in Bits(32 bits)
     val tx_packet_req = in Bool()
+    val tx_packet_trigger = in Bool()
   }
   noIoPrefix()
 
@@ -55,7 +56,7 @@ case class Apb_TxRam(addrwidth : Int) extends Component{
     hssl_tx.io.s_axi_tx_tready := io.output.ready
     hssl_tx.io.tx_packet_gtxid := io.tx_id
     hssl_tx.io.tx_packet_req := io.tx_packet_req
-    hssl_tx.io.tx_packet_trigger := False
+    hssl_tx.io.tx_packet_trigger := io.tx_packet_trigger
     hssl_tx.io.tx_packet_head := busarea.tx_frame
     xilinx_bram.io.rd_en := !hssl_tx.io.tx_packet_rden
     xilinx_bram.io.rd_clk := io.tx_clk

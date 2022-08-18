@@ -32,7 +32,7 @@ case class GSSL_MODULE(timer_cnt : Int, write_aw : Int, read_aw : Int, lookback 
     io.cyp1401.GSSL_MODE_B := cyp1401_init.io.GSSL_MODE_B
     io.cyp1401.GSSL_MODE_C := cyp1401_init.io.GSSL_MODE_C
 
-    io.cyp1401.GSSL_REFCLK_ABCD := !io.clk
+    io.cyp1401.GSSL_REFCLK_ABCD := io.clk
     /****************************GSSL_A 通道定时发送VME,SENSOR数据 *********************/
     val gssl_sensor_regs = Reg(Vec(Bits(32 bits),12))  addTag(crossClockDomain)
     val timer_A = Timer(32)
@@ -117,35 +117,37 @@ case class GSSL_MODULE(timer_cnt : Int, write_aw : Int, read_aw : Int, lookback 
     gssl_tx_c.io.tx_atc_trigger := rx_done_c
     gssl_tx_c.io.reads.dataOut := 0
     /****************************GSSL_B 用于测试 USE for TEST*********************/
-    val timer_B = Timer(32)
-      timer_B.io.tick := cyp1401_init.io.GSSL_TRSTZ_N_ABCD
-      timer_B.io.limit := timer_cnt
-      when(timer_B.io.value >= timer_B.io.limit){
-        timer_B.io.clear := True
-      }otherwise{
-        timer_B.io.clear := False
-      }
-
-    val meminitvalue_B = for(i <- 0 until 1<<read_aw)yield{
-      val initdata = i + 256
-      BigInt(initdata)
-    }
-    val roms = Mem(Bits(32 bits), BigInt(1) << read_aw) initBigInt(meminitvalue_B)
-
-    val rx_b_ttctriger =  Reg(Bool()) init False  addTag(crossClockDomain)
-
-    val gssl_tx_b = new GSSL_TX_MOUDLE(read_aw)
-    gssl_tx_b.io.GSSL_REFCLK := io.clk
-    gssl_tx_b.io.rst_in := io.reset
-    io.cyp1401.GSSL_TXCT0_B := gssl_tx_b.io.GSSL_TXCT0
-    io.cyp1401.GSSL_TXD_B := gssl_tx_b.io.GSSL_TXD
-    gssl_tx_b.io.tx_frame_head_data := B"x0000210c"
-    gssl_tx_b.io.tx_data_trigger := timer_B.io.full
-    //gssl_tx_c.io.tx_data_trigger := rx_b_ttctriger
-    gssl_tx_b.io.tx_atc_trigger := False
-    gssl_tx_b.io.tx_ttc_trigger := False
-    gssl_tx_b.io.reads.dataOut := roms.readSync(gssl_tx_b.io.reads.addr.resized,gssl_tx_b.io.reads.en)
-
+      io.cyp1401.GSSL_TXCT0_B := 0
+      io.cyp1401.GSSL_TXD_B := 0
+//    val timer_B = Timer(32)
+//      timer_B.io.tick := cyp1401_init.io.GSSL_TRSTZ_N_ABCD
+//      timer_B.io.limit := timer_cnt
+//      when(timer_B.io.value >= timer_B.io.limit){
+//        timer_B.io.clear := True
+//      }otherwise{
+//        timer_B.io.clear := False
+//      }
+//
+//    val meminitvalue_B = for(i <- 0 until 1<<read_aw)yield{
+//      val initdata = i + 256
+//      BigInt(initdata)
+//    }
+//    val roms = Mem(Bits(32 bits), BigInt(1) << read_aw) initBigInt(meminitvalue_B)
+//
+//    val rx_b_ttctriger =  Reg(Bool()) init False  addTag(crossClockDomain)
+//
+//    val gssl_tx_b = new GSSL_TX_MOUDLE(read_aw)
+//    gssl_tx_b.io.GSSL_REFCLK := io.clk
+//    gssl_tx_b.io.rst_in := io.reset
+//    io.cyp1401.GSSL_TXCT0_B := gssl_tx_b.io.GSSL_TXCT0
+//    io.cyp1401.GSSL_TXD_B := gssl_tx_b.io.GSSL_TXD
+//    gssl_tx_b.io.tx_frame_head_data := B"x0000210c"
+//    gssl_tx_b.io.tx_data_trigger := timer_B.io.full
+//    //gssl_tx_c.io.tx_data_trigger := rx_b_ttctriger
+//    gssl_tx_b.io.tx_atc_trigger := False
+//    gssl_tx_b.io.tx_ttc_trigger := False
+//    gssl_tx_b.io.reads.dataOut := roms.readSync(gssl_tx_b.io.reads.addr.resized,gssl_tx_b.io.reads.en)
+//
     io.sensor_data := gssl_sensor_regs
   }
   /****************************GSSL_A接受未使用 *********************/
@@ -157,11 +159,7 @@ case class GSSL_MODULE(timer_cnt : Int, write_aw : Int, read_aw : Int, lookback 
       rx_module_c.io.GSSL_RXD := io.cyp1401.GSSL_RXD_C
       rx_module_c.io.GSSL_RXST0 := io.cyp1401.GSSL_RXST0_C
     }
-//    else{
-//      rx_module_c.io.GSSL_RXCLK := io.clk
-//      rx_module_c.io.GSSL_RXD := gssl_txarea.gssl_tx_c.io.GSSL_TXD
-//      rx_module_c.io.GSSL_RXST0 := gssl_txarea.gssl_tx_c.io.GSSL_TXCT0
-//    }
+
     rx_module_c.io.rst_in := io.reset
     //rx_module_b.io.writes <> io.writes
     when((rx_module_c.io.writes.we) && (rx_module_c.io.writes.addr === U(0x21))){
@@ -209,26 +207,22 @@ case class GSSL_MODULE(timer_cnt : Int, write_aw : Int, read_aw : Int, lookback 
     gssl_txarea.rx_done_c := rx_module_c.io.rx_frame_done|rx_done_b_delay1|rx_done_b_delay2
   }
   /****************************GSSL_B接受TTC触发后发送SENSOR数据  *********************/
-  val gssl_rxarea_b = new ClockingArea(ClockDomain(if(!lookback) io.cyp1401.GSSL_RXCLK_B else io.clk,io.reset)){
-    val rx_module_b = new GSSL_RX_MOUDLE(write_aw)
-    if(!lookback){
-      rx_module_b.io.GSSL_RXCLK := io.cyp1401.GSSL_RXCLK_B
-      rx_module_b.io.GSSL_RXD := io.cyp1401.GSSL_RXD_B
-      rx_module_b.io.GSSL_RXST0 := io.cyp1401.GSSL_RXST0_B
-    }
-//    else{
-//      rx_module_b.io.GSSL_RXCLK := io.clk
-//      rx_module_b.io.GSSL_RXD := gssl_txarea.gssl_tx_b.io.GSSL_TXD
-//      rx_module_b.io.GSSL_RXST0 := gssl_txarea.gssl_tx_b.io.GSSL_TXCT0
+//  val gssl_rxarea_b = new ClockingArea(ClockDomain(if(!lookback) io.cyp1401.GSSL_RXCLK_B else io.clk,io.reset)){
+//    val rx_module_b = new GSSL_RX_MOUDLE(write_aw)
+//    if(!lookback){
+//      rx_module_b.io.GSSL_RXCLK := io.cyp1401.GSSL_RXCLK_B
+//      rx_module_b.io.GSSL_RXD := io.cyp1401.GSSL_RXD_B
+//      rx_module_b.io.GSSL_RXST0 := io.cyp1401.GSSL_RXST0_B
 //    }
-    rx_module_b.io.rst_in := io.reset
-
-    val rx_b_ttctriger_delay1 = Reg(Bool()) init False
-    val rx_b_ttctriger_delay2 = Reg(Bool()) init False
-    rx_b_ttctriger_delay1 := Delay(rx_module_b.io.rx_ttc_trigger,1)
-    rx_b_ttctriger_delay2 := Delay(rx_module_b.io.rx_ttc_trigger,2)
-    gssl_txarea.rx_b_ttctriger := rx_module_b.io.rx_ttc_trigger|rx_b_ttctriger_delay1|rx_b_ttctriger_delay2
-  }
+//
+//    rx_module_b.io.rst_in := io.reset
+//
+//    val rx_b_ttctriger_delay1 = Reg(Bool()) init False
+//    val rx_b_ttctriger_delay2 = Reg(Bool()) init False
+//    rx_b_ttctriger_delay1 := Delay(rx_module_b.io.rx_ttc_trigger,1)
+//    rx_b_ttctriger_delay2 := Delay(rx_module_b.io.rx_ttc_trigger,2)
+//    gssl_txarea.rx_b_ttctriger := rx_module_b.io.rx_ttc_trigger|rx_b_ttctriger_delay1|rx_b_ttctriger_delay2
+//  }
 
 }
 

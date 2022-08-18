@@ -1,10 +1,11 @@
 package MO
 
+import PHPA82.ila_test.ila
 import spinal.core._
 import spinal.lib.bus.amba3.apb.sim.Apb3Driver
 import spinal.lib.bus.amba3.apb.{Apb3, Apb3Config, Apb3SlaveFactory}
 import spinal.lib.bus.misc.SizeMapping
-import spinal.lib.{Fragment, Stream, slave}
+import spinal.lib.{Delay, Fragment, Stream, slave}
 
 class gtp_rx extends BlackBox{
   val io = new Bundle{
@@ -34,6 +35,8 @@ class Apb_RxRAM(addrwidth : Int) extends Component{
     val rx_clk = in Bool()
     val reset = in Bool()
     val rx_id = in Bits(32 bits)
+    val gtp_rx_done = out Bool()
+    val test_dataout = out Bits(32 bits)
    }
   noIoPrefix()
 
@@ -50,6 +53,7 @@ class Apb_RxRAM(addrwidth : Int) extends Component{
     hssl_rx.io.m_axi_rx_tlast := io.input.payload.last
     io.input.ready := True
     hssl_rx.io.gtx_id := io.rx_id
+    io.gtp_rx_done := hssl_rx.io.gtp_rx_done
 
 //    val meminitvalue = for(i <- 0 until (BigInt(1) << addrwidth).toInt)yield{
 //      val initdata = i + 256
@@ -63,19 +67,30 @@ class Apb_RxRAM(addrwidth : Int) extends Component{
     xilinx_bram.io.wr_addr := hssl_rx.io.packet_data_addr.resized
     xilinx_bram.io.wr_data := hssl_rx.io.m_axi_rx_tdata
     xilinx_bram.io.wr_en := hssl_rx.io.packet_data_wr
+
+    io.test_dataout := RegNextWhen(hssl_rx.io.m_axi_rx_tdata.asBits,((hssl_rx.io.packet_data_addr === 7)&&hssl_rx.io.packet_data_wr))
   }
   val busarea = new ClockingArea(ClockDomain(io.clk,io.reset)){
     val busctrl = Apb3SlaveFactory(io.apb)
 
+    val psel = Reg(Bool()) init False
+    psel := io.apb.PSEL.asBool
+
     xilinx_bram.io.rd_clk := io.clk
-    xilinx_bram.io.rd_en := io.apb.PSEL.asBool
+    //xilinx_bram.io.rd_en := io.apb.PSEL.asBool
+    xilinx_bram.io.rd_en := psel.rise() || (Delay(psel.rise(),1,init = False))|| (Delay(psel.rise(),2,init = False))
     //busctrl.readSyncMemWordAligned(rx_area.rams,0)
     val mapping = SizeMapping(0,256 << log2Up(32/8))
     val memAddress = busctrl.readAddress(mapping) >> log2Up(32/8)
     xilinx_bram.io.rd_addr := memAddress.asBits
     val readData = xilinx_bram.io.rd_data
     busctrl.readPrimitive(readData,mapping,0,"")
+
+    val ila_probe=ila("3",xilinx_bram.io.wr_clk,xilinx_bram.io.wr_addr,xilinx_bram.io.wr_data,xilinx_bram.io.wr_en,
+      xilinx_bram.io.rd_en,xilinx_bram.io.rd_data,io.input.payload.fragment,io.input.valid,io.input.payload.last,io.input.ready,xilinx_bram.io.rd_addr)
   }
+
+
 }
 
 object Hssl_RxRAM extends App{

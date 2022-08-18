@@ -1,9 +1,10 @@
 package Axilite4
 
 import spinal.core._
-import spinal.lib.bus.amba4.axilite.{AxiLite4, AxiLite4Config, AxiLite4SlaveFactory}
+import spinal.lib.bus.amba4.axi.{Axi4Bus, Axi4SpecRenamer}
+import spinal.lib.bus.amba4.axilite.{AxiLite4, AxiLite4Config, AxiLite4SlaveFactory, AxiLite4SpecRenamer}
 import spinal.lib.io.TriStateArray
-import spinal.lib.{BufferCC, master, slave}
+import spinal.lib.{BufferCC, IMasterSlave, master, slave}
 
 object AxiLite4GpioConfig {
   def getaxi4liteconfig = AxiLite4Config(16,32)
@@ -14,6 +15,7 @@ case class AxiLite4Gpio(gpioWidth : Int, withReadSync : Boolean) extends Compone
     val s_axi = slave(AxiLite4(AxiLite4GpioConfig.getaxi4liteconfig))
     val gpio = master(TriStateArray(gpioWidth bits))
     val value = out Bits(gpioWidth bits)
+    AxiLite4SpecRenamer(s_axi)
   }
   noIoPrefix()
 
@@ -26,5 +28,5 @@ case class AxiLite4Gpio(gpioWidth : Int, withReadSync : Boolean) extends Compone
 }
 
 object AxiLite4Gpio extends App{
-  SpinalVerilog(AxiLite4Gpio(32,false))
+  SpinalConfig(anonymSignalPrefix = "temp").generateVerilog(AxiLite4Gpio(32,false))
 }
