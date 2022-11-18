@@ -12,10 +12,12 @@ object EndatConfig{
 case class Apb_Endat(moduleName:String,baseaddr:Long) extends Component{
   val io = new Bundle{
     val apb  = slave(Apb3(EndatConfig.getApb3Config()))
-    val endat = master(EndatInterface())
+    val endat = master(ENDAT_Interface())
     val endat_postion = out Bits(38 bits)
+    val endat_index = out Bool()
     val clk = in Bool()
     val reset = in Bool()
+    val sync_single = out Bool()
   }
   noIoPrefix()
 
@@ -35,8 +37,10 @@ case class Apb_Endat(moduleName:String,baseaddr:Long) extends Component{
 //
 
 
-    val endat = new Endat_Ctrl(25,6,38,3000)
+    val endat = new Endat_Ctrl(18,6,38,250)
     endat.io.endat <> io.endat
+    io.sync_single := endat.io.sync_single
+    io.endat_index := endat.io.index
 
     val endat_postion = Reg(Bits(38 bits)) init 0
     val endat_index = Reg(Bool()) init False
@@ -52,8 +56,9 @@ case class Apb_Endat(moduleName:String,baseaddr:Long) extends Component{
     ctrl.read(endat_postion.asBits(37 downto 32), 0,bitOffset = 0,documentation = "endat_postion光栅尺数据—高6位")
     ctrl.read(endat_postion.asBits(31 downto 16), 4,bitOffset = 0,documentation = "endat_postion光栅尺数据—中16位")
     ctrl.read(endat_postion.asBits(15 downto 0), 8,bitOffset = 0,documentation = "endat_postion光栅尺数据—低16位")
-    ctrl.read(endat_index.asBits(0 downto 0), 12,bitOffset = 0,documentation = "endat_postion光栅尺数据—低16位")
+    ctrl.read(endat_index.asBits(0 downto 0), 12,bitOffset = 0,documentation = "endat_postion光栅尺index")
     ctrl.addDataModel(moduleName,baseaddr)
   }
 
+  
 }

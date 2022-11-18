@@ -50,11 +50,38 @@ case class GSSL_MODULE(timer_cnt : Int, write_aw : Int, read_aw : Int, lookback 
     io.cyp1401.GSSL_TXCT0_A := gssl_tx_a.io.GSSL_TXCT0
     io.cyp1401.GSSL_TXD_A := gssl_tx_a.io.GSSL_TXD
     gssl_tx_a.io.tx_frame_head_data := B"x00004112"
+//      gssl_tx_a.io.tx_frame_head_data := B"x0000210C"
     gssl_tx_a.io.tx_data_trigger := timer_A.io.full
     gssl_tx_a.io.tx_atc_trigger := False
     gssl_tx_a.io.tx_ttc_trigger := False
 
     val tx_temp = Reg(Bits(32 bits))
+
+//    when((gssl_tx_a.io.reads.addr === U(0x21)) && gssl_tx_a.io.reads.en){
+//      tx_temp := B"32'x11223344"
+//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x22)) && gssl_tx_a.io.reads.en){
+//      tx_temp := B"32'x55667788"
+//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x23)) && gssl_tx_a.io.reads.en){
+//      tx_temp := B"32'x99aabbcc"
+//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x24)) && gssl_tx_a.io.reads.en){
+//      tx_temp := B"32'x01020304"
+//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x25)) && gssl_tx_a.io.reads.en){
+//      tx_temp := B"32'x05060708"
+//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x26)) && gssl_tx_a.io.reads.en){
+//      tx_temp := B"32'x090a0b0c"
+//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x27)) && gssl_tx_a.io.reads.en){
+//      tx_temp := B"32'x10203040"
+//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x28)) && gssl_tx_a.io.reads.en){
+//      tx_temp := B"32'x50607080"
+//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x29)) && gssl_tx_a.io.reads.en){
+//      tx_temp := B"32'x90a0b0c0"
+//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x2a)) && gssl_tx_a.io.reads.en){
+//      tx_temp := B"32'x12345678"
+//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x2b)) && gssl_tx_a.io.reads.en){
+//      tx_temp := B"32'x02030405"
+//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x2c)) && gssl_tx_a.io.reads.en){
+//      tx_temp := B"32'x06070809"
+//    }
 
     when((gssl_tx_a.io.reads.addr === U(0x41)) && gssl_tx_a.io.reads.en){
       tx_temp := io.vme_data(0)

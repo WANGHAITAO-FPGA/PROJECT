@@ -36,18 +36,6 @@ case class X300_SDAC_TOP(addrwidth : Int, datawidth : Int, timerl_imit: Int, sta
     }
     io.led := ledtemp
 
-    val tx_tick = Reg(Bool()) init False
-    val tick_count = Counter(0,25000)
-    when(io.tick){
-      tick_count.increment()
-    }otherwise{
-      tick_count.clear()
-      tx_tick := False
-    }
-    when(tick_count.willOverflow){
-      tx_tick := True
-    }
-
     val start_send = Reg(Bool()) init False
 
     val sdacRxPreamble = new X300_RxPreamble(datawidth)
@@ -61,7 +49,7 @@ case class X300_SDAC_TOP(addrwidth : Int, datawidth : Int, timerl_imit: Int, sta
     val sdactxsimplebus = new X300_TxSimpleBus(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : Int, data_length : Int)
     sdactxsimplebus.io.addAttribute("keep","true")
     io.output << sdactxsimplebus.io.output
-    sdactxsimplebus.io.timer_tick := tx_tick
+    sdactxsimplebus.io.timer_tick := io.tick
 
     val sdacregif = new X300_SdacRegif(addrwidth,datawidth,endat_num,ad7606_num,bissc_num,endcoder_num)
     //val sdacregif = new Enable_Test(addrwidth,datawidth,endat_num,ad7606_num,bissc_num,endcoder_num)
@@ -109,7 +97,7 @@ case class X300_SDAC_TOP(addrwidth : Int, datawidth : Int, timerl_imit: Int, sta
 }
 
 object X300_SDAC_TOP extends App{
-  SpinalConfig(headerWithDate = true,targetDirectory = "E:/E200I/X300_ENABLE_TEST/SDAC_ENABLE_TEST/SDAC_PSD.srcs/sources_1/imports/rtl/").generateVerilog(InOutWrapper(new X300_SDAC_TOP(9,32,6250,0,60,0,3,0,0,0)))
+  SpinalConfig(headerWithDate = true,targetDirectory = "E:/WORK_OK/X300_SDAC_PSD/SDAC_PSD/SDAC_PSD.srcs/sources_1/imports/rtl/").generateVerilog(InOutWrapper(new X300_SDAC_TOP(9,32,6250,0,60,0,3,0,0,0)))
 }
 
 object X300_SDAC_Sim{

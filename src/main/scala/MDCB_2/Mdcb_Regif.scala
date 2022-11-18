@@ -256,21 +256,41 @@ case class Mdcb_Regif(addrwidth : Int, datawidth : Int, ad5544_num : Int, ad7606
   val AD5544_Triger3_Temp =  My_Reg_AD5544_Datatemp910.hitDoWrite | My_Reg_AD5544_Datatemp1112.hitDoWrite
   io.AD5544_TRIGER(2) := (AD5544_Triger3_Temp|Delay(AD5544_Triger3_Temp,1)|Delay(AD5544_Triger3_Temp,2)|Delay(AD5544_Triger3_Temp,3))
 
+
   val My_Reg_M_EN_TTL = busslave.newReg(doc="4路外部输出TTL信号，电机控制PA寄存器")
+
+  val M_Reset_TTL1 = My_Reg_M_EN_TTL.fieldAt(0,bc = 1 bits,RW,0,"外部光耦1输出信号，M_Reset_TTL1，X1电机RESET")
+  io.FPGA_DO(0) := M_Reset_TTL1.asBool
   val M_EN_TTL1 = My_Reg_M_EN_TTL.fieldAt(2,bc = 1 bits,RW,0,"外部TTL1输出信号，M_EN_TTL1，X1电机使能")
   io.M_EN_TTL(0) := M_EN_TTL1.asBool
-  val M_EN_TTL2 = My_Reg_M_EN_TTL.fieldAt(10,bc = 1 bits,RW,0,"外部TTL2输出信号，M_EN_TTL2，X2电机使能")
+
+  val M_Reset_TTL2 = My_Reg_M_EN_TTL.fieldAt(4,bc = 1 bits,RW,0,"外部光耦2输出信号，M_Reset_TTL2，X2电机RESET")
+  io.FPGA_DO(1) := M_Reset_TTL2.asBool
+  val M_EN_TTL2 = My_Reg_M_EN_TTL.fieldAt(6,bc = 1 bits,RW,0,"外部TTL2输出信号，M_EN_TTL2，X2电机使能")
   io.M_EN_TTL(1) := M_EN_TTL2.asBool
-  val M_EN_TTL3 = My_Reg_M_EN_TTL.fieldAt(18,bc = 1 bits,RW,0,"外部TTL3输出信号，M_EN_TTL3，Y1电机使能")
+
+  val M_Reset_TTL3 = My_Reg_M_EN_TTL.fieldAt(8,bc = 1 bits,RW,0,"外部光耦3输出信号，M_Reset_TTL3，Y1电机RESET")
+  io.FPGA_DO(2) := M_Reset_TTL3.asBool
+  val M_EN_TTL3 = My_Reg_M_EN_TTL.fieldAt(10,bc = 1 bits,RW,0,"外部TTL3输出信号，M_EN_TTL3，Y1电机使能")
   io.M_EN_TTL(2) := M_EN_TTL3.asBool
-  val M_EN_TTL4 = My_Reg_M_EN_TTL.fieldAt(26,bc = 1 bits,RW,0,"外部TTL4输出信号，M_EN_TTL4，Y2电机使能")
+
+  val M_Reset_TTL4 = My_Reg_M_EN_TTL.fieldAt(12,bc = 1 bits,RW,0,"外部光耦4输出信号，M_Reset_TTL4，Y2电机RESET")
+  io.FPGA_DO(3) := M_Reset_TTL4.asBool
+  val M_EN_TTL4 = My_Reg_M_EN_TTL.fieldAt(14,bc = 1 bits,RW,0,"外部TTL4输出信号，M_EN_TTL4，Y2电机使能")
   io.M_EN_TTL(3) := M_EN_TTL4.asBool
 
+  val M_Reset_TTL5 = My_Reg_M_EN_TTL.fieldAt(16,bc = 1 bits,RW,0,"外部光耦5输出信号，M_Reset_TTL5，EPZ电机RESET")
+  io.FPGA_DO(4) := ~M_Reset_TTL5.asBool
+  val M_EN_TTL5 = My_Reg_M_EN_TTL1.fieldAt(18,bc = 1 bits,RW,0,"外部TTL5输出信号，M_EN_TTL5，EPZ电机使能")
+  io.M_EN_TTL(4) := ~M_EN_TTL5.asBool
+
+  val M_Reset_TTL6 = My_Reg_M_EN_TTL.fieldAt(20,bc = 1 bits,RW,0,"外部光耦6输出信号，M_Reset_TTL6，EPRZ电机RESET")
+  io.FPGA_DO(5) := ~M_Reset_TTL6.asBool
+  val M_EN_TTL6 = My_Reg_M_EN_TTL1.fieldAt(22,bc = 1 bits,RW,0,"外部TTL6输出信号，M_EN_TTL6，EPRZ电机使能")
+  io.M_EN_TTL(5) := ~M_EN_TTL6.asBool
+
   val My_Reg_M_EN_TTL1 = busslave.newReg(doc="4路外部输出TTL信号，电机控制PA寄存器")
-  val M_EN_TTL5 = My_Reg_M_EN_TTL1.fieldAt(2,bc = 1 bits,RW,0,"外部TTL5输出信号，M_EN_TTL5，EPZ电机使能")
-  io.M_EN_TTL(4) := M_EN_TTL5.asBool
-  val M_EN_TTL6 = My_Reg_M_EN_TTL1.fieldAt(10,bc = 1 bits,RW,0,"外部TTL6输出信号，M_EN_TTL6，EPRZ电机使能")
-  io.M_EN_TTL(5) := M_EN_TTL6.asBool
+
   val M_EN_TTL7 = My_Reg_M_EN_TTL1.fieldAt(18,bc = 1 bits,RW,0,"外部TTL7输出信号，M_EN_TTL7，预留")
   io.M_EN_TTL(6) := M_EN_TTL7.asBool
   val M_EN_TTL8 = My_Reg_M_EN_TTL1.fieldAt(26,bc = 1 bits,RW,0,"外部TTL8输出信号，M_EN_TTL8，预留")
@@ -289,18 +309,18 @@ case class Mdcb_Regif(addrwidth : Int, datawidth : Int, ad5544_num : Int, ad7606
   val Valve = My_Reg_Valve.fieldAt(0,32 bits,RW,0,"阀门")
 
   val My_Reg_FPGA_DO = busslave.newReg(doc="16路外部输出光耦信号），FPGA_DO(FPGA_B33_IO_OUT)，预留")
-  val FPGA_DO_0 = My_Reg_FPGA_DO.fieldAt(0,bc = 1 bits,RW,0,"外部光耦1输入信号，FPGA_DO1，预留")
-  io.FPGA_DO(0) := FPGA_DO_0.asBool
-  val FPGA_DO_1 = My_Reg_FPGA_DO.fieldAt(2,bc = 1 bits,RW,0,"外部光耦2输入信号，FPGA_DO2，预留")
-  io.FPGA_DO(1) := FPGA_DO_1.asBool
-  val FPGA_DO_2 = My_Reg_FPGA_DO.fieldAt(4,bc = 1 bits,RW,0,"外部光耦3输入信号，FPGA_DO3，预留")
-  io.FPGA_DO(2) := FPGA_DO_2.asBool
-  val FPGA_DO_3 = My_Reg_FPGA_DO.fieldAt(6,bc = 1 bits,RW,0,"外部光耦4输入信号，FPGA_DO4，预留")
-  io.FPGA_DO(3) := FPGA_DO_3.asBool
-  val FPGA_DO_4 = My_Reg_FPGA_DO.fieldAt(8,bc = 1 bits,RW,0,"外部光耦5输入信号，FPGA_DO5，预留")
-  io.FPGA_DO(4) := FPGA_DO_4.asBool
-  val FPGA_DO_5 = My_Reg_FPGA_DO.fieldAt(10,bc = 1 bits,RW,0,"外部光耦6输入信号，FPGA_DO6，预留")
-  io.FPGA_DO(5) := FPGA_DO_5.asBool
+//  val FPGA_DO_0 = My_Reg_FPGA_DO.fieldAt(0,bc = 1 bits,RW,0,"外部光耦1输入信号，FPGA_DO1，预留")
+  //io.FPGA_DO(0) := FPGA_DO_0.asBool
+//  val FPGA_DO_1 = My_Reg_FPGA_DO.fieldAt(2,bc = 1 bits,RW,0,"外部光耦2输入信号，FPGA_DO2，预留")
+//  io.FPGA_DO(1) := FPGA_DO_1.asBool
+//  val FPGA_DO_2 = My_Reg_FPGA_DO.fieldAt(4,bc = 1 bits,RW,0,"外部光耦3输入信号，FPGA_DO3，预留")
+//  io.FPGA_DO(2) := FPGA_DO_2.asBool
+//  val FPGA_DO_3 = My_Reg_FPGA_DO.fieldAt(6,bc = 1 bits,RW,0,"外部光耦4输入信号，FPGA_DO4，预留")
+//  io.FPGA_DO(3) := FPGA_DO_3.asBool
+//  val FPGA_DO_4 = My_Reg_FPGA_DO.fieldAt(8,bc = 1 bits,RW,0,"外部光耦5输入信号，FPGA_DO5，预留")
+//  io.FPGA_DO(4) := FPGA_DO_4.asBool
+//  val FPGA_DO_5 = My_Reg_FPGA_DO.fieldAt(10,bc = 1 bits,RW,0,"外部光耦6输入信号，FPGA_DO6，预留")
+//  io.FPGA_DO(5) := FPGA_DO_5.asBool
   val FPGA_DO_6 = My_Reg_FPGA_DO.fieldAt(12,bc = 1 bits,RW,0,"外部光耦7输入信号，FPGA_DO7，预留")
   io.FPGA_DO(6) := FPGA_DO_6.asBool
   val FPGA_DO_7 = My_Reg_FPGA_DO.fieldAt(14,bc = 1 bits,RW,0,"外部光耦8输入信号，FPGA_DO8，预留")
@@ -337,5 +357,5 @@ case class Mdcb_Regif(addrwidth : Int, datawidth : Int, ad5544_num : Int, ad7606
 }
 
 object Mdcb_Regif extends App{
-  SpinalVerilog(new Mdcb_Regif(8,32,3,2,4,4))
+  SpinalConfig(headerWithDate = true,targetDirectory = "E:/STCS/STCS_MDCB_V1.00/MDCB_2.srcs/sources_1/imports/SRIO/").generateVerilog(new Mdcb_Regif(8,32,3,2,4,4))
 }

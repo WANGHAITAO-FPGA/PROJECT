@@ -11,7 +11,7 @@ case class FiberRxPreamble(datawidth : Int) extends Component{
   }
   noIoPrefix()
 
-  val startDelimiter = io.slave_id##B"x00F1F2F3"
+  val startDelimiter = io.slave_id##B"x0000FFBC"
   val startDelimiterWidth = datawidth*2
   val history = History(io.input, 0 until startDelimiterWidth/datawidth, when = io.input.fire)
   val historyDataCat = B(Cat(history.map(_.payload.fragment).reverse))

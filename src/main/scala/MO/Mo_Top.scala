@@ -212,7 +212,7 @@ object MO_TEST extends App{
 object Mo_Top extends App{
   //SpinalConfig(anonymSignalPrefix = "temp",oneFilePerComponent = true).generateVerilog(InOutWrapper(new Mo_Code(SramLayout(24,16))))
 
-  SpinalConfig(anonymSignalPrefix = "temp",headerWithDate = true,targetDirectory = "E:/WORK_OK/X300_MO_REFACTOR_1.02/X300_MO/X300_MO.srcs/sources_1/imports/SRIO/").generateVerilog(InOutWrapper(new Mo_Code(SramLayout(24,16))))
+  SpinalConfig(anonymSignalPrefix = "temp",headerWithDate = true,targetDirectory = "E:/X300_20220810/X300_MO_REFACTOR_1.04/X300_MO/X300_MO.srcs/sources_1/imports/SRIO/").generateVerilog(InOutWrapper(new Mo_Code(SramLayout(24,16))))
 }
 
 case class Mo_Top_Test(period:Int) extends MO_TEST(SramLayout(24,16)){

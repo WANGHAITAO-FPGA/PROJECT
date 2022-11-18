@@ -15,7 +15,7 @@ case class Intitaor(fifo_depth:Int) extends Component{
   noIoPrefix()
 
   io.intiator.intiator_req_common.tkeep := B"xFF"
-  io.intiator.intiator_req_common.tuser := B"x00FF0000"
+  io.intiator.intiator_req_common.tuser := B"x00FF00FF"
 
   val current_addr = io.usercmd.user_addr
   val current_ftype = io.usercmd.user_ftype
@@ -27,7 +27,7 @@ case class Intitaor(fifo_depth:Int) extends Component{
   val streamfifo = new StreamFifo(Bits(64 bits),fifo_depth)
   streamfifo.io.push << io.usercmd.user_data
 
-  val header_beat = current_tid ## current_ftype ## current_ttype ## B"0" ## current_prio ## B"0" ## current_size ## B"2'x0" ## current_addr
+  val header_beat = current_tid ## current_ftype ## current_ttype ## B"0" ## current_prio ## B"0" ## current_size ## B"2'x0" ## B"34'x0c200000"
 
   val current_beat_cnt = Reg(UInt(6 bits)) init 0
   when(io.intiator.intiator_req_stream.fire && io.intiator.intiator_req_stream.last){
@@ -68,16 +68,17 @@ case class Intitaor(fifo_depth:Int) extends Component{
   val send_start_d = RegNext(io.send_start) init False
   when(io.intiator.intiator_req_stream.fire && io.intiator.intiator_req_stream.last){
     ireq_tvalid := False
-    //user_data_ready := False
+    user_data_ready := False
   }elsewhen(io.send_start && (!send_start_d)){
     ireq_tvalid := True
-    //user_data_ready := True
+    user_data_ready := True
   }otherwise{
     ireq_tvalid := ireq_tvalid
-    //user_data_ready := user_data_ready
+    user_data_ready := user_data_ready
   }
   io.intiator.intiator_req_stream.valid := ireq_tvalid
-  streamfifo.io.pop.ready := io.intiator.intiator_req_stream.fire && (current_beat_cnt =/= 0)
+  //streamfifo.io.pop.ready := io.intiator.intiator_req_stream.fire && (current_beat_cnt =/= 0)
+  streamfifo.io.pop.ready := user_data_ready
 
   /***********************Response Side Check*****************/
   val write_queue_data_d = B"44'x0" ## current_tid ## current_ftype ## current_size

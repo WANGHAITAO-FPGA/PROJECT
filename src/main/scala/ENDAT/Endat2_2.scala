@@ -1,6 +1,7 @@
 package ENDAT
 
 import CRCCORE.{CRC5, CRCCombinational, CRCCombinationalCmdMode, CRCCombinationalConfig}
+import PHPA82.ila_test.ila
 import spinal.core._
 import spinal.lib.com.eth.{Crc, CrcKind}
 import spinal.lib.fsm.{EntryPoint, State, StateMachine}
@@ -9,7 +10,7 @@ import spinal.lib.misc.Timer
 
 case class Endat2_2(endat_clkToogle : Int, Mode_Bits : Int, Pos_Bits : Int, Wait_Tcnt : Int) extends Component{
   val io = new Bundle{
-    val endat = master(EndatInterface())
+    val endat = master(ENDAT_Interface())
     val sample = in Bool()
     val endat_mode = in Bits(Mode_Bits bits)
     val endat_mrs = in Bits(24 bits)
@@ -23,6 +24,7 @@ case class Endat2_2(endat_clkToogle : Int, Mode_Bits : Int, Pos_Bits : Int, Wait
     val crc_check = out Bool()
     val init_done = out Bool()
     val index = out Bool()
+    val sync_single = out Bool()
   }
   noIoPrefix()
 
@@ -35,6 +37,8 @@ case class Endat2_2(endat_clkToogle : Int, Mode_Bits : Int, Pos_Bits : Int, Wait
       counter := 0
     }
   }
+
+  val sync_single = Reg(Bool()) init False
 
   val init_timer_tick = Reg(Bool()) init False
 
@@ -73,7 +77,7 @@ case class Endat2_2(endat_clkToogle : Int, Mode_Bits : Int, Pos_Bits : Int, Wait
 
   val endat_rddata = Reg(Bool()) init False
 
-  endat_rddata := io.endat.data.read
+  endat_rddata := io.endat.read
 
   val crc_cal = new CRCCombinational(CRCCombinationalConfig(CRC5.ENDAT, 1 bits))
   val crc_valid = Reg(Bool()) init False
@@ -130,6 +134,7 @@ case class Endat2_2(endat_clkToogle : Int, Mode_Bits : Int, Pos_Bits : Int, Wait
           timer.reset := True
           crc_valid := False
           crc_check := False
+          sync_single := True
           goto(Dummy_State)
         }
       }
@@ -140,6 +145,7 @@ case class Endat2_2(endat_clkToogle : Int, Mode_Bits : Int, Pos_Bits : Int, Wait
           counter := counter + 1
           endat_clk := ~endat_clk
           timer.reset := True
+          sync_single := False
           when(counter === 4){
             write_enable := True
             counter := 0
@@ -447,7 +453,8 @@ case class Endat2_2(endat_clkToogle : Int, Mode_Bits : Int, Pos_Bits : Int, Wait
           when(counter === (1)){
             counter := 0
             write_enable := False
-            goto(Read_AddData2)
+            //goto(Read_AddData2)
+            goto(Wait_Reset)
           }otherwise{
             crc_valid := True
           }
@@ -508,8 +515,8 @@ case class Endat2_2(endat_clkToogle : Int, Mode_Bits : Int, Pos_Bits : Int, Wait
     }
   }
   io.endat.clk := endat_clk
-  io.endat.data.write := mode_out
-  io.endat.data.writeEnable := write_enable
+  io.endat.write := mode_out
+  io.endat.writeEnable := write_enable
   io.postion := RegNextWhen(postion,postion_crc === postion_cal)  addTag(crossClockDomain)
   io.endat_crc := crc
   io.endat_cal := crc_cal.io.crc
@@ -518,13 +525,16 @@ case class Endat2_2(endat_clkToogle : Int, Mode_Bits : Int, Pos_Bits : Int, Wait
   io.crc_check := postion_crc === postion_cal
   io.init_done := init_done
   io.index := io.extra_data1(22)
+  io.sync_single := sync_single
   addPrePopTask(()=>io.currentState.assignFromBits(fsm.stateReg.asBits))
+
+//  val ila_probe=ila("1",io.endat.data.write,io.endat.data.writeEnable,io.endat.data.read,io.endat.clk,io.currentState,io.postion,io.endat_mode)
 }
 
 
 case class Endat_Ctrl(endat_clkToogle : Int, Mode_Bits : Int, Pos_Bits : Int, Wait_Tcnt : Int) extends Component{
   val io = new Bundle{
-    val endat = master(EndatInterface())
+    val endat = master(ENDAT_Interface())
     val currentState = out UInt(4 bits)
     val postion = out Bits(Pos_Bits bits)
     val endat_crc = out Bits(5 bits)
@@ -533,6 +543,7 @@ case class Endat_Ctrl(endat_clkToogle : Int, Mode_Bits : Int, Pos_Bits : Int, Wa
     val extra_data2 = out Bits(25 bits)
     val State = out UInt(5 bits)
     val index = out Bool()
+    val sync_single = out Bool()
   }
   noIoPrefix()
 
@@ -553,6 +564,7 @@ case class Endat_Ctrl(endat_clkToogle : Int, Mode_Bits : Int, Pos_Bits : Int, Wa
   endat.io.endat_mrs := endat_mrs
   io.State := endat.io.currentState
   io.index := endat.io.index
+  io.sync_single := endat.io.sync_single
 
   val counter = Reg(UInt(10 bits)) init 0
 
@@ -571,7 +583,7 @@ case class Endat_Ctrl(endat_clkToogle : Int, Mode_Bits : Int, Pos_Bits : Int, Wa
         endat_mrs := 0x4c0000
         sample := True
         counter := counter + 1
-        when(counter >20){
+        when(counter >5){
           counter := 0
           goto(Wait_Mrs1_Done)
         }
@@ -582,6 +594,12 @@ case class Endat_Ctrl(endat_clkToogle : Int, Mode_Bits : Int, Pos_Bits : Int, Wa
         sample := False
         when(endat.io.currentState === 4){
           goto(Wait)
+        }otherwise{
+          counter := counter + 1
+          when(counter > 500){
+            counter := 0
+            goto(Wait)
+          }
         }
       }
     }
@@ -600,7 +618,7 @@ case class Endat_Ctrl(endat_clkToogle : Int, Mode_Bits : Int, Pos_Bits : Int, Wa
         endat_mrs := 0x470000
         sample := True
         counter := counter + 1
-        when(counter >20) {
+        when(counter >5) {
           counter := 0
           goto(Wait_Confirm1_Done)
         }
@@ -611,6 +629,12 @@ case class Endat_Ctrl(endat_clkToogle : Int, Mode_Bits : Int, Pos_Bits : Int, Wa
         sample := False
         when(endat.io.currentState === 4){
           goto(Add1Wait)
+        }otherwise {
+          counter := counter + 1
+          when(counter > 500) {
+            counter := 0
+            goto(Add1Wait)
+          }
         }
       }
     }
@@ -711,7 +735,7 @@ case class Endat_Ctrl(endat_clkToogle : Int, Mode_Bits : Int, Pos_Bits : Int, Wa
 }
 
 object Endat_Ctrl extends App{
-  SpinalConfig(enumPrefixEnable = false,targetDirectory = "E:/E200I/ENDAT_TEST/MDCB_2.srcs/sources_1/imports/SRIO").generateSystemVerilog(new Endat_Ctrl(25,6,38,3000))
+  SpinalConfig(headerWithDate = true,enumPrefixEnable = false).generateVerilog(new Endat_Ctrl(15,6,38,250))
 }
 
 

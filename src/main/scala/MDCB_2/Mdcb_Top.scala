@@ -172,7 +172,7 @@ class Mdcb_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : 
 
 object Mdcb_Top extends App{
   //SpinalConfig().addStandardMemBlackboxing(blackboxAll).generateVerilog(new Mdcb_Top(8,32,500,0,50,3,2,4,4))
-  SpinalVerilog(new Mdcb_Top(12,32,500,0,50,3,2,4,4,true))
+  SpinalConfig(headerWithDate = true,targetDirectory = "E:/STCS/STCS_MDCB_V1.00/MDCB_2.srcs/sources_1/imports/SRIO/").generateVerilog(new Mdcb_Top(12,32,500,0,50,3,2,4,4,false))
 }
 
 object Mdcb_Test{

@@ -228,17 +228,17 @@ case class SrioResponse(addressWidth : Int, addressLowBit : Int) extends Compone
        dut.io.treq_tuser #= 0
        dut.clockDomain.waitSampling(10)
 
-       dut.io.treq.payload.fragment #= SrioCmd(12,5,4,0x56,100,2)
-       dut.io.treq.valid #= true
-       dut.io.treq.last #= false
-       dut.clockDomain.waitSampling()
-       dut.io.treq.payload.fragment #= 0x55555555
-       dut.io.treq.valid #= true
-       dut.io.treq.last #= true
-       dut.clockDomain.waitSampling()
-       dut.io.treq.valid #= false
-       dut.io.treq.last #= false
-       dut.clockDomain.waitSampling(20)
+//       dut.io.treq.payload.fragment #= SrioCmd(12,5,4,0x56,100,2)
+//       dut.io.treq.valid #= true
+//       dut.io.treq.last #= false
+//       dut.clockDomain.waitSampling()
+//       dut.io.treq.payload.fragment #= 0x55555555
+//       dut.io.treq.valid #= true
+//       dut.io.treq.last #= true
+//       dut.clockDomain.waitSampling()
+//       dut.io.treq.valid #= false
+//       dut.io.treq.last #= false
+//       dut.clockDomain.waitSampling(20)
 
        dut.io.treq.payload.fragment #= SrioCmd(13,6,0,3,100,2)
        dut.io.treq.valid #= true
@@ -263,31 +263,31 @@ case class SrioResponse(addressWidth : Int, addressLowBit : Int) extends Compone
        dut.io.treq.last #= false
        dut.clockDomain.waitSampling(20)
 
-       dut.io.treq.payload.fragment #= SrioCmd(10,5,5,0x56,100,2)
-       dut.io.treq.valid #= true
-       dut.io.treq.last #= false
-       dut.clockDomain.waitSampling()
-       dut.io.treq.payload.fragment #= 0x55555555
-       dut.io.treq.valid #= true
-       dut.io.treq.last #= true
-       dut.clockDomain.waitSampling()
-       dut.io.treq.valid #= false
-       dut.io.treq.last #= false
-       dut.clockDomain.waitSampling(20)
-
-       dut.io.treq.payload.fragment #= SrioCmd(10,2,5,0x008,0x064,2)
-       dut.io.tresp.ready #= true
-       dut.io.treq.valid #= true
-       dut.io.treq.last #= true
-       dut.clockDomain.waitSampling()
-       dut.io.tresp.ready #= false
-       dut.io.treq.valid #= false
-       dut.io.treq.last #= false
-       dut.clockDomain.waitSampling()
-       dut.io.tresp.ready #= true
-       dut.io.treq.valid #= false
-       dut.io.treq.last #= false
-       dut.clockDomain.waitSampling(200)
+//       dut.io.treq.payload.fragment #= SrioCmd(10,5,5,0x56,100,2)
+//       dut.io.treq.valid #= true
+//       dut.io.treq.last #= false
+//       dut.clockDomain.waitSampling()
+//       dut.io.treq.payload.fragment #= 0x55555555
+//       dut.io.treq.valid #= true
+//       dut.io.treq.last #= true
+//       dut.clockDomain.waitSampling()
+//       dut.io.treq.valid #= false
+//       dut.io.treq.last #= false
+//       dut.clockDomain.waitSampling(20)
+//
+//       dut.io.treq.payload.fragment #= SrioCmd(10,2,5,0x008,0x064,2)
+//       dut.io.tresp.ready #= true
+//       dut.io.treq.valid #= true
+//       dut.io.treq.last #= true
+//       dut.clockDomain.waitSampling()
+//       dut.io.tresp.ready #= false
+//       dut.io.treq.valid #= false
+//       dut.io.treq.last #= false
+//       dut.clockDomain.waitSampling()
+//       dut.io.tresp.ready #= true
+//       dut.io.treq.valid #= false
+//       dut.io.treq.last #= false
+//       dut.clockDomain.waitSampling(200)
      }
    }
  }

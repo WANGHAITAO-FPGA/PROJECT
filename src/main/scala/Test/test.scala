@@ -2,6 +2,7 @@ package Test
 
 import spinal.core._
 import spinal.core.sim._
+import spinal.lib.memory.sdram.sdr.{IS42x320D, SdramCtrl}
 
 import scala.collection.mutable.ArrayBuffer
 

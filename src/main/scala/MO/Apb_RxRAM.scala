@@ -46,6 +46,7 @@ class Apb_RxRAM(addrwidth : Int) extends Component{
 
   val rx_area = new ClockingArea(ClockDomain(io.rx_clk,io.reset)){
     val hssl_rx = new gtp_rx
+    val gtp_rx_done = Reg(Bool()) init False
     hssl_rx.io.log_clk := io.rx_clk
     hssl_rx.io.log_rst_q := io.reset
     hssl_rx.io.m_axi_rx_tdata := io.input.payload.fragment
@@ -53,7 +54,9 @@ class Apb_RxRAM(addrwidth : Int) extends Component{
     hssl_rx.io.m_axi_rx_tlast := io.input.payload.last
     io.input.ready := True
     hssl_rx.io.gtx_id := io.rx_id
-    io.gtp_rx_done := hssl_rx.io.gtp_rx_done
+    //io.gtp_rx_done := hssl_rx.io.gtp_rx_done
+    gtp_rx_done := io.input.valid && io.input.payload.last && (io.input.payload.fragment === B"32'x0000FFBD")
+    io.gtp_rx_done := gtp_rx_done || Delay(gtp_rx_done,1,init = False) || Delay(gtp_rx_done,2,init = False) || Delay(gtp_rx_done,3,init = False)
 
 //    val meminitvalue = for(i <- 0 until (BigInt(1) << addrwidth).toInt)yield{
 //      val initdata = i + 256
@@ -86,8 +89,8 @@ class Apb_RxRAM(addrwidth : Int) extends Component{
     val readData = xilinx_bram.io.rd_data
     busctrl.readPrimitive(readData,mapping,0,"")
 
-    val ila_probe=ila("3",xilinx_bram.io.wr_clk,xilinx_bram.io.wr_addr,xilinx_bram.io.wr_data,xilinx_bram.io.wr_en,
-      xilinx_bram.io.rd_en,xilinx_bram.io.rd_data,io.input.payload.fragment,io.input.valid,io.input.payload.last,io.input.ready,xilinx_bram.io.rd_addr)
+//    val ila_probe=ila("3",xilinx_bram.io.wr_clk,xilinx_bram.io.wr_addr,xilinx_bram.io.wr_data,xilinx_bram.io.wr_en,
+//      xilinx_bram.io.rd_en,xilinx_bram.io.rd_data,io.input.payload.fragment,io.input.valid,io.input.payload.last,io.input.ready,xilinx_bram.io.rd_addr)
   }
 
 

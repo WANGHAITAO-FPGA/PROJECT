@@ -56,7 +56,7 @@ case class Median_Filter(sample_cnt : Int) extends Component{
     //val data_out = master Flow(SInt(16 bits))
     val data_max = out SInt(16 bits)
     val data_min = out SInt(16 bits)
-    val data_sum = out SInt(16 bits)
+    val data_averge = out SInt(16 bits)
   }
   noIoPrefix()
 
@@ -82,7 +82,7 @@ case class Median_Filter(sample_cnt : Int) extends Component{
   io.data_max := RegNextWhen(findmax.dataOut,counter === sample_cnt)
   io.data_min := RegNextWhen(findmin.dataOut,counter === sample_cnt)
 
-  io.data_sum := data_averge
+  io.data_averge := data_averge
 }
 
 

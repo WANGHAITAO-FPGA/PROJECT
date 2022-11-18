@@ -1,6 +1,6 @@
 package SDCR
 
-import PHPA82.EncoderInterface
+import PHPA82.{BISS_Position, EncoderInterface}
 import SimpleBus._
 import spinal.core._
 import spinal.lib.bus.regif.AccessType.{RO, RW}
@@ -9,7 +9,7 @@ import spinal.lib.{master, slave}
 
 import java.time.LocalDate
 
-case class Sdcr_Regif(addrwidth : Int, datawidth : Int, endat_num : Int, temp_num : Int, endcoder_num : Int) extends Component{
+case class Sdcr_Regif(addrwidth : Int, datawidth : Int, endat_num : Int, temp_num : Int, endcoder_num : Int, ssi_num : Int) extends Component{
   val io = new Bundle{
     val simplebus = slave(SimpleBus(SimpleBusConfig(addrwidth,datawidth)))
     val slaveid = in Bits(datawidth bits)
@@ -25,6 +25,7 @@ case class Sdcr_Regif(addrwidth : Int, datawidth : Int, endat_num : Int, temp_nu
     val Encoder_Zero_Keep = Seq.fill(endcoder_num)(in Bits(1 bits))
     val Encoder_Clr = Seq.fill(endcoder_num)(out Bits(1 bits))
     val Encoder_lock_Pos = Seq.fill(endcoder_num)(in Bits(32 bits))
+    val SSi_Pos = Seq.fill(ssi_num)(in Bits(32 bits))
   }
   noIoPrefix()
 
@@ -48,10 +49,10 @@ case class Sdcr_Regif(addrwidth : Int, datawidth : Int, endat_num : Int, temp_nu
     Encoder_Pos_Data := io.Encoder_Pos(i)
   }
 
-  val My_Reg_Encoder_Lock = (0 until endcoder_num).map { i =>
-    val Encoder_Lock_Pos = busslave.newReg(doc=s"Encoder$i 增量式光栅尺触发INDEX位时的位置值")
-    val Lock_Pos_Data = Encoder_Lock_Pos.field(32 bits,RO,0,s"Encoder$i 增量式光栅尺触发INDEX位时的位置值")
-    Lock_Pos_Data := io.Encoder_lock_Pos(i)
+  val My_Reg_Bissc = (0 until ssi_num).map { i =>
+    val Ssi_Pos = busslave.newReg(doc=s"Bissc$i SSI光栅尺位置信号")
+    val Ssi_Pos_Data = Ssi_Pos.field(32 bits,RO,0,s"光栅尺,SSI$i ssi光栅尺位置信号")
+    Ssi_Pos_Data := io.SSi_Pos(i)
   }
 
   val My_Reg_Encoder_ZeroSingle = busslave.newReg(doc="4路增量式光栅尺零位信号")
@@ -98,7 +99,6 @@ case class Sdcr_Regif(addrwidth : Int, datawidth : Int, endat_num : Int, temp_nu
     val Temp_Data = Temp.field(32 bits,RO,0,s"Temp_Data$i")
     Temp_Data := io.Temp_Data(i)
   }
-
 
   val My_Reg_TTL_Single = busslave.newReg(doc="8路外部输入TTL信号（例如：PA FAULT输入，限位传感器输入），M_Fault_TTL")
   val TTL1_Single = My_Reg_TTL_Single.fieldAt(0,bc = 1 bits,RO,0,"外部TTL1输入信号，M_Fault_TTL1")
@@ -152,8 +152,11 @@ case class Sdcr_Regif(addrwidth : Int, datawidth : Int, endat_num : Int, temp_nu
   val Opt16_Single = My_Reg_Opt_Single.fieldAt(30,bc = 1 bits,RO,0,"外部光耦16输入信号，FPGA_DI16")
   Opt16_Single := io.FPGA_DI_Filter(15).asBits
 
-
-
+  val My_Reg_Encoder_Lock = (0 until endcoder_num).map { i =>
+    val Encoder_Lock_Pos = busslave.newReg(doc=s"Encoder$i 增量式光栅尺触发INDEX位时的位置值")
+    val Lock_Pos_Data = Encoder_Lock_Pos.field(32 bits,RO,0,s"Encoder$i 增量式光栅尺触发INDEX位时的位置值")
+    Lock_Pos_Data := io.Encoder_lock_Pos(i)
+  }
   /**********************************************************************************************
    * SDCR 光纤接受数据
    *

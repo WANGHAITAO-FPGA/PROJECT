@@ -63,6 +63,8 @@ class AD7606(moduleName:String,baseaddr:Long) extends Component {
     val ad7606Interface = master(Ad7606Interface())
     val clk = in Bool()
     val reset = in Bool()
+    val sample_en = in Bool()
+    val ad_sample_data0 = out Bits(16 bits)
   }
   noIoPrefix()
 
@@ -86,7 +88,7 @@ class AD7606(moduleName:String,baseaddr:Long) extends Component {
     io.ad7606Interface.ad_data <> ad7606_ctrl.io.ad_data
     io.ad7606Interface.first_data <> ad7606_ctrl.io.first_data
 
-    ad7606_ctrl.io.sample_en := True
+    ad7606_ctrl.io.sample_en := io.sample_en
 
     val data_temp_1 = Reg(UInt(16 bits)) init 0x1234
     val data_temp_2 = Reg(UInt(16 bits)) init 0x5678
@@ -120,7 +122,7 @@ class AD7606(moduleName:String,baseaddr:Long) extends Component {
     //ctrl.printDataModel()
 
     //data_temp_1.addAttribute("MARK_DEBUG","TRUE")
-
+    io.ad_sample_data0 := data_temp_1.asBits
     ctrl.addDataModel(moduleName,baseaddr)
   }
 }

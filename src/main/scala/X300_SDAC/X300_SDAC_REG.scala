@@ -77,67 +77,67 @@ case class X300_SdacRegif(addrwidth : Int, datawidth : Int, endat_num : Int, ad7
 
   val My_Reg_AD7606_Datatemp5 = busslave.newReg(doc="AD7606数据输入（U6）")
   val AD7606_Datatemp5 = My_Reg_AD7606_Datatemp5.fieldAt(0,bc = 16 bits,RO,0,"AD7606（U6）数据通道4输入")
-  AD7606_Datatemp5 := io.AD7606_DATA(0)(4)
+  AD7606_Datatemp5 := io.AD7606_DATA(1)(0)
 
   val My_Reg_AD7606_Datatemp6 = busslave.newReg(doc="AD7606数据输入（U6）")
   val AD7606_Datatemp6 = My_Reg_AD7606_Datatemp6.fieldAt(0,bc = 16 bits,RO,0,"AD7606（U6）数据通道4输入")
-  AD7606_Datatemp6 := io.AD7606_DATA(0)(5)
+  AD7606_Datatemp6 := io.AD7606_DATA(1)(1)
 
   val My_Reg_AD7606_Datatemp7 = busslave.newReg(doc="AD7606数据输入（U6）")
   val AD7606_Datatemp7 = My_Reg_AD7606_Datatemp7.fieldAt(0,bc = 16 bits,RO,0,"AD7606（U6）数据通道4输入")
-  AD7606_Datatemp7 := io.AD7606_DATA(0)(6)
+  AD7606_Datatemp7 := io.AD7606_DATA(1)(2)
 
   val My_Reg_AD7606_Datatemp8 = busslave.newReg(doc="AD7606数据输入（U6）")
   val AD7606_Datatemp8 = My_Reg_AD7606_Datatemp8.fieldAt(0,bc = 16 bits,RO,0,"AD7606（U6）数据通道4输入")
-  AD7606_Datatemp8 := io.AD7606_DATA(0)(7)
+  AD7606_Datatemp8 := io.AD7606_DATA(1)(3)
 
   val My_Reg_AD7606_Datatemp9 = busslave.newReg(doc="AD7606数据输入（U7）")
   val AD7606_Datatemp9 = My_Reg_AD7606_Datatemp9.fieldAt(0,bc = 16 bits,RO,0,"AD7606（U7）数据通道1输入")
-  AD7606_Datatemp9 := io.AD7606_DATA(1)(0)
+  AD7606_Datatemp9 := io.AD7606_DATA(2)(0)
 
   val My_Reg_AD7606_Datatemp10 = busslave.newReg(doc="AD7606数据输入（U7）")
   val AD7606_Datatemp10 = My_Reg_AD7606_Datatemp10.fieldAt(0,bc = 16 bits,RO,0,"AD7606（U7）数据通道1输入")
-  AD7606_Datatemp10 := io.AD7606_DATA(1)(1)
+  AD7606_Datatemp10 := io.AD7606_DATA(2)(1)
 
   val My_Reg_AD7606_Datatemp11 = busslave.newReg(doc="AD7606数据输入（U7）")
   val AD7606_Datatemp11 = My_Reg_AD7606_Datatemp11.fieldAt(0,bc = 16 bits,RO,0,"AD7606（U7）数据通道1输入")
-  AD7606_Datatemp11 := io.AD7606_DATA(1)(2)
+  AD7606_Datatemp11 := io.AD7606_DATA(2)(2)
 
   val My_Reg_AD7606_Datatemp12 = busslave.newReg(doc="AD7606数据输入（U7）")
   val AD7606_Datatemp12 = My_Reg_AD7606_Datatemp12.fieldAt(0,bc = 16 bits,RO,0,"AD7606（U7）数据通道1输入")
-  AD7606_Datatemp12 := io.AD7606_DATA(1)(3)
+  AD7606_Datatemp12 := io.AD7606_DATA(2)(3)
 
   val My_Reg_AD7606_Datatemp13 = busslave.newReg(doc="AD7606数据输入（U7）")
   val AD7606_Datatemp13 = My_Reg_AD7606_Datatemp13.fieldAt(0,bc = 16 bits,RO,0,"AD7606（U7）数据通道1输入")
-  AD7606_Datatemp13 := io.AD7606_DATA(1)(4)
+  AD7606_Datatemp13 := io.AD7606_DATA(0)(4)
 
   val My_Reg_AD7606_Datatemp14 = busslave.newReg(doc="AD7606数据输入（U7）")
   val AD7606_Datatemp14 = My_Reg_AD7606_Datatemp14.fieldAt(0,bc = 16 bits,RO,0,"AD7606（U7）数据通道1输入")
-  AD7606_Datatemp14 := io.AD7606_DATA(1)(5)
+  AD7606_Datatemp14 := io.AD7606_DATA(0)(5)
 
   val My_Reg_AD7606_Datatemp15 = busslave.newReg(doc="AD7606数据输入（U7）")
   val AD7606_Datatemp15 = My_Reg_AD7606_Datatemp15.fieldAt(0,bc = 16 bits,RO,0,"AD7606（U7）数据通道1输入")
-  AD7606_Datatemp15 := io.AD7606_DATA(1)(6)
+  AD7606_Datatemp15 := io.AD7606_DATA(0)(6)
 
   val My_Reg_AD7606_Datatemp16 = busslave.newReg(doc="AD7606数据输入（U7）")
   val AD7606_Datatemp16 = My_Reg_AD7606_Datatemp16.fieldAt(0,bc = 16 bits,RO,0,"AD7606（U7）数据通道1输入")
-  AD7606_Datatemp16 := io.AD7606_DATA(1)(7)
+  AD7606_Datatemp16 := io.AD7606_DATA(0)(7)
 
   val My_Reg_AD7606_Datatemp17 = busslave.newReg(doc="AD7606数据输入（U8）")
   val AD7606_Datatemp17 = My_Reg_AD7606_Datatemp17.fieldAt(0,bc = 16 bits,RO,0,"AD7606（U7）数据通道1输入")
-  AD7606_Datatemp17 := io.AD7606_DATA(2)(0)
+  AD7606_Datatemp17 := io.AD7606_DATA(1)(4)
 
   val My_Reg_AD7606_Datatemp18 = busslave.newReg(doc="AD7606数据输入（U8）")
   val AD7606_Datatemp18 = My_Reg_AD7606_Datatemp18.fieldAt(0,bc = 16 bits,RO,0,"AD7606（U7）数据通道1输入")
-  AD7606_Datatemp18 := io.AD7606_DATA(2)(1)
+  AD7606_Datatemp18 := io.AD7606_DATA(1)(5)
 
   val My_Reg_AD7606_Datatemp19 = busslave.newReg(doc="AD7606数据输入（U8）")
   val AD7606_Datatemp19 = My_Reg_AD7606_Datatemp19.fieldAt(0,bc = 16 bits,RO,0,"AD7606（U7）数据通道1输入")
-  AD7606_Datatemp19 := io.AD7606_DATA(2)(2)
+  AD7606_Datatemp19 := io.AD7606_DATA(1)(6)
 
   val My_Reg_AD7606_Datatemp20 = busslave.newReg(doc="AD7606数据输入（U8）")
   val AD7606_Datatemp20 = My_Reg_AD7606_Datatemp20.fieldAt(0,bc = 16 bits,RO,0,"AD7606（U7）数据通道1输入")
-  AD7606_Datatemp20 := io.AD7606_DATA(2)(3)
+  AD7606_Datatemp20 := io.AD7606_DATA(1)(7)
 
   val My_Reg_AD7606_Datatemp21 = busslave.newReg(doc="AD7606数据输入（U8）")
   val AD7606_Datatemp21 = My_Reg_AD7606_Datatemp21.fieldAt(0,bc = 16 bits,RO,0,"AD7606（U7）数据通道1输入")

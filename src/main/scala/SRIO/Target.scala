@@ -169,9 +169,42 @@ case class Target(addressWidth : Int, addressLowBit : Int) extends Component{
   io.target.target_resp_common.tkeep := B"xFF"
   io.target.target_resp_common.tuser := B"x000000FF"
 
-  val ila_probe=ila("1",io.doorbell_info)
+//  val ila_probe=ila("1",io.doorbell_info)
 }
 
 object Target_Demo extends App{
   SpinalVerilog(Target(8,0))
 }
+
+//object Target_Sim{
+//  import spinal.core.sim._
+//
+//  def main(args: Array[String]): Unit = {
+//    SimConfig.withWave.doSim(new Target(10,0)){dut=>
+//      dut.clockDomain.forkStimulus(10)
+//      dut.io.target.target_req_stream.valid #= false
+//      dut.io.target.target_req_stream.payload.last #= false
+//      dut.clockDomain.waitSampling(50)
+//      dut.io.target.target_req_stream.valid #= true
+//      dut.io.target.target_req_stream.payload.fragment #= BigInt(0x0060000000000000)
+//      dut.clockDomain.waitSampling()
+//      dut.io.target.target_req_stream.valid #= true
+//      dut.io.target.target_req_stream.payload.fragment #= 0x01020304
+//      dut.clockDomain.waitSampling()
+//      dut.io.target.target_req_stream.valid #= true
+//      dut.io.target.target_req_stream.payload.fragment #= 0x05060708
+//      dut.clockDomain.waitSampling()
+//      dut.io.target.target_req_stream.valid #= true
+//      dut.io.target.target_req_stream.payload.fragment #= 0x05060708
+//      dut.clockDomain.waitSampling()
+//      dut.io.target.target_req_stream.valid #= true
+//      dut.io.target.target_req_stream.last #= true
+//      dut.io.target.target_req_stream.payload.fragment #= 0x05060708
+//      dut.clockDomain.waitSampling()
+//      dut.io.target.target_req_stream.valid #= false
+//      dut.io.target.target_req_stream.last #= false
+//      dut.clockDomain.waitSampling(1000)
+//
+//    }
+//  }
+//}

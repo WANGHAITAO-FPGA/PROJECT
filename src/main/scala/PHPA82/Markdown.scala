@@ -8,7 +8,7 @@ import java.io._
 object regFileGen {
   val regContent=new  StringBuilder()
   def genRegFileByMarkdown()={
-    val regFileHdl = new PrintWriter(new File("regFile.md"))
+    val regFileHdl = new PrintWriter(new File("YW_regFile.md"))
     regFileHdl.println("|module name|base addr|offset|reg name|bit filed|attribute|description|")
     regFileHdl.println("|---------|----------|----------|----------|----------|----------|----------|")
     regFileHdl.println(regContent.toString())

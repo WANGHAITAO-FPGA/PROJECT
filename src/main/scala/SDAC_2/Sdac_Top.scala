@@ -1,6 +1,6 @@
 package SDAC_2
 
-import ENDAT.{Endat, EndatInterface}
+import ENDAT.{Endat, ENDAT_Interface}
 import MDCB_2.{MdcbRxPreamble, MdcbRxSimpleBus, MdcbTxSimpleBus, Mdcb_Ioin_Filter, Mdcb_Regif}
 import PHPA82.{AD7606_DATA, Ad5544Interface, Ad7606Interface, BISS_Position, BissCInterface, EncoderInterface, Encoder_Top, dac_ad5544}
 import spinal.core._
@@ -25,7 +25,7 @@ class Sdac_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : 
     val clk_80M = in Bool()
     val clk_160M = in Bool()
     val slaveid = in Bits(datawidth bits)
-    val ENDAT = Seq.fill(endat_num)(master(EndatInterface()))
+    val ENDAT = Seq.fill(endat_num)(master(ENDAT_Interface()))
     //val uart  = master(Uart())
     val EtherCAT_DATA = in (Vec(Bits(32 bits),12))
     val uart_regin = in (Vec(Bits(16 bits),uartreg_num))

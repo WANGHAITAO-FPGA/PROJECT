@@ -349,51 +349,51 @@ case class VME_REG(datawidth : Int) extends Component{
     io.vme_data(5) := RegNextWhen(VME_Reg5,My_Reg5.hitDoWrite)
     /*****************************SENSOR REG ****************************************************/
     val My_Reg6 = busslave.newRegAt(0x0018,doc="My_Reg6")
-    val SENSOR_Reg0 = My_Reg6.field(32 bits,RO,0x01020304,"SENSOR_Reg0")
+    val SENSOR_Reg0 = My_Reg6.field(32 bits,RO,0,"SENSOR_Reg0")
     SENSOR_Reg0 := io.sensor_data(0)
 
     val My_Reg7 = busslave.newRegAt(0x001c,doc="My_Reg7")
-    val SENSOR_Reg1 = My_Reg7.field(32 bits,RO,0x01020304,"SENSOR_Reg1")
+    val SENSOR_Reg1 = My_Reg7.field(32 bits,RO,0,"SENSOR_Reg1")
     SENSOR_Reg1 := io.sensor_data(1)
 
     val My_Reg8 = busslave.newRegAt(0x0020,doc="My_Reg8")
-    val SENSOR_Reg2 = My_Reg8.field(32 bits,RO,0x01020304,"SENSOR_Reg2")
+    val SENSOR_Reg2 = My_Reg8.field(32 bits,RO,0,"SENSOR_Reg2")
     SENSOR_Reg2 := io.sensor_data(2)
 
     val My_Reg9 = busslave.newRegAt(0x0024,doc="My_Reg9")
-    val SENSOR_Reg3 = My_Reg9.field(32 bits,RO,0x01020304,"SENSOR_Reg3")
+    val SENSOR_Reg3 = My_Reg9.field(32 bits,RO,0,"SENSOR_Reg3")
     SENSOR_Reg3 := io.sensor_data(3)
 
     val My_Reg10 = busslave.newRegAt(0x0028,doc="My_Reg10")
-    val SENSOR_Reg4 = My_Reg10.field(32 bits,RO,0x01020304,"SENSOR_Reg4")
+    val SENSOR_Reg4 = My_Reg10.field(32 bits,RO,0,"SENSOR_Reg4")
     SENSOR_Reg4 := io.sensor_data(4)
     /******************************************************************************************/
     val My_Reg11 = busslave.newRegAt(0x002c,doc="My_Reg11")
-    val SENSOR_Reg5 = My_Reg11.field(32 bits,RO,0x01020304,"SENSOR_Reg5")
+    val SENSOR_Reg5 = My_Reg11.field(32 bits,RO,0,"SENSOR_Reg5")
     SENSOR_Reg5 := io.sensor_data(5)
 
     val My_Reg12 = busslave.newRegAt(0x0030,doc="My_Reg12")
-    val SENSOR_Reg6 = My_Reg12.field(32 bits,RO,0x01020304,"SENSOR_Reg6")
+    val SENSOR_Reg6 = My_Reg12.field(32 bits,RO,0,"SENSOR_Reg6")
     SENSOR_Reg6 := io.sensor_data(6)
 
     val My_Reg13 = busslave.newRegAt(0x0034,doc="My_Reg13")
-    val SENSOR_Reg7 = My_Reg13.field(32 bits,RO,0x01020304,"SENSOR_Reg7")
+    val SENSOR_Reg7 = My_Reg13.field(32 bits,RO,0,"SENSOR_Reg7")
     SENSOR_Reg7 := io.sensor_data(7)
     /******************************************************************************************/
     val My_Reg14 = busslave.newRegAt(0x0038,doc="My_Reg14")
-    val SENSOR_Reg8 = My_Reg14.field(32 bits,RO,0x01020304,"SENSOR_Reg8")
+    val SENSOR_Reg8 = My_Reg14.field(32 bits,RO,0,"SENSOR_Reg8")
     SENSOR_Reg8 := io.sensor_data(8)
 
     val My_Reg15 = busslave.newRegAt(0x003c,doc="My_Reg15")
-    val SENSOR_Reg9 = My_Reg15.field(32 bits,RO,0x01020304,"SENSOR_Reg9")
+    val SENSOR_Reg9 = My_Reg15.field(32 bits,RO,0,"SENSOR_Reg9")
     SENSOR_Reg9 := io.sensor_data(9)
 
     val My_Reg16 = busslave.newRegAt(0x0040,doc="My_Reg16")
-    val SENSOR_Reg10 = My_Reg16.field(32 bits,RO,0x01020304,"SENSOR_Reg10")
+    val SENSOR_Reg10 = My_Reg16.field(32 bits,RO,0,"SENSOR_Reg10")
     SENSOR_Reg10 := io.sensor_data(10)
 
     val My_Reg17 = busslave.newRegAt(0x0044,doc="My_Reg17")
-    val SENSOR_Reg11 = My_Reg17.field(32 bits,RO,0x01020304,"SENSOR_Reg11")
+    val SENSOR_Reg11 = My_Reg17.field(32 bits,RO,0,"SENSOR_Reg11")
     SENSOR_Reg11 := io.sensor_data(11)
   }
 }

@@ -102,6 +102,7 @@ case class Encoder_Top(inclr : Boolean) extends Component{
     val zerosensor = new ZeroSensor
     zerosensor.io.zerosensor_in := io.encoderinterface.encoder_iphase
     io.encoder_iphase_out := zerosensor.io.zerosensor_out
+
 //    if(!inclr){
 //
 //    }

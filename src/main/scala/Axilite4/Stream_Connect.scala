@@ -54,8 +54,8 @@ case class Stream_Connect(datawidth : Int, portCount : Int, data_length : Int, f
   val tick = Reg(Bool()) init False
   tick := io.tick
   val start = Reg(Bool()) init False
-  val counter = new Counter(0,portCount * data_length)
-  when(tick.rise()){
+    val counter = new Counter(0,portCount * data_length)
+    when(tick.rise()){
     start := True
     ready := True
   }

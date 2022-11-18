@@ -9,18 +9,20 @@ import spinal.lib.fsm.{EntryPoint, State, StateMachine}
 import spinal.lib.io.{InOutWrapper, TriState, TriStateArray}
 import spinal.lib.misc.Timer
 
-case class EndatInterface()  extends Bundle with IMasterSlave{
+case class ENDAT_Interface() extends Bundle with IMasterSlave{
   val clk = Bool()
-  val data = TriState(Bool())
+  val read = Bool()
+  val write = Bool()
+  val writeEnable = Bool()
   override def asMaster(): Unit = {
-    out(clk)
-    master(data)
+    out(clk,write,writeEnable)
+    in(read)
   }
 }
 
 case class Endat(endat_clkToogle : Int, Mode_Bits : Int, Pos_Bits : Int, Wait_Tcnt : Int) extends Component{
   val io = new Bundle{
-    val endat = master(EndatInterface())
+    val endat = master(ENDAT_Interface())
     val sample = in Bool()
     val endat_mode = in Bits(Mode_Bits bits)
     val currentState = out UInt(4 bits)
@@ -63,7 +65,7 @@ case class Endat(endat_clkToogle : Int, Mode_Bits : Int, Pos_Bits : Int, Wait_Tc
 
   val endat_rddata = Reg(Bool()) init False
 
-  endat_rddata := io.endat.data.read
+  endat_rddata := io.endat.read
 
   val crc_cal = new CRCCombinational(CRCCombinationalConfig(CRC5.ENDAT, 1 bits))
   val crc_valid = Reg(Bool()) init False
@@ -272,8 +274,8 @@ case class Endat(endat_clkToogle : Int, Mode_Bits : Int, Pos_Bits : Int, Wait_Tc
     }
   }
   io.endat.clk := endat_clk
-  io.endat.data.write := mode_out
-  io.endat.data.writeEnable := write_enable
+  io.endat.write := mode_out
+  io.endat.writeEnable := write_enable
   io.postion := RegNextWhen(postion,crc_check)
   io.crc := crc
   io.crc_cal_result := crc_cal.io.crc
@@ -286,45 +288,45 @@ object Endat extends App{
 }
 
 
-object Endat_Sim{
-  def main(args: Array[String]): Unit = {
-    SimConfig.withWave.doSim(new Endat(4,6,8,500)){dut=>
-      dut.clockDomain.forkStimulus(20)
-      dut.io.sample #= false
-      dut.io.endat.data.read #= false
-      dut.clockDomain.waitSampling(10)
-      dut.clockDomain.waitSampling(60)
-      dut.io.sample #= true
-      dut.io.endat_mode #= 7
-      dut.clockDomain.waitSampling()
-      dut.io.sample #= false
-      dut.clockDomain.waitSampling(200)
-      dut.io.endat.data.read #= true
-      dut.clockDomain.waitSampling(10)
-      dut.io.endat.data.read #= true
-      dut.clockDomain.waitSampling(10)
-      dut.io.endat.data.read #= false
-      dut.clockDomain.waitSampling(10)
-      dut.io.endat.data.read #= false
-      dut.clockDomain.waitSampling(10)
-      dut.io.endat.data.read #= true
-      dut.clockDomain.waitSampling(10)
-      dut.io.endat.data.read #= false
-      dut.clockDomain.waitSampling(10)
-      dut.io.endat.data.read #= true
-      dut.clockDomain.waitSampling(10)
-      dut.io.endat.data.read #= false
-      dut.clockDomain.waitSampling(10)
-      dut.io.endat.data.read #= true
-      dut.clockDomain.waitSampling(10)
-      dut.io.endat.data.read #= false
-      dut.clockDomain.waitSampling(10)
-      dut.io.endat.data.read #= true
-      dut.clockDomain.waitSampling(10)
-      dut.io.endat.data.read #= false
-      dut.clockDomain.waitSampling(10)
-      dut.io.endat.data.read #= true
-      dut.clockDomain.waitSampling(5000)
-    }
-  }
-}
+//object Endat_Sim{
+//  def main(args: Array[String]): Unit = {
+//    SimConfig.withWave.doSim(new Endat(4,6,8,500)){dut=>
+//      dut.clockDomain.forkStimulus(20)
+//      dut.io.sample #= false
+//      dut.io.endat.data.read #= false
+//      dut.clockDomain.waitSampling(10)
+//      dut.clockDomain.waitSampling(60)
+//      dut.io.sample #= true
+//      dut.io.endat_mode #= 7
+//      dut.clockDomain.waitSampling()
+//      dut.io.sample #= false
+//      dut.clockDomain.waitSampling(200)
+//      dut.io.endat.data.read #= true
+//      dut.clockDomain.waitSampling(10)
+//      dut.io.endat.data.read #= true
+//      dut.clockDomain.waitSampling(10)
+//      dut.io.endat.data.read #= false
+//      dut.clockDomain.waitSampling(10)
+//      dut.io.endat.data.read #= false
+//      dut.clockDomain.waitSampling(10)
+//      dut.io.endat.data.read #= true
+//      dut.clockDomain.waitSampling(10)
+//      dut.io.endat.data.read #= false
+//      dut.clockDomain.waitSampling(10)
+//      dut.io.endat.data.read #= true
+//      dut.clockDomain.waitSampling(10)
+//      dut.io.endat.data.read #= false
+//      dut.clockDomain.waitSampling(10)
+//      dut.io.endat.data.read #= true
+//      dut.clockDomain.waitSampling(10)
+//      dut.io.endat.data.read #= false
+//      dut.clockDomain.waitSampling(10)
+//      dut.io.endat.data.read #= true
+//      dut.clockDomain.waitSampling(10)
+//      dut.io.endat.data.read #= false
+//      dut.clockDomain.waitSampling(10)
+//      dut.io.endat.data.read #= true
+//      dut.clockDomain.waitSampling(5000)
+//    }
+//  }
+//}

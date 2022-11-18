@@ -1,17 +1,18 @@
 package SDCR
 
-import ENDAT.{Endat, EndatInterface, Endat_Ctrl}
+import ENDAT.{Endat, ENDAT_Interface, Endat_Ctrl, SSI, SsiInterface}
 import MDCB_2.Mdcb_Ioin_Filter
-import PHPA82.{EncoderInterface, Encoder_Top}
+import PHPA82.{BISS_Position, BissCInterface, EncoderInterface, Encoder_Top}
 import SDAC_2.{SdacRxPreamble, SdacRxSimpleBus, SdacTxSimpleBus, Sdac_Regif}
 import spinal.core._
 import spinal.lib.{Fragment, Stream, master, slave}
 
-case class Sdcr_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : Int, data_length : Int, endat_num : Int, temp_num : Int, endcoder_num : Int) extends Component{
+case class Sdcr_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : Int, data_length : Int, endat_num : Int, temp_num : Int, endcoder_num : Int, ssi_num : Int) extends Component{
   val io = new Bundle{
     val intput = slave(Stream(Fragment(Bits(datawidth bits))))
     val output = master(Stream(Fragment(Bits(datawidth bits))))
-    val ENDAT = Seq.fill(endat_num)(master(EndatInterface()))
+    val ENDAT = Seq.fill(endat_num)(master(ENDAT_Interface()))
+    val SSI = Seq.fill(ssi_num)(master(SsiInterface()))
     val ENCODER = Seq.fill(endcoder_num)(master(EncoderInterface()))
     val slaveid = in Bits(datawidth bits)
     val Press_Data = in Vec(Bits(32 bits),5)
@@ -44,7 +45,7 @@ case class Sdcr_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_ad
     io.output << sdactxsimplebus.io.output
     sdactxsimplebus.io.timer_tick := True
 
-    val sdacregif = new Sdcr_Regif(addrwidth,datawidth,endat_num,temp_num,endcoder_num)
+    val sdacregif = new Sdcr_Regif(addrwidth,datawidth,endat_num,temp_num,endcoder_num,ssi_num)
     sdacregif.io.addAttribute("keep","true")
     sdacregif.io.simplebus.WADDR := sdacrxsimplebus.io.waddr
     sdacregif.io.simplebus.WDATA := sdacrxsimplebus.io.wdata
@@ -65,6 +66,16 @@ case class Sdcr_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_ad
       sdacregif.io.Endat_Data(i) := endat(i).io.postion
       sdacregif.io.Endat_Index(i) := endat(i).io.index
     }
+
+    val ssi = Seq.fill(ssi_num)(new SSI(32,200))
+    for(i <- 0 until ssi_num){
+      ssi(i).io.ssi <> io.SSI(i)
+      ssi(i).io.kind.cpha := False
+      ssi(i).io.kind.cpol := False
+      sdacregif.io.SSi_Pos(i) := ssi(i).io.postion
+    }
+    ssi(0).io.addAttribute("MARK_DEBUG","TRUE")
+
 
     val mdcb_iofilter = new Mdcb_Ioin_Filter(40)
     mdcb_iofilter.io.M_Fault_TTL := io.M_Fault_TTL
@@ -95,5 +106,5 @@ case class Sdcr_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_ad
 }
 
 object Sdcr_Top extends App{
-  SpinalConfig(headerWithDate = true,targetDirectory = "E:/E200I/OLD_VERSION/E200I_SDCR/MDCB_2.srcs/sources_1/imports/SRIO").generateVerilog(new Sdcr_Top(10,32,6250,0,62,4,4,4))
+  SpinalConfig(headerWithDate = true,targetDirectory = "E:/E200I/E200I_SDCR_V1.02/MDCB_2.srcs/sources_1/imports/SRIO/").generateVerilog(new Sdcr_Top(10,32,6250,0,62,4,4,4,4))
 }
