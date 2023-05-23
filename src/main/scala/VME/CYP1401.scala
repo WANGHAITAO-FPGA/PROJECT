@@ -161,6 +161,8 @@ case class GSSL_TX_MOUDLE(addressWidth : Int) extends Component{
     val GSSL_TXD = out Bits(8 bits)
     val tx_frame_head_data = in Bits(32 bits)
     val reads = master(XILINX_BRAM_PORT(32, addressWidth, READ))
+    val tx_frame_busy = out Bool()
+    val tx_frame_done = out Bool()
   }
   noIoPrefix()
 
@@ -192,6 +194,8 @@ case class GSSL_TX_MOUDLE(addressWidth : Int) extends Component{
     io.GSSL_TXCT0(2 downto 1) := 0
     io.GSSL_TXCT0(0) := gssltxtransmitter.encode_k
     io.GSSL_TXD := gssltxtransmitter.encode_data
+    io.tx_frame_busy := gssltxtransmitter.tx_frame_busy
+    io.tx_frame_done := gssltxtransmitter.tx_frame_done
   }
 }
 

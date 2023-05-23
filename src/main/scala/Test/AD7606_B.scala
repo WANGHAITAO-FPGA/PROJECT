@@ -1,6 +1,7 @@
 package Test
 
 import PHPA82.AD7606_DATA
+import PHPA82.ila_test.ila
 import YW_PROJ.clk_wiz_0
 import spinal.core._
 import spinal.lib.fsm.{EntryPoint, State, StateMachine}

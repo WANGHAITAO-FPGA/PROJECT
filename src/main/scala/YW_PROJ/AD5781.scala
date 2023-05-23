@@ -156,18 +156,48 @@ case class AD5781_Ctrl(sclkToogle : Int) extends Component{
         counter.increment()
         when(counter.willOverflowIfInc){
           counter.clear()
+          ldac := False
+          goto(Inital_DacData)
+        }
+      }
+    }
+    val Inital_DacData: State = new State{
+      whenIsActive{
+        spi_cmd_valid:= True
+        spi_cmd_payload := B"4'x1"##B"18'x1FFFF"##B"2'x0"
+        goto(Wait_InitDone)
+      }
+    }
+    val Wait_InitDone: State = new State{
+      whenIsActive{
+        when(spi_ctrl.io.rsp.valid){
+          goto(Set_InitLdac)
+        }
+      }
+    }
+    val Set_InitLdac: State = new State{
+      whenIsActive {
+        counter.increment()
+        when(counter.value >= 4) {
+          ldac := True
+          counter.clear()
+          goto(WaitSet_DacData)
+        }
+      }
+    }
+    val WaitSet_DacData: State = new State{
+      whenIsActive{
+        when(io.daout_data.valid){
+          ldac := False
           goto(Set_DacData)
-//          goto(Get_CtrlReg)
         }
       }
     }
     val Set_DacData: State = new State{
       whenIsActive{
-        when(io.daout_data.valid){
-          spi_cmd_valid:= True
-          spi_cmd_payload := B"4'x1"##io.daout_data.payload##B"2'x0"
-          goto(Wait_SetDacDone)
-        }
+        spi_cmd_valid:= True
+        spi_cmd_payload := B"4'x1"##io.daout_data.payload##B"2'x0"
+        goto(Wait_SetDacDone)
       }
     }
     val Wait_SetDacDone: State = new State{
@@ -180,17 +210,42 @@ case class AD5781_Ctrl(sclkToogle : Int) extends Component{
     val Set_Ldac: State = new State{
       whenIsActive{
         counter.increment()
-        when(counter.value <= 5){
-          ldac := True
-        }elsewhen((counter.value > 5)&&(counter.value < 10)){
-          ldac := False
-        }elsewhen(counter.value > 20){
+        when(counter.value >= 4){
           ldac := True
           counter.clear()
-          goto(Set_DacData)
+          goto(WaitSet_DacData)
         }
       }
     }
+//    val Set_DacData_1: State = new State{
+//      whenIsActive{
+//          ldac := False
+//          spi_cmd_valid:= True
+//          spi_cmd_payload := B"4'x1"##io.daout_data.payload##B"2'x0"
+//          goto(Wait_SetDacDone_1)
+//      }
+//    }
+//    val Wait_SetDacDone_1: State = new State{
+//      whenIsActive{
+//        when(spi_ctrl.io.rsp.valid){
+//          goto(Set_Ldac_1)
+//        }
+//      }
+//    }
+//    val Set_Ldac_1: State = new State{
+//      whenIsActive{
+//        counter.increment()
+//        when(counter.value <= 4){
+//          ldac := True
+//        }elsewhen((counter.value > 4)&&(counter.value <= 8)){
+//          ldac := False
+//        }elsewhen(counter.value > 8){
+//          ldac := True
+//          counter.clear()
+//          goto(Set_DacData)
+//        }
+//      }
+//    }
   }
 }
 

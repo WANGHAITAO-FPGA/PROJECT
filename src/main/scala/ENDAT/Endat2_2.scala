@@ -25,6 +25,7 @@ case class Endat2_2(endat_clkToogle : Int, Mode_Bits : Int, Pos_Bits : Int, Wait
     val init_done = out Bool()
     val index = out Bool()
     val sync_single = out Bool()
+    val interrupt = out Bool()
   }
   noIoPrefix()
 
@@ -37,6 +38,9 @@ case class Endat2_2(endat_clkToogle : Int, Mode_Bits : Int, Pos_Bits : Int, Wait
       counter := 0
     }
   }
+
+  val interrupt = Reg(Bool()) init False
+  io.interrupt := interrupt
 
   val sync_single = Reg(Bool()) init False
 
@@ -507,8 +511,10 @@ case class Endat2_2(endat_clkToogle : Int, Mode_Bits : Int, Pos_Bits : Int, Wait
       whenIsActive{
         counter := counter + 1
         endat_clk := True
+        interrupt := True
         when(counter > Wait_Tcnt) {
           counter := 0
+          interrupt := False
           goto(Wait_Start)
         }
       }
@@ -544,6 +550,7 @@ case class Endat_Ctrl(endat_clkToogle : Int, Mode_Bits : Int, Pos_Bits : Int, Wa
     val State = out UInt(5 bits)
     val index = out Bool()
     val sync_single = out Bool()
+    val interrupt = out Bool()
   }
   noIoPrefix()
 
@@ -565,6 +572,7 @@ case class Endat_Ctrl(endat_clkToogle : Int, Mode_Bits : Int, Pos_Bits : Int, Wa
   io.State := endat.io.currentState
   io.index := endat.io.index
   io.sync_single := endat.io.sync_single
+  io.interrupt := endat.io.interrupt
 
   val counter = Reg(UInt(10 bits)) init 0
 

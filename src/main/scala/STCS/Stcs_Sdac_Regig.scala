@@ -430,9 +430,9 @@ case class Stcs_Sdac_Regif(addrwidth : Int, datawidth : Int, endat_num : Int, ad
 
   val My_Reg_FPGA_DO = busslave.newReg(doc="16路外部输出光耦信号），FPGA_DO(FPGA_B33_IO_OUT)")
   val FPGA_DO_0 = My_Reg_FPGA_DO.fieldAt(0,bc = 1 bits,RW,0,"外部光耦1输入信号，FPGA_DO1")
-  io.FPGA_DO(0) := FPGA_DO_0.asBool
+  io.FPGA_DO(0) := ~FPGA_DO_0.asBool
   val FPGA_DO_1 = My_Reg_FPGA_DO.fieldAt(2,bc = 1 bits,RW,0,"外部光耦2输入信号，FPGA_DO2")
-  io.FPGA_DO(1) := FPGA_DO_1.asBool
+  io.FPGA_DO(1) := ~FPGA_DO_1.asBool
   val FPGA_DO_2 = My_Reg_FPGA_DO.fieldAt(4,bc = 1 bits,RW,0,"外部光耦3输入信号，FPGA_DO3")
   io.FPGA_DO(2) := FPGA_DO_2.asBool
   val FPGA_DO_3 = My_Reg_FPGA_DO.fieldAt(6,bc = 1 bits,RW,0,"外部光耦4输入信号，FPGA_DO4")

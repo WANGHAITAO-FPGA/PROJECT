@@ -2,6 +2,7 @@ package MDCB_2
 
 import CRCCORE.CRCCombinationalCore.Register
 import PHPA82.{AD7606_DATA, Ad5544Interface, Ad7606Interface, BISS_Position, BissCInterface, EncoderInterface, Encoder_Top, dac_ad5544}
+import STCS.Encoder_Test
 import spinal.core._
 import spinal.lib.misc.Timer
 import spinal.lib.{BufferCC, Delay, Fragment, Stream, master, slave}
@@ -147,6 +148,9 @@ class Mdcb_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : 
       }
 
       val encoder = Seq.fill(endcoder_num)(new Encoder_Top(false))
+
+//      val test = Seq.fill(endcoder_num)(new Encoder_Test())
+
       for(i <- 0 until endcoder_num){
         encoder(i).io.clk := io.clk_80M
         encoder(i).io.reset := io.reset
@@ -156,6 +160,8 @@ class Mdcb_Top(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : 
         encoder(i).io.encoder_clr_in := mdcbregif.io.Encoder_Clr(i).asBool
         mdcbregif.io.Encoder_Zero_Keep(i) := encoder(i).io.encoder_iphase_out.asBits
         mdcbregif.io.Encoder_lock_Pos(i) := encoder(i).io.encoder_lock_pos
+
+//        test(i).io.currentValue := encoder(i).io.encoder_position_out
       }
     }
 

@@ -15,6 +15,7 @@ case class SdacTxSimpleBus(addrwidth : Int, datawidth : Int, timerl_imit: Int, s
     val RADDR = out UInt(addrwidth bits)
     val RDATA = in Bits(datawidth bits)
     val timer_tick = in Bool()
+    val timer_out = out Bool()
   }
   noIoPrefix()
 
@@ -32,6 +33,8 @@ case class SdacTxSimpleBus(addrwidth : Int, datawidth : Int, timerl_imit: Int, s
   }otherwise{
     timer.io.clear := False
   }
+
+  io.timer_out := timer.io.full
 
   val streamfifo = new StreamFifo(Bits(datawidth bits),data_length)
   streamfifo.logic.ram.addAttribute("ram_style", "block")

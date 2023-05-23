@@ -1,15 +1,16 @@
 package YW_PROJ
 
 import ENDAT.{ENDAT_Interface, Endat_Ctrl}
-import PHPA82.regFileGen.{genRegFileByMarkdown, regInsert}
+import PHPA82.ila_test.ila
+import PHPA82.regFileGen.{genRegFileByMarkdown, regContent, regInsert}
 import Test.{AD7606_Ctrl, Ad7606_Interface}
 import spinal.core._
 import spinal.lib.blackbox.xilinx.s7.IOBUF
 import spinal.lib.bus.amba3.apb.{Apb3, Apb3Config, Apb3SlaveFactory}
 import spinal.lib.bus.amba4.axi.{Axi4, Axi4Config, Axi4SlaveFactory, Axi4SpecRenamer}
-import spinal.lib.bus.misc.BusSlaveFactory
+import spinal.lib.bus.misc.{BusSlaveFactory, BusSlaveFactoryDelayed, BusSlaveFactoryRead, BusSlaveFactoryWrite}
 import spinal.lib.io.{InOutWrapper, TriState}
-import spinal.lib.{Flow, IMasterSlave, master, slave}
+import spinal.lib.{BufferCC, Delay, Flow, IMasterSlave, master, slave}
 
 case class Yw_Bsp_Ctrl(addressWidth : Int, ad5781_num : Int, endat_num : Int) extends Component{
   val io = new Bundle{
@@ -21,8 +22,9 @@ case class Yw_Bsp_Ctrl(addressWidth : Int, ad5781_num : Int, endat_num : Int) ex
     val ad7606_data = master Flow(Vec(Bits(16 bits),8))
     val endat_postion = out Vec(Bits(38 bits),endat_num)
     val da5781_data = Seq.fill(ad5781_num)(slave(Flow(Bits(18 bits))))
+    val interrupt = Seq.fill(endat_num)(out Bool())
 
-    def driveFrom(bus : BusSlaveFactory, baseAddress : Int = 0) = new Area {
+    def driveFrom(bus : BusSlaveFactoryDelayed, baseAddress : Int = 0) = new Area {
       val ad7760_datatemp = Reg(Bits(32 bits)) init 0
       when(!bus.isReading(0)) {
         ad7760_datatemp := ad7760_data.payload
@@ -32,30 +34,33 @@ case class Yw_Bsp_Ctrl(addressWidth : Int, ad5781_num : Int, endat_num : Int) ex
       val ad7606_datatemp = Vec(Reg(Bits(16 bits)), 8)
 
       for (i <- 0 until 8) {
-        when(!bus.isReading(4 * (i + 1))) {
+        when(!bus.isReading((4 * (i + 1))*8)) {
           ad7606_datatemp(i) := ad7606_data.payload(i)
         }
-        bus.read(ad7606_datatemp(i), 4 * (i + 1), 0, s"AD7606采集数据,ad7606 $i 通道采集数据")
+        bus.read(ad7606_datatemp(i), (4 * (i + 1))*8, 0, s"AD7606采集数据,ad7606 $i 通道采集数据")
       }
 
       val endat_temp = Vec(Reg(Bits(38 bits)), endat_num)
       for (i <- 0 until endat_num) {
-        when((!bus.isReading(32 + 4 * (2 * i + 1))) || (!bus.isReading(32 + 4 * (2 * i + 2)))) {
+        when((!bus.isReading((32 + 4 * (2 * i + 1))*8)) || (!bus.isReading((32 + 4 * (2 * i + 2))*8))) {
           endat_temp(i) := endat_postion(i)
         }
-        bus.read(endat_temp(i).asBits(37 downto 32), 32 + 4 * (2 * i + 1), 0, s"Endat采集数据,Endat $i 通道采集数据高6位")
-        bus.read(endat_temp(i).asBits(31 downto 0), 32 + 4 * (2 * i + 2), 0, s"Endat采集数据,Endat $i 通道采集数据低32位")
+        bus.read(endat_temp(i).asBits(37 downto 32), (32 + 4 * (2 * i + 1))*8, 0, s"Endat采集数据,Endat $i 通道采集数据高6位")
+        bus.read(endat_temp(i).asBits(31 downto 0), (32 + 4 * (2 * i + 2))*8, 0, s"Endat采集数据,Endat $i 通道采集数据低32位")
       }
 
       for (i <- 0 until ad5781_num) {
         val streamUnbuffered = Vec(Flow(Bits(18 bits)), ad5781_num)
-        streamUnbuffered(i).valid := bus.isWriting(80 + 4 * i)
-        bus.driveAndRead(streamUnbuffered(i).payload, 80 + 4 * i, 0, s"AD5781设定电压，AD5781 $i 通道")
+        streamUnbuffered(i).valid := bus.isWriting((80 + 4 * i)*8)
+        bus.driveAndRead(streamUnbuffered(i).payload, (80 + 4 * i)*8, 0, s"AD5781设定电压，AD5781 $i 通道")
         da5781_data(i) << streamUnbuffered(i)
       }
+      bus.addDataModel("YW_REG",0)
     }
   }
   noIoPrefix()
+
+  val sync_single = Reg(Bool()) init False addTag(crossClockDomain)
 
   val ad7760_ctrl = new AD7760_Ctrl(5)
   io.ad7760 <> ad7760_ctrl.io.ad7760
@@ -63,14 +68,17 @@ case class Yw_Bsp_Ctrl(addressWidth : Int, ad5781_num : Int, endat_num : Int) ex
 
   val ad7606_ctrl = new AD7606_Ctrl(5,20,true)
   io.ad_7606 <> ad7606_ctrl.io.ad_7606
-  ad7606_ctrl.io.sample_en := True
+  ad7606_ctrl.io.sample_en := sync_single
+//  ad7606_ctrl.io.sample_en := True
   io.ad7606_data <> ad7606_ctrl.io.adc_data
 
   val endat_ctrl = Seq.fill(endat_num)(new Endat_Ctrl(18,6,38,250))
   for(i <- 0 until endat_num){
     io.endat(i) <> endat_ctrl(i).io.endat
     io.endat_postion(i) <> endat_ctrl(i).io.postion
+    io.interrupt(i) <> endat_ctrl(i).io.interrupt
   }
+  sync_single := endat_ctrl(0).io.sync_single
 
   val ad5781_ctrl = Seq.fill(ad5781_num)(AD5781_Ctrl(2))
   for(i <- 0 until ad5781_num){
@@ -78,7 +86,7 @@ case class Yw_Bsp_Ctrl(addressWidth : Int, ad5781_num : Int, endat_num : Int) ex
     ad5781_ctrl(i).io.daout_data <> io.da5781_data(i)
   }
 
-  addPrePopTask(()=>genRegFileByMarkdown())
+
 }
 
 case class Apb3_Yw_Bsp(addressWidth : Int, ad5781_num : Int, endat_num : Int) extends Component{
@@ -88,6 +96,9 @@ case class Apb3_Yw_Bsp(addressWidth : Int, ad5781_num : Int, endat_num : Int) ex
     val ad7760 = master(AD7760_Interface())
     val ad_7606 = master(Ad7606_Interface(true))
     val endat = Seq.fill(endat_num)(master(ENDAT_Interface()))
+    val interrupt = Seq.fill(endat_num)(out Bool())
+    val gpio_in = in Bits(6 bits)
+    val gpio_out = out Bits(6 bits)
   }
   noIoPrefix()
 
@@ -102,12 +113,20 @@ case class Apb3_Yw_Bsp(addressWidth : Int, ad5781_num : Int, endat_num : Int) ex
   }
   for(i <- 0 until endat_num){
     Yw_Bsp.io.endat(i) <> io.endat(i)
+    io.interrupt(i) := Yw_Bsp.io.interrupt(i)
   }
-
   val bridge = Yw_Bsp.io.driveFrom(bus_ctrl)
+
+  val gpio_in_temp = Reg(Bits(6 bits)) init 0
+  val gpio_out_temp = Reg(Bits(6 bits)) init 0
+
+  gpio_in_temp := BufferCC(io.gpio_in)
+  bus_ctrl.read(gpio_in_temp, 0x320)
+  bus_ctrl.driveAndRead(gpio_out_temp, 0x340)
+  io.gpio_out := gpio_out_temp
+
+  val ila_probe=ila("1",gpio_in_temp,gpio_out_temp,io.apb.PSEL,io.apb.PWRITE,io.apb.PENABLE,io.apb.PADDR,io.apb.PWDATA,io.apb.PRDATA)
 }
-
-
 
 case class Axi4_Yw_Bsp(addressWidth : Int, ad5781_num : Int, endat_num : Int) extends Component{
   val io = new Bundle{
@@ -132,10 +151,11 @@ case class Axi4_Yw_Bsp(addressWidth : Int, ad5781_num : Int, endat_num : Int) ex
   for(i <- 0 until endat_num){
     Yw_Bsp.io.endat(i) <> io.endat(i)
   }
-  io.ad5781(0).addAttribute("MARK_DEBUG","TRUE")
+  //io.ad5781(0).addAttribute("MARK_DEBUG","TRUE")
 
   val bridge = Yw_Bsp.io.driveFrom(bus_ctrl)
 }
+
 
 object Axi4_Yw_Bsp extends App{
   SpinalConfig(headerWithDate = true,targetDirectory = "E:/YW/YW_BSP_TEST/YW_BSP_TEST.srcs/sources_1/imports/SRIO").generateVerilog(new Axi4_Yw_Bsp(10,4,4))

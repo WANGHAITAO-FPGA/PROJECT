@@ -1,6 +1,7 @@
 package MLMC300
 
 import PHPA82._
+import PHPA82.ila_test.ila
 import PHPA82.regFileGen.{genRegFileByMarkdown, regInsert}
 import spinal.core._
 import spinal.lib.bus.amba3.apb.{Apb3, Apb3Config, Apb3Decoder, Apb3Gpio, Apb3SlaveFactory}
@@ -55,8 +56,8 @@ class MlmcTop(sramLayout : SramLayout) extends Component{
   val area = new ClockingArea(systemClockDomain){
     val emif_interface = new Emif_Apb(sramLayout)
     io.emif <> emif_interface.io.emif
-    io.emif.addAttribute("MARK_DEBUG","TRUE")
-    emif_interface.io.apb.addAttribute("MARK_DEBUG","TRUE")
+//    io.emif.addAttribute("MARK_DEBUG","TRUE")
+//    emif_interface.io.apb.addAttribute("MARK_DEBUG","TRUE")
 
     val apbMapping = ArrayBuffer[(Apb3, SizeMapping)]()
     val ad5544_triger = new AD5544_triger("AD5544_Triger",0x000000)
@@ -116,6 +117,8 @@ class MlmcTop(sramLayout : SramLayout) extends Component{
       ledtemp := ~ledtemp;
     }
     io.led := ledtemp
+
+    val ila_probe=ila("1",io.emif.emif_cs,io.emif.emif_oe,io.emif.emif_we,io.emif.emif_data.write,io.emif.emif_data.read,io.emif.emif_data.writeEnable,io.emif.emif_addr)
   }
   addPrePopTask(()=>genRegFileByMarkdown())
 }

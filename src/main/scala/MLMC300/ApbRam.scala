@@ -30,6 +30,7 @@ case class ApbRam(moduleName:String,baseaddr:Long) extends Component{
   ctrl.read(stream_fifo.io.pop.payload, 0x04)
   ctrl.read(stream_fifo.io.occupancy, 0x06)
   ctrl.read(stream_fifo.io.availability, 0x08)
+  stream_fifo.io.occupancy.addAttribute("MARK_DEBUG","TRUE")
 }
 
 /*object ApbRam extends App {

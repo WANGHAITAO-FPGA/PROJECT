@@ -291,15 +291,15 @@ case class Stcs_Mdcb_Regif(addrwidth : Int, datawidth : Int, ad5544_num : Int, a
 
   val My_Reg_FPGA_DO = busslave.newReg(doc="16路外部输出光耦信号），FPGA_DO(FPGA_B33_IO_OUT)，预留")
   val FPGA_DO_0 = My_Reg_FPGA_DO.fieldAt(0,bc = 1 bits,RW,0,"外部光耦1输入信号，FPGA_DO1，预留")
-  io.FPGA_DO(0) := FPGA_DO_0.asBool
+  io.FPGA_DO(0) := ~FPGA_DO_0.asBool
   val FPGA_DO_1 = My_Reg_FPGA_DO.fieldAt(2,bc = 1 bits,RW,0,"外部光耦2输入信号，FPGA_DO2，预留")
   io.FPGA_DO(1) := FPGA_DO_1.asBool
   val FPGA_DO_2 = My_Reg_FPGA_DO.fieldAt(4,bc = 1 bits,RW,0,"外部光耦3输入信号，FPGA_DO3，预留")
-  io.FPGA_DO(2) := FPGA_DO_2.asBool
+  io.FPGA_DO(2) := ~FPGA_DO_2.asBool
   val FPGA_DO_3 = My_Reg_FPGA_DO.fieldAt(6,bc = 1 bits,RW,0,"外部光耦4输入信号，FPGA_DO4，预留")
   io.FPGA_DO(3) := FPGA_DO_3.asBool
   val FPGA_DO_4 = My_Reg_FPGA_DO.fieldAt(8,bc = 1 bits,RW,0,"外部光耦5输入信号，FPGA_DO5，预留")
-  io.FPGA_DO(4) := FPGA_DO_4.asBool
+  io.FPGA_DO(4) := ~FPGA_DO_4.asBool
   val FPGA_DO_5 = My_Reg_FPGA_DO.fieldAt(10,bc = 1 bits,RW,0,"外部光耦6输入信号，FPGA_DO6，预留")
   io.FPGA_DO(5) := FPGA_DO_5.asBool
   val FPGA_DO_6 = My_Reg_FPGA_DO.fieldAt(12,bc = 1 bits,RW,0,"外部光耦7输入信号，FPGA_DO7，预留")

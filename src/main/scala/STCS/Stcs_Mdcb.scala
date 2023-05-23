@@ -146,6 +146,9 @@ case class Stcs_Mdcb(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_a
       }
 
       val encoder = Seq.fill(endcoder_num)(new Encoder_Top(false))
+
+      val test = Seq.fill(endcoder_num)(new Encoder_Test())
+
       for(i <- 0 until endcoder_num){
         encoder(i).io.clk := io.clk_80M
         encoder(i).io.reset := io.reset
@@ -155,6 +158,8 @@ case class Stcs_Mdcb(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_a
         encoder(i).io.encoder_clr_in := mdcbregif.io.Encoder_Clr(i).asBool
         mdcbregif.io.Encoder_Zero_Keep(i) := encoder(i).io.encoder_iphase_out.asBits
         mdcbregif.io.Encoder_lock_Pos(i) := encoder(i).io.encoder_lock_pos
+
+        test(i).io.currentValue := encoder(i).io.encoder_position_out
       }
     }
 
@@ -171,5 +176,7 @@ case class Stcs_Mdcb(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_a
 
 object Stcs_Mdcb_Top extends App{
   //SpinalConfig().addStandardMemBlackboxing(blackboxAll).generateVerilog(new Mdcb_Top(8,32,500,0,50,3,2,4,4))
-  SpinalConfig(headerWithDate = true,targetDirectory = "E:/STCS/STCS_MDCB_V1.00/MDCB_2.srcs/sources_1/imports/SRIO/").generateVerilog(new Stcs_Mdcb(12,32,500,0,50,3,2,4,4,false))
+  SpinalConfig(headerWithDate = true,
+    targetDirectory = "D:/STCS"
+  ).generateVerilog(new Stcs_Mdcb(12,32,500,0,50,3,2,4,4,false))
 }

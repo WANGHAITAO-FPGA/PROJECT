@@ -51,6 +51,9 @@ case class Stcs_Sdac(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_a
     io.output << sdactxsimplebus.io.output
     sdactxsimplebus.io.timer_tick := True
 
+    val pulse = new PulseCCByToggle(sdac_clkdomain,ad_clkdomain)
+    pulse.io.pulseIn := sdactxsimplebus.io.timer_out
+
     /*val sdacurat = new Sdac_Uart(32,32,4000,uartreg_num,false)
     sdacurat.io.uart <> io.uart*/
 
@@ -116,6 +119,9 @@ case class Stcs_Sdac(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_a
 
 
       val encoder = Seq.fill(endcoder_num)(new Encoder_Top(false))
+
+      val test = Seq.fill(endcoder_num)(new Encoder_Test())
+
       for(i <- 0 until endcoder_num){
         encoder(i).io.clk := io.clk_80M
         encoder(i).io.reset := io.reset
@@ -125,6 +131,9 @@ case class Stcs_Sdac(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_a
         encoder(i).io.encoder_clr_in := sdacregif.io.Encoder_Clr(i).asBool
         sdacregif.io.Encoder_Zero_Keep(i) := encoder(i).io.encoder_iphase_out.asBits
         sdacregif.io.Encoder_lock_Pos(i) := encoder(i).io.encoder_lock_pos
+
+        test(i).io.currentValue := encoder(i).io.encoder_position_out
+        test(i).io.tick := pulse.io.pulseOut
       }
 
       val endat = Seq.fill(endat_num)((new Endat(20,6,38,3000)))
@@ -165,5 +174,5 @@ case class Stcs_Sdac(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_a
 }
 
 object Sdcr_Top extends App{
-  SpinalConfig(headerWithDate = true,targetDirectory = "E:/STCS/STCS_SDAC_V1.00/MDCB_2.srcs/sources_1/imports/untitled2").generateVerilog(new Stcs_Sdac(10,32,6250,0,62,4,4,4,4,8,0))
+  SpinalConfig(headerWithDate = true,targetDirectory = "D:/STCS/").generateVerilog(new Stcs_Sdac(10,32,6250,0,62,4,4,4,4,8,0))
 }

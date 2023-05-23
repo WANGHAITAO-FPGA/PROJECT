@@ -27,6 +27,7 @@ case class Top_Module(datawidth : Int,timer_cnt : Int) extends Component{
   val vme_area = new ClockingArea(ClockDomain(io.vme_clk,io.reset)){
     val vme_data = Reg(Vec(Bits(32 bits),6))  addTag(crossClockDomain)
     val sensor_data = Reg(Vec(Bits(32 bits),12))  addTag(crossClockDomain)
+    val original_data = Reg(Vec(Bits(32 bits),22))  addTag(crossClockDomain)
     val vme_module = new VME_TOP(datawidth)
     vme_module.io.clk := io.vme_clk
     vme_module.io.reset := io.reset
@@ -38,6 +39,7 @@ case class Top_Module(datawidth : Int,timer_cnt : Int) extends Component{
     io.datadir := vme_module.io.datadir
     vme_data := vme_module.io.vme_data
     vme_module.io.sensor_data := sensor_data
+    original_data := vme_module.io.original_data
   }
 
   val gssl_area = new ClockingArea(ClockDomain(io.gssl_clk,io.reset)){
@@ -48,8 +50,9 @@ case class Top_Module(datawidth : Int,timer_cnt : Int) extends Component{
     io.rx_led := gssl_module.io.rx_led
     gssl_module.io.vme_data := vme_area.vme_data
     vme_area.sensor_data := gssl_module.io.sensor_data
-
+    gssl_module.io.original_data := vme_area.original_data
     val ledtemp = Reg(Bool()) init False
+
     val counter =  CounterFreeRun(62500000)
     when(counter.willOverflow){
       counter.clear()
@@ -60,11 +63,15 @@ case class Top_Module(datawidth : Int,timer_cnt : Int) extends Component{
 }
 
 object Top_Module extends App{
-  SpinalConfig(headerWithDate = true,targetDirectory = "E:/6DOF/6DOF_FPGA/6DOF_FPGA.srcs/sources_1/imports/SRIO").generateVerilog(InOutWrapper(new Top_Module(32,5000)))
+  SpinalConfig(headerWithDate = true,
+    targetDirectory = "D:/6DOF/",
+    nameWhenByFile = false,
+    enumPrefixEnable = false
+  ).generateVerilog(InOutWrapper(new Top_Module(16,12500)))
 //  SpinalVerilog(InOutWrapper(new Top_Module(32,5000)))
 }
 
-class Top_Module_Test extends Top_Module(32,5000){
+class Top_Module_Test extends Top_Module(16,5000){
   import spinal.core.sim._
   def init = {
     vme_area.clockDomain.forkStimulus(25)

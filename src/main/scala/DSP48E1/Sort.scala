@@ -64,7 +64,7 @@ object Bitonic extends App {
     Mux(a > b, Vec(a, b), Vec(b, a))
   }
 
-  SimConfig.withWave.compile(Bitonic(UInt(16 bits), 8, uintcomp, true)).doSim { dut =>
+  SimConfig.withWave.compile(Bitonic(UInt(16 bits), 8, uintcomp, false)).doSim { dut =>
     dut.clockDomain.forkStimulus(10)
     dut.dataIn.valid #= false
     dut.clockDomain.waitSampling(10)

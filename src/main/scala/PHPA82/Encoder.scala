@@ -34,13 +34,16 @@ class ZeroSensor extends Component {
   val counter = new Counter(0,40000)
   val zerosensor_temp = Reg(Bool()) init False  addTag(crossClockDomain)
 
+  val zerosensor_in_temp = Reg(Bool()) init False
+  zerosensor_in_temp := io.zerosensor_in
+
   import ZeroState._
 
   val stateMachine = new Area {
     val state = RegInit(ZIDLE)
     switch(state) {
       is(ZIDLE) {
-        when(io.zerosensor_in.rise()){
+        when(zerosensor_in_temp.rise()){
           state := ZWAIT
           counter.clear()
           zerosensor_temp := True
