@@ -9,15 +9,18 @@ case class MdcbRxPreamble(datawidth : Int) extends Component{
     val input = slave(Stream(Fragment(Bits(datawidth bits))))
     val slave_id = in Bits(datawidth bits)
     val output = master(Stream(Fragment(Bits(datawidth bits))))
+    val trigger = out Bool()
   }
   noIoPrefix()
 
   val startDelimiter = io.slave_id##B"x00F1F2F3"
+  val trigerDelimiter = B"x00F3F2F1"##B"x00F1F2F3"
   val startDelimiterWidth = datawidth*2
   val history = History(io.input, 0 until startDelimiterWidth/datawidth, when = io.input.fire)
   val historyDataCat = B(Cat(history.map(_.payload.fragment).reverse))
   val hit = history.map(_.valid).andR && historyDataCat === startDelimiter
   val inFrame = RegInit(False)
+  val trigger = history.map(_.valid).andR && historyDataCat === trigerDelimiter && io.input.payload.last
 
   io.output.valid := False
   io.output.payload  := io.input.payload
@@ -36,6 +39,7 @@ case class MdcbRxPreamble(datawidth : Int) extends Component{
       }
     }
   }
+  io.trigger := RegNext(trigger)
 }
 
 

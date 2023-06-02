@@ -64,10 +64,10 @@ case class Top_Module(datawidth : Int,timer_cnt : Int) extends Component{
 
 object Top_Module extends App{
   SpinalConfig(headerWithDate = true,
-    targetDirectory = "D:/6DOF/",
+    targetDirectory = "D:/6DOF/6DOF_FPGA_V4/6DOF_FPGA.srcs/sources_1/imports/SRIO/",
     nameWhenByFile = false,
     enumPrefixEnable = false
-  ).generateVerilog(InOutWrapper(new Top_Module(16,12500)))
+  ).generateVerilog(InOutWrapper(new Top_Module(16,6250)))
 //  SpinalVerilog(InOutWrapper(new Top_Module(32,5000)))
 }
 

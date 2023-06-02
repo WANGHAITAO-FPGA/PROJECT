@@ -23,15 +23,16 @@ case class MdcbTxSimpleBus(addrwidth : Int, datawidth : Int, timerl_imit: Int, s
   val RDATA = Reg(Bits(datawidth bits))
   val send_length = Reg(UInt(addrwidth bits)) init 0
 
-
-  val timer = Timer(32)
-  timer.io.tick := io.timer_tick
-  timer.io.limit := timerl_imit
-  when(timer.io.value >= timer.io.limit){
-    timer.io.clear := True
-  }otherwise{
-    timer.io.clear := False
-  }
+//  val timer = Timer(32)
+//  timer.io.tick := io.timer_tick
+//  timer.io.limit := timerl_imit
+//  when(timer.io.value >= timer.io.limit){
+//    timer.io.clear := True
+//  }otherwise{
+//    timer.io.clear := False
+//  }
+  val tick = Reg(Bool()) init False
+  tick := io.timer_tick
 
   val streamfifo = new StreamFifo(Bits(datawidth bits),data_length)
   streamfifo.logic.ram.addAttribute("ram_style", "block")
@@ -39,7 +40,7 @@ case class MdcbTxSimpleBus(addrwidth : Int, datawidth : Int, timerl_imit: Int, s
   val fsm =new StateMachine{
     val Wait_Start: State = new State with EntryPoint {
       whenIsActive{
-        when(timer.io.full){
+        when(tick.rise()){
           RADDR := start_addr
           RENABLE := True
           send_length := 0

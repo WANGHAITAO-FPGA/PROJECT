@@ -1,5 +1,6 @@
 package STCS
 
+import PHPA82.ila_test.ila
 import SimpleBus._
 import spinal.core._
 import spinal.lib.bus.regif.AccessType.{RO, RW}
@@ -56,24 +57,6 @@ case class Stcs_Sdac_Regif(addrwidth : Int, datawidth : Int, endat_num : Int, ad
     Ssi_Pos_Data := io.SSi_Pos(i)
   }
 
-//  val My_Reg_BissC1_Pos = busslave.newReg(doc="X1光栅尺,BissC1绝对式光栅尺位置信号")
-//  val BissC1_Pos = My_Reg_BissC1_Pos.field(32 bits,RO,0,"X1光栅尺,BissC1绝对式光栅尺位置信号")
-//  BissC1_Pos := io.BissC_Pos(0)
-//
-//  val My_Reg_BissC2_Pos = busslave.newReg(doc="X2光栅尺,BissC2绝对式光栅尺位置信号")
-//  val BissC2_Pos = My_Reg_BissC2_Pos.field(32 bits,RO,0,"X2光栅尺,BissC2绝对式光栅尺位置信号")
-//  BissC2_Pos := io.BissC_Pos(1)
-//
-//  val My_Reg_BissC3_Pos = busslave.newReg(doc="Y1光栅尺,BissC3绝对式光栅尺位置信号")
-//  val BissC3_Pos = My_Reg_BissC3_Pos.field(32 bits,RO,0,"Y1光栅尺,BissC3绝对式光栅尺位置信号")
-//  BissC3_Pos := io.BissC_Pos(2)
-//
-//  val My_Reg_BissC4_Pos = busslave.newReg(doc="Y2光栅尺,BissC4绝对式光栅尺位置信号")
-//  val BissC4_Pos = My_Reg_BissC4_Pos.field(32 bits,RO,0,"Y2光栅尺,BissC4绝对式光栅尺位置信号")
-//  BissC4_Pos := io.BissC_Pos(3)
-
-
-
   val My_Reg_Encoder1_Pos = busslave.newReg(doc="EPZ光栅尺,Encoder1增量式光栅尺位置信号")
   val Encoder1_Pos = My_Reg_Encoder1_Pos.field(32 bits,RO,0,"EPZ光栅尺,Encoder1增量式光栅尺位置信号")
   Encoder1_Pos := io.Encoder_Pos(0)
@@ -86,9 +69,11 @@ case class Stcs_Sdac_Regif(addrwidth : Int, datawidth : Int, endat_num : Int, ad
   val Encoder3_Pos = My_Reg_Encoder3_Pos.field(32 bits,RO,0,"Encoder3增量式光栅尺位置信号")
   Encoder3_Pos := io.Encoder_Pos(2)
 
+
   val My_Reg_Encoder4_Pos = busslave.newReg(doc="Encoder4增量式光栅尺位置信号")
   val Encoder4_Pos = My_Reg_Encoder4_Pos.field(32 bits,RO,0,"Encoder4增量式光栅尺位置信号")
   Encoder4_Pos := io.Encoder_Pos(3)
+
 
   val My_Reg_AD7606_Datatemp1 = busslave.newReg(doc="AD7606数据输入（U6）")
   val AD7606_Datatemp1 = My_Reg_AD7606_Datatemp1.fieldAt(0,bc = 32 bits,RO,0,"AD7606（U6）数据通道1输入,H1电容传感器")
@@ -462,28 +447,41 @@ case class Stcs_Sdac_Regif(addrwidth : Int, datawidth : Int, endat_num : Int, ad
   val FPGA_DO_15 = My_Reg_FPGA_DO.fieldAt(30,bc = 1 bits,RW,0,"外部光耦16输入信号，FPGA_DO16")
   io.FPGA_DO(15) := FPGA_DO_15.asBool
 
-  val Encoder_Clr0 = Reg(Bool()) init False
-  val Encoder_Clr1 = Reg(Bool()) init False
-  val Encoder_Clr2 = Reg(Bool()) init False
-  val Encoder_Clr3 = Reg(Bool()) init False
+//  val Encoder_Clr0 = Reg(Bits(1 bits)) init 0
+//  val Encoder_Clr1 = Reg(Bits(1 bits)) init 0
+//  val Encoder_Clr2 = Reg(Bits(1 bits)) init 0
+//  val Encoder_Clr3 = Reg(Bits(1 bits)) init 0
 
   val My_Reg_Encoder_Pos_Clr = busslave.newReg(doc="4路增量式光栅尺位置清零控制信号")
   val Encoder1_Pos_Clr = My_Reg_Encoder_Pos_Clr.fieldAt(0,bc = 1 bits,RW,0,"Encoder1位置清零")
-  Encoder_Clr0 := Encoder1_Pos_Clr.asBool & (My_Reg_Encoder_Pos_Clr.hitDoWrite)
-  io.Encoder_Clr(0) := (Encoder_Clr0 | Delay(Encoder_Clr0,1,init = False) | Delay(Encoder_Clr0,2,init = False)  | Delay(Encoder_Clr0,3,init = False)).asBits
-  //io.Encoder_Clr(0) := Encoder1_Pos_Clr & (My_Reg_Encoder_Pos_Clr.hitDoWrite.asBits)
-  val Encoder2_Pos_Clr = My_Reg_Encoder_Pos_Clr.fieldAt(8,bc = 1 bits,RW,0,"Encoder2位置清零")
-  Encoder_Clr1 := Encoder2_Pos_Clr.asBool & (My_Reg_Encoder_Pos_Clr.hitDoWrite)
-  io.Encoder_Clr(1):= (Encoder_Clr1 | Delay(Encoder_Clr1,1,init = False) | Delay(Encoder_Clr1,2,init = False)  | Delay(Encoder_Clr1,3,init = False)).asBits
-  //io.Encoder_Clr(1):= Encoder2_Pos_Clr & (My_Reg_Encoder_Pos_Clr.hitDoWrite.asBits)
-  val Encoder3_Pos_Clr = My_Reg_Encoder_Pos_Clr.fieldAt(16,bc = 1 bits,RW,0,"Encoder3位置清零")
-  Encoder_Clr2 := Encoder3_Pos_Clr.asBool & (My_Reg_Encoder_Pos_Clr.hitDoWrite)
-  io.Encoder_Clr(2):= (Encoder_Clr2 | Delay(Encoder_Clr2,1,init = False) | Delay(Encoder_Clr2,2,init = False)  | Delay(Encoder_Clr2,3,init = False)).asBits
+  io.Encoder_Clr(0) := Encoder1_Pos_Clr
 
-  //io.Encoder_Clr(2) := Encoder3_Pos_Clr & (My_Reg_Encoder_Pos_Clr.hitDoWrite.asBits)
+  val Encoder2_Pos_Clr = My_Reg_Encoder_Pos_Clr.fieldAt(8,bc = 1 bits,RW,0,"Encoder2位置清零")
+  io.Encoder_Clr(1):= Encoder2_Pos_Clr
+
+  val Encoder3_Pos_Clr = My_Reg_Encoder_Pos_Clr.fieldAt(16,bc = 1 bits,RW,0,"Encoder3位置清零")
+  io.Encoder_Clr(2) := Encoder3_Pos_Clr
+
   val Encoder4_Pos_Clr = My_Reg_Encoder_Pos_Clr.fieldAt(24,bc = 1 bits,RW,0,"Encoder4位置清零")
-  Encoder_Clr3 := Encoder4_Pos_Clr.asBool & (My_Reg_Encoder_Pos_Clr.hitDoWrite)
-  io.Encoder_Clr(3):= (Encoder_Clr3 | Delay(Encoder_Clr3,1,init = False) | Delay(Encoder_Clr3,2,init = False)  | Delay(Encoder_Clr3,3,init = False)).asBits
-  //io.Encoder_Clr(3) := Encoder4_Pos_Clr & (My_Reg_Encoder_Pos_Clr.hitDoWrite.asBits)
+  io.Encoder_Clr(3) := Encoder4_Pos_Clr
+
   busslave.accept(HtmlGenerator("Sdac_Reg", "Sdac_Reg"))
+
+  val t1 = Reg(SInt(32 bits)) init 0
+  t1:= io.Encoder_Pos(0).asSInt
+  val flag1 = Reg(Bool())
+  flag1 := False
+  when(t1 > 10000){
+    flag1 := True
+  }
+
+  val t2 = Reg(SInt(32 bits)) init 0
+  t2:= io.Encoder_Pos(1).asSInt
+  val flag2 = Reg(Bool())
+  flag2 := False
+  when(t2 > 10000){
+    flag2 := True
+  }
+
+  val ila_probe = ila("5",io.Encoder_Clr(0),io.Encoder_Pos(0),io.Encoder_Pos(1),io.Encoder_Pos(2),flag1,flag2)
 }

@@ -6,7 +6,7 @@ import spinal.core._
 import spinal.lib.misc.Timer
 import spinal.lib._
 
-case class Stcs_Mdcb(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : Int, data_length : Int, ad5544_num : Int, ad7606_num : Int, bissc_num : Int, endcoder_num : Int, demo_test : Boolean) extends Component{
+case class Stcs_Mdcb(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : Int, data_length : Int, ad5544_num : Int, ad7606_num : Int, bissc_num : Int, endcoder_num : Int, demo_test : Boolean = false) extends Component{
   val io = new Bundle{
     val intput = slave(Stream(Fragment(Bits(datawidth bits))))
     val output = master(Stream(Fragment(Bits(datawidth bits))))
@@ -47,6 +47,15 @@ case class Stcs_Mdcb(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_a
       demo_ticker := timer_A.io.full|Delay(timer_A.io.full,1,init = False)|Delay(timer_A.io.full,2,init = False)
     }
 
+    val timer = Timer(32)
+    timer.io.tick := True
+    timer.io.limit := 6250
+    when(timer.io.value >= timer.io.limit){
+      timer.io.clear := True
+    }otherwise{
+      timer.io.clear := False
+    }
+
     val mdcbRxPreamble = new MdcbRxPreamble(datawidth)
     mdcbRxPreamble.io.addAttribute("keep","true")
     mdcbRxPreamble.io.input << io.intput
@@ -59,7 +68,9 @@ case class Stcs_Mdcb(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_a
     val mdcbtxsimplebus = new MdcbTxSimpleBus(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_addr : Int, data_length : Int)
     mdcbtxsimplebus.io.addAttribute("keep","true")
     io.output << mdcbtxsimplebus.io.output
-    mdcbtxsimplebus.io.timer_tick := True
+//    mdcbtxsimplebus.io.timer_tick := True
+    mdcbtxsimplebus.io.timer_tick := timer.io.full
+//    mdcbtxsimplebus.io.timer_tick := mdcbRxPreamble.io.trigger
 
     val mdcbregif = new Stcs_Mdcb_Regif(addrwidth,datawidth,ad5544_num,ad7606_num,bissc_num,endcoder_num)
     mdcbregif.io.addAttribute("keep","true")
@@ -147,8 +158,6 @@ case class Stcs_Mdcb(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_a
 
       val encoder = Seq.fill(endcoder_num)(new Encoder_Top(false))
 
-      val test = Seq.fill(endcoder_num)(new Encoder_Test())
-
       for(i <- 0 until endcoder_num){
         encoder(i).io.clk := io.clk_80M
         encoder(i).io.reset := io.reset
@@ -158,8 +167,6 @@ case class Stcs_Mdcb(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_a
         encoder(i).io.encoder_clr_in := mdcbregif.io.Encoder_Clr(i).asBool
         mdcbregif.io.Encoder_Zero_Keep(i) := encoder(i).io.encoder_iphase_out.asBits
         mdcbregif.io.Encoder_lock_Pos(i) := encoder(i).io.encoder_lock_pos
-
-        test(i).io.currentValue := encoder(i).io.encoder_position_out
       }
     }
 
@@ -177,6 +184,6 @@ case class Stcs_Mdcb(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_a
 object Stcs_Mdcb_Top extends App{
   //SpinalConfig().addStandardMemBlackboxing(blackboxAll).generateVerilog(new Mdcb_Top(8,32,500,0,50,3,2,4,4))
   SpinalConfig(headerWithDate = true,
-    targetDirectory = "D:/STCS"
-  ).generateVerilog(new Stcs_Mdcb(12,32,500,0,50,3,2,4,4,false))
+    targetDirectory = "D:/STCS/MDCB_TEST_1/MDCB_2.srcs/sources_1/imports/SRIO/"
+  ).generateVerilog(new Stcs_Mdcb(12,32,6250,0,50,3,2,4,4,false))
 }

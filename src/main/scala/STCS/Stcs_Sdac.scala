@@ -2,6 +2,7 @@ package STCS
 
 import ENDAT.{ENDAT_Interface, Endat, SSI, SsiInterface}
 import MDCB_2.Mdcb_Ioin_Filter
+import PHPA82.ila_test.ila
 import PHPA82.{AD7606_DATA, Ad5544Interface, Ad7606Interface, BISS_Position, BissCInterface, EncoderInterface, Encoder_Top, dac_ad5544}
 import SDAC_2.{SdacRxPreamble, SdacRxSimpleBus, SdacTxSimpleBus, Sdac_Regif}
 import spinal.core._
@@ -34,7 +35,7 @@ case class Stcs_Sdac(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_a
 
   val sdac_clkdomain = ClockDomain(io.clk,io.reset)
 
-  val ad_clkdomain = ClockDomain(io.clk_80M,io.reset)
+//  val ad_clkdomain = ClockDomain(io.clk_80M,io.reset)
 
   val sdac_area = new ClockingArea(sdac_clkdomain){
     val sdacRxPreamble = new SdacRxPreamble(datawidth)
@@ -51,11 +52,15 @@ case class Stcs_Sdac(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_a
     io.output << sdactxsimplebus.io.output
     sdactxsimplebus.io.timer_tick := True
 
-    val pulse = new PulseCCByToggle(sdac_clkdomain,ad_clkdomain)
+    val pulse = new PulseCCByToggle(sdac_clkdomain,sdac_clkdomain)
     pulse.io.pulseIn := sdactxsimplebus.io.timer_out
 
-    /*val sdacurat = new Sdac_Uart(32,32,4000,uartreg_num,false)
-    sdacurat.io.uart <> io.uart*/
+    val encoder_position_out = Vec(Reg(Bits(32 bits)),4) addTag(crossClockDomain)
+    val encoder_position_out1 = Vec(Reg(Bits(32 bits)),4) addTag(crossClockDomain)
+    encoder_position_out1(0) := encoder_position_out(0)
+    encoder_position_out1(1) := encoder_position_out(1)
+    encoder_position_out1(2) := encoder_position_out(2)
+    encoder_position_out1(3) := encoder_position_out(3)
 
     val sdacregif = new Stcs_Sdac_Regif(addrwidth,datawidth,endat_num,ad7606_num,ssi_num,endcoder_num, uartreg_num, ad5544_num)
     sdacregif.io.addAttribute("keep","true")
@@ -69,11 +74,16 @@ case class Stcs_Sdac(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_a
     //sdacregif.io.uart_regin := sdacurat.io.uart_regout
     sdacregif.io.uart_regin := io.uart_regin
     sdacregif.io.EtherCAT_DATA := io.EtherCAT_DATA
+    sdacregif.io.Encoder_Pos(0) := encoder_position_out1(0)
+    sdacregif.io.Encoder_Pos(1) := encoder_position_out1(1)
+    sdacregif.io.Encoder_Pos(2) := encoder_position_out1(2)
+    sdacregif.io.Encoder_Pos(3) := encoder_position_out1(3)
 
-    val ad_area = new ClockingArea(ad_clkdomain){
+
+//    val ad_area = new ClockingArea(ad_clkdomain){
       val ad7606 = Seq.fill(ad7606_num)(new AD7606_DATA)
       for(i <- 0 until ad7606_num){
-        ad7606(i).io.clk := io.clk_80M
+        ad7606(i).io.clk := io.clk
         ad7606(i).io.reset := io.reset
         io.AD7606(i).ad_cs := ad7606(i).io.ad_cs
         io.AD7606(i).ad_os := ad7606(i).io.ad_os
@@ -99,6 +109,38 @@ case class Stcs_Sdac(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_a
         sdacregif.io.AD7606_DATA(i)(7) :=  ad7606(i).io.ad_ch8_o.asBits
       }
 
+//      val ad_test = Seq.fill(8)(new Encoder_Test())
+//      val diff_test = Seq.fill(8)(Reg(Bool()) init False)
+//      ad_test(0).io.currentValue := ad7606(0).io.ad_ch1_o.asBits
+//      ad_test(1).io.currentValue := ad7606(0).io.ad_ch2_o.asBits
+//      ad_test(2).io.currentValue := ad7606(0).io.ad_ch3_o.asBits
+//      ad_test(3).io.currentValue := ad7606(0).io.ad_ch4_o.asBits
+//      ad_test(4).io.currentValue := ad7606(0).io.ad_ch5_o.asBits
+//      ad_test(5).io.currentValue := ad7606(0).io.ad_ch6_o.asBits
+//      ad_test(6).io.currentValue := ad7606(0).io.ad_ch7_o.asBits
+//      ad_test(7).io.currentValue := ad7606(0).io.ad_ch8_o.asBits
+//      ad_test(0).io.tick := ad7606(0).io.ad_data_valid_o
+//      ad_test(1).io.tick := ad7606(0).io.ad_data_valid_o
+//      ad_test(2).io.tick := ad7606(0).io.ad_data_valid_o
+//      ad_test(3).io.tick := ad7606(0).io.ad_data_valid_o
+//      ad_test(4).io.tick := ad7606(0).io.ad_data_valid_o
+//      ad_test(5).io.tick := ad7606(0).io.ad_data_valid_o
+//      ad_test(6).io.tick := ad7606(0).io.ad_data_valid_o
+//      ad_test(7).io.tick := ad7606(0).io.ad_data_valid_o
+//
+//      diff_test(0) := ad_test(0).io.isDiffOver50
+//      diff_test(1) := ad_test(1).io.isDiffOver50
+//      diff_test(2) := ad_test(2).io.isDiffOver50
+//      diff_test(3) := ad_test(3).io.isDiffOver50
+//      diff_test(4) := ad_test(4).io.isDiffOver50
+//      diff_test(5) := ad_test(5).io.isDiffOver50
+//      diff_test(6) := ad_test(6).io.isDiffOver50
+//      diff_test(7) := ad_test(7).io.isDiffOver50
+//
+//      val ila_probe = ila("5",ad7606(0).io.ad_cs,ad7606(0).io.ad_data,ad7606(0).io.ad_convsta,ad7606(0).io.ad_rd,ad7606(0).io.first_data,
+//        diff_test(0))
+
+
 //      val bissc = Seq.fill(bissc_num)(new BISS_Position)
 //      for(i <- 0 until bissc_num){
 //        bissc(i).clk := io.clk_80M
@@ -117,23 +159,17 @@ case class Stcs_Sdac(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_a
         sdacregif.io.SSi_Pos(i) := ssi(i).io.postion
       }
 
-
       val encoder = Seq.fill(endcoder_num)(new Encoder_Top(false))
 
-      val test = Seq.fill(endcoder_num)(new Encoder_Test())
-
       for(i <- 0 until endcoder_num){
-        encoder(i).io.clk := io.clk_80M
+        encoder(i).io.clk := io.clk
         encoder(i).io.reset := io.reset
         encoder(i).io.clk_160M := io.clk_160M
         encoder(i).io.encoderinterface := io.ENCODER(i)
-        sdacregif.io.Encoder_Pos(i) := encoder(i).io.encoder_position_out
+        encoder_position_out(i) := encoder(i).io.encoder_position_out
         encoder(i).io.encoder_clr_in := sdacregif.io.Encoder_Clr(i).asBool
         sdacregif.io.Encoder_Zero_Keep(i) := encoder(i).io.encoder_iphase_out.asBits
-        sdacregif.io.Encoder_lock_Pos(i) := encoder(i).io.encoder_lock_pos
-
-        test(i).io.currentValue := encoder(i).io.encoder_position_out
-        test(i).io.tick := pulse.io.pulseOut
+        sdacregif.io.Encoder_lock_Pos(i) := 0
       }
 
       val endat = Seq.fill(endat_num)((new Endat(20,6,38,3000)))
@@ -146,7 +182,7 @@ case class Stcs_Sdac(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_a
 
       val ad5544 = Seq.fill(ad5544_num)(new dac_ad5544)
       for(i <- 0 until ad5544_num){
-        ad5544(i).io.clk := io.clk_80M
+        ad5544(i).io.clk := io.clk
         ad5544(i).io.reset := io.reset
         io.AD5544(i).AD5544_SCLK := ad5544(i).io.AD5544_SCLK
         io.AD5544(i).AD5544_CS := ad5544(i).io.AD5544_CS
@@ -160,7 +196,7 @@ case class Stcs_Sdac(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_a
         ad5544(i).io.AD5544_DATA_IN4 := sdacregif.io.AD5544_DATA(i)(3).asUInt
         ad5544(i).io.ad5544_trig := sdacregif.io.AD5544_TRIGER(i)
       }
-    }
+//    }
 
     val mdcb_iofilter = new Mdcb_Ioin_Filter(40)
     mdcb_iofilter.io.M_Fault_TTL := io.M_Fault_TTL
@@ -174,5 +210,8 @@ case class Stcs_Sdac(addrwidth : Int, datawidth : Int, timerl_imit: Int, start_a
 }
 
 object Sdcr_Top extends App{
-  SpinalConfig(headerWithDate = true,targetDirectory = "D:/STCS/").generateVerilog(new Stcs_Sdac(10,32,6250,0,62,4,4,4,4,8,0))
+  SpinalConfig(headerWithDate = true,
+    nameWhenByFile = false,
+    targetDirectory = "D:/STCS/STCS_SDAC_V1.06/MDCB_2.srcs/sources_1/imports/untitled2/"
+  ).generateVerilog(new Stcs_Sdac(10,32,6250,0,62,4,4,4,4,8,0))
 }

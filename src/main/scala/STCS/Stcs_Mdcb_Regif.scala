@@ -1,5 +1,6 @@
 package STCS
 
+import PHPA82.ila_test.ila
 import SimpleBus._
 import spinal.core._
 import spinal.lib.bus.regif.AccessType.{RO, RW}
@@ -323,16 +324,40 @@ case class Stcs_Mdcb_Regif(addrwidth : Int, datawidth : Int, ad5544_num : Int, a
   val FPGA_DO_15 = My_Reg_FPGA_DO.fieldAt(30,bc = 1 bits,RW,0,"外部光耦16输入信号，FPGA_DO16，预留")
   io.FPGA_DO(15) := FPGA_DO_15.asBool
 
+  val Encoder_Clr0 = Reg(Bool()) init False
+  val Encoder_Clr1 = Reg(Bool()) init False
+  val Encoder_Clr2 = Reg(Bool()) init False
+  val Encoder_Clr3 = Reg(Bool()) init False
+
   val My_Reg_Encoder_Pos_Clr = busslave.newReg(doc="4路增量式光栅尺位置清零控制信号,预留")
   val Encoder1_Pos_Clr = My_Reg_Encoder_Pos_Clr.fieldAt(0,bc = 1 bits,RW,0,"Encoder1位置清零，预留")
-  io.Encoder_Clr(0) := Encoder1_Pos_Clr & (My_Reg_Encoder_Pos_Clr.hitDoWrite.asBits)
+  Encoder_Clr0 := Encoder1_Pos_Clr.asBool
+  io.Encoder_Clr(0) := Encoder_Clr0.asBits
+
   val Encoder2_Pos_Clr = My_Reg_Encoder_Pos_Clr.fieldAt(8,bc = 1 bits,RW,0,"Encoder2位置清零，预留")
-  io.Encoder_Clr(1):= Encoder2_Pos_Clr & (My_Reg_Encoder_Pos_Clr.hitDoWrite.asBits)
+  Encoder_Clr1 := Encoder2_Pos_Clr.asBool
+  io.Encoder_Clr(1):= Encoder_Clr1.asBits
+
   val Encoder3_Pos_Clr = My_Reg_Encoder_Pos_Clr.fieldAt(16,bc = 1 bits,RW,0,"Encoder3位置清零，预留")
-  io.Encoder_Clr(2) := Encoder3_Pos_Clr & (My_Reg_Encoder_Pos_Clr.hitDoWrite.asBits)
+  Encoder_Clr2 := Encoder3_Pos_Clr.asBool
+  io.Encoder_Clr(2):= Encoder_Clr2.asBits
+
   val Encoder4_Pos_Clr = My_Reg_Encoder_Pos_Clr.fieldAt(24,bc = 1 bits,RW,0,"Encoder4位置清零，预留")
-  io.Encoder_Clr(3) := Encoder4_Pos_Clr & (My_Reg_Encoder_Pos_Clr.hitDoWrite.asBits)
+  Encoder_Clr3 := Encoder4_Pos_Clr.asBool
+  io.Encoder_Clr(3):= Encoder_Clr3.asBits
+
 
   busslave.accept(HtmlGenerator("mdcb.html", "AP"))
+
+//  val test = Seq.fill(4)(Encoder_Test())
+//  for(i <- 0 until 4){
+//    test(i).io.currentValue := io.Encoder_Pos(i)
+//  }
+//  test(0).io.tick := My_Reg_Encoder1_Pos.hitDoRead
+//  test(1).io.tick := My_Reg_Encoder2_Pos.hitDoRead
+//  test(2).io.tick := My_Reg_Encoder3_Pos.hitDoRead
+//  test(3).io.tick := My_Reg_Encoder4_Pos.hitDoRead
+
+  val ila_probe = ila("5",Encoder1_Pos_Clr,io.Encoder_Clr(0),io.Encoder_Pos(0))
 
 }

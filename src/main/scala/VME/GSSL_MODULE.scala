@@ -5,7 +5,7 @@ import Memory.XILINX_BRAM_PORT
 import PHPA82.ila_test.ila
 import spinal.core._
 import spinal.lib.misc.Timer
-import spinal.lib.{Counter, Delay, master}
+import spinal.lib.{Counter, Delay, StreamCCByToggle, master}
 
 case class GSSL_MODULE(timer_cnt : Int, write_aw : Int, read_aw : Int, lookback : Boolean) extends Component{
   val io = new Bundle{
@@ -38,18 +38,18 @@ case class GSSL_MODULE(timer_cnt : Int, write_aw : Int, read_aw : Int, lookback 
     /****************************GSSL_A 通道定时发送VME,SENSOR数据 *********************/
     val gssl_sensor_regs = Reg(Vec(Bits(32 bits),12))  addTag(crossClockDomain)
 
-    val gssl_sensor_regs_temp = Reg(Vec(Bits(32 bits),12))  addTag(crossClockDomain)
+//    val gssl_sensor_regs_temp = Reg(Vec(Bits(32 bits),12))  addTag(crossClockDomain)
 
-    val timer_A = Timer(32)
-    val counter = Counter(20000000)
-    timer_A.io.tick := cyp1401_init.io.GSSL_TRSTZ_N_ABCD
-    timer_A.io.limit := timer_cnt
-    when(timer_A.io.value >= timer_A.io.limit){
-      timer_A.io.clear := True
-      counter.increment()
-    }otherwise{
-      timer_A.io.clear := False
-    }
+//    val timer_A = Timer(32)
+//    val counter = Counter(20000000)
+//    timer_A.io.tick := cyp1401_init.io.GSSL_TRSTZ_N_ABCD
+//    timer_A.io.limit := timer_cnt
+//    when(timer_A.io.value >= timer_A.io.limit){
+//      timer_A.io.clear := True
+//      counter.increment()
+//    }otherwise{
+//      timer_A.io.clear := False
+//    }
 
     val vme_data = Reg(Vec(Bits(32 bits),6))
     val sensor_data = Reg(Vec(Bits(32 bits),12))
@@ -61,6 +61,8 @@ case class GSSL_MODULE(timer_cnt : Int, write_aw : Int, read_aw : Int, lookback 
     val tx_busy = Reg(Bool()) init False addTag(crossClockDomain)
 
     val rx_a_ttctriger = Reg(Bool()) init False  addTag(crossClockDomain)
+
+    val rx_done_c = Reg(Bool()) init False  addTag(crossClockDomain)
 
     gssl_tx_a.io.GSSL_REFCLK := io.clk
     gssl_tx_a.io.rst_in := io.reset
@@ -77,7 +79,7 @@ case class GSSL_MODULE(timer_cnt : Int, write_aw : Int, read_aw : Int, lookback 
       vme_data := io.vme_data
       original_data := io.original_data
       sensor_data := gssl_sensor_regs
-      sensor_data_temp := gssl_sensor_regs_temp
+      sensor_data_temp := gssl_sensor_regs
     }
 
     val tx_temp = Reg(Bits(32 bits))
@@ -89,78 +91,25 @@ case class GSSL_MODULE(timer_cnt : Int, write_aw : Int, read_aw : Int, lookback 
 //      test_temp := test_case.io.test_data
       /*test____data*/
 
-//    when((gssl_tx_a.io.reads.addr === U(0x41))){
-//      tx_temp := vme_data(0)
-//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x42))){
-//      tx_temp := vme_data(1)
-//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x43))){
-//      tx_temp := vme_data(2)
-//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x44))){
-//      tx_temp := vme_data(3)
-//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x45))){
-//      tx_temp := vme_data(4)
-//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x46))){
-//      tx_temp := vme_data(5)
-//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x47))){
-//      tx_temp := gssl_sensor_regs(0)
-//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x48))){
-//      tx_temp := gssl_sensor_regs(1)
-//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x49))){
-//      tx_temp := gssl_sensor_regs(2)
-//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x4a))){
-//      tx_temp := gssl_sensor_regs(3)
-//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x4b))){
-//      tx_temp := gssl_sensor_regs(4)
-//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x4c))){
-//      tx_temp := gssl_sensor_regs(5)
-//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x4d))){
-//      tx_temp := gssl_sensor_regs(6)
-//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x4e))){
-//      tx_temp := gssl_sensor_regs(7)
-//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x4f))){
-//      tx_temp := gssl_sensor_regs(8)
-//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x50))){
-//      tx_temp := gssl_sensor_regs(9)
-//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x51))){
-//      tx_temp := gssl_sensor_regs(10)
-//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x52))){
-//      tx_temp := gssl_sensor_regs(11)
-//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x53))){
-//      tx_temp := original_data(0)
-//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x54))){
-//      tx_temp := original_data(1)
-//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x55))){
-//      tx_temp := original_data(2)
-//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x56))){
-//      tx_temp := original_data(3)
-//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x57))){
-//      tx_temp := original_data(4)
-//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x58))){
-//      tx_temp := original_data(5)
-//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x59))){
-//      tx_temp := original_data(6)
-//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x5a))){
-//      tx_temp := original_data(7)
-//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x5b))){
-//      tx_temp := original_data(8)
-//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x5c))){
-//      tx_temp := original_data(9)
-//    }elsewhen((gssl_tx_a.io.reads.addr === U(0x5d))){
-//      tx_temp := original_data(10)
-//    }
 
     when((gssl_tx_a.io.reads.addr === U(0x41)) && gssl_tx_a.io.reads.en){
       tx_temp := vme_data(0)
+//      tx_temp := 0
     }elsewhen((gssl_tx_a.io.reads.addr === U(0x42)) && gssl_tx_a.io.reads.en){
       tx_temp := vme_data(1)
+//      tx_temp := 0
     }elsewhen((gssl_tx_a.io.reads.addr === U(0x43)) && gssl_tx_a.io.reads.en){
       tx_temp := vme_data(2)
+//      tx_temp := 0
     }elsewhen((gssl_tx_a.io.reads.addr === U(0x44)) && gssl_tx_a.io.reads.en){
       tx_temp := vme_data(3)
+//      tx_temp := 0
     }elsewhen((gssl_tx_a.io.reads.addr === U(0x45)) && gssl_tx_a.io.reads.en){
       tx_temp := vme_data(4)
+//      tx_temp := 0
     }elsewhen((gssl_tx_a.io.reads.addr === U(0x46)) && gssl_tx_a.io.reads.en){
       tx_temp := vme_data(5)
+//      tx_temp := 0
     }elsewhen((gssl_tx_a.io.reads.addr === U(0x47)) && gssl_tx_a.io.reads.en){
       tx_temp := sensor_data_temp(0)
     }elsewhen((gssl_tx_a.io.reads.addr === U(0x48)) && gssl_tx_a.io.reads.en){
@@ -187,32 +136,47 @@ case class GSSL_MODULE(timer_cnt : Int, write_aw : Int, read_aw : Int, lookback 
       tx_temp := sensor_data_temp(11)
     }elsewhen((gssl_tx_a.io.reads.addr === U(0x53)) && gssl_tx_a.io.reads.en){
       tx_temp := original_data(0)
+//      tx_temp := 0
     }elsewhen((gssl_tx_a.io.reads.addr === U(0x54)) && gssl_tx_a.io.reads.en){
       tx_temp := original_data(1)
+//      tx_temp := 0
     }elsewhen((gssl_tx_a.io.reads.addr === U(0x55)) && gssl_tx_a.io.reads.en){
       tx_temp := original_data(2)
+//      tx_temp := 0
     }elsewhen((gssl_tx_a.io.reads.addr === U(0x56)) && gssl_tx_a.io.reads.en){
       tx_temp := original_data(3)
+//      tx_temp := 0
     }elsewhen((gssl_tx_a.io.reads.addr === U(0x57)) && gssl_tx_a.io.reads.en){
       tx_temp := original_data(4)
+//      tx_temp := 0
     }elsewhen((gssl_tx_a.io.reads.addr === U(0x58)) && gssl_tx_a.io.reads.en){
       tx_temp := original_data(5)
+//      tx_temp := 0
     }elsewhen((gssl_tx_a.io.reads.addr === U(0x59)) && gssl_tx_a.io.reads.en){
       tx_temp := original_data(6)
+//      tx_temp := 0
     }elsewhen((gssl_tx_a.io.reads.addr === U(0x5a)) && gssl_tx_a.io.reads.en){
       tx_temp := original_data(7)
+//      tx_temp := 0
     }elsewhen((gssl_tx_a.io.reads.addr === U(0x5b)) && gssl_tx_a.io.reads.en){
       tx_temp := original_data(8)
+//      tx_temp := 0
     }elsewhen((gssl_tx_a.io.reads.addr === U(0x5c)) && gssl_tx_a.io.reads.en){
       tx_temp := original_data(9)
+//      tx_temp := 0
     }elsewhen((gssl_tx_a.io.reads.addr === U(0x5d)) && gssl_tx_a.io.reads.en){
       tx_temp := original_data(10)
+//      tx_temp := 0
     }
-
     gssl_tx_a.io.reads.dataOut := tx_temp
-//      gssl_tx_a.io.reads.dataOut := test_temp
+
+    val flag = Reg(Bool())
+      flag := False
+    when(tx_temp.asSInt > 500){
+      flag := True
+    }
     /****************************GSSL_C 定时发送TTC，同时接受到SENSOR数据后返回ATC*********************/
-    val rx_done_c = Reg(Bool()) init False  addTag(crossClockDomain)
+//    val rx_done_c = Reg(Bool()) init False  addTag(crossClockDomain)
 
     val timer_C = Timer(32)
     timer_C.io.tick := cyp1401_init.io.GSSL_TRSTZ_N_ABCD
@@ -295,8 +259,6 @@ case class GSSL_MODULE(timer_cnt : Int, write_aw : Int, read_aw : Int, lookback 
 
     val sensor_regs = Reg(Vec(Bits(32 bits),12))
 
-    val sensor_regs_temp = Reg(Vec(Bits(32 bits),12))
-
     rx_module_c.io.rst_in := io.reset
     when((rx_module_c.io.writes.we) && (rx_module_c.io.writes.addr === U(0x21))){
       sensor_regs(0) := rx_module_c.io.writes.dataIn
@@ -345,24 +307,13 @@ case class GSSL_MODULE(timer_cnt : Int, write_aw : Int, read_aw : Int, lookback 
     val rx_frame_done = Reg(Bool()) init False
     rx_frame_done := rx_module_c.io.rx_frame_done
 
-    when(rx_frame_done.rise()){
-      gssl_txarea.gssl_sensor_regs := sensor_regs
-      gssl_txarea.gssl_sensor_regs_temp := sensor_regs
+    val fifo = Seq.fill(12)(StreamCCByToggle(Bits(32 bits),ClockDomain(io.cyp1401.GSSL_RXCLK_C,io.reset),ClockDomain(io.clk,io.reset)))
+    for(i <- 0 until 12){
+      fifo(i).io.input.payload := sensor_regs(i)
+      fifo(i).io.input.valid := rx_frame_done
+      fifo(i).io.output.ready := True
+      gssl_txarea.gssl_sensor_regs(i) := fifo(i).io.output.payload
     }
-//    gssl_txarea.gssl_sensor_regs := sensor_regs
-//    gssl_txarea.gssl_sensor_regs_temp := sensor_regs
-//
-//    val trigger = Reg(Bool()) init False
-//    when(rx_frame_done.rise()){
-//      sensor_regs_temp := sensor_regs
-//      trigger := True
-//    }
-//
-//    when(trigger&&(!gssl_txarea.tx_busy)){
-//
-//      gssl_txarea.gssl_sensor_regs_temp := sensor_regs_temp
-//      trigger := False
-//    }
   }
   /****************************GSSL_B接受TTC触发后发送SENSOR数据  *********************/
   val gssl_rxarea_b = new ClockingArea(ClockDomain(if(!lookback) io.cyp1401.GSSL_RXCLK_B else io.clk,io.reset)){
@@ -373,67 +324,11 @@ case class GSSL_MODULE(timer_cnt : Int, write_aw : Int, read_aw : Int, lookback 
       rx_module_b.io.GSSL_RXST0 := io.cyp1401.GSSL_RXST0_B
     }
     rx_module_b.io.rst_in := io.reset
-
-//    val sensor_regs = Reg(Vec(Bits(32 bits),12))
-//
-//    val sensor_regs_temp = Reg(Vec(Bits(32 bits),12))
-//
-//    rx_module_b.io.rst_in := io.reset
-//    when((rx_module_b.io.writes.we) && (rx_module_b.io.writes.addr === U(0x21))){
-//      sensor_regs(0) := rx_module_b.io.writes.dataIn
-//    }
-//    when((rx_module_b.io.writes.we) && (rx_module_b.io.writes.addr === U(0x22))){
-//      sensor_regs(1) := rx_module_b.io.writes.dataIn
-//    }
-//    when((rx_module_b.io.writes.we) && (rx_module_b.io.writes.addr === U(0x23))){
-//      sensor_regs(2) := rx_module_b.io.writes.dataIn
-//    }
-//    when((rx_module_b.io.writes.we) && (rx_module_b.io.writes.addr === U(0x24))){
-//      sensor_regs(3) := rx_module_b.io.writes.dataIn
-//    }
-//    when((rx_module_b.io.writes.we) && (rx_module_b.io.writes.addr === U(0x25))){
-//      sensor_regs(4) := rx_module_b.io.writes.dataIn
-//    }
-//    when((rx_module_b.io.writes.we) && (rx_module_b.io.writes.addr === U(0x26))){
-//      sensor_regs(5) := rx_module_b.io.writes.dataIn
-//    }
-//    when((rx_module_b.io.writes.we) && (rx_module_b.io.writes.addr === U(0x27))){
-//      sensor_regs(6) := rx_module_b.io.writes.dataIn
-//    }
-//    when((rx_module_b.io.writes.we) && (rx_module_b.io.writes.addr === U(0x28))){
-//      sensor_regs(7) := rx_module_b.io.writes.dataIn
-//    }
-//    when((rx_module_b.io.writes.we) && (rx_module_b.io.writes.addr === U(0x29))){
-//      sensor_regs(8) := rx_module_b.io.writes.dataIn
-//    }
-//    when((rx_module_b.io.writes.we) && (rx_module_b.io.writes.addr === U(0x2a))){
-//      sensor_regs(9) := rx_module_b.io.writes.dataIn
-//    }
-//    when((rx_module_b.io.writes.we) && (rx_module_b.io.writes.addr === U(0x2b))){
-//      sensor_regs(10) := rx_module_b.io.writes.dataIn
-//    }
-//    when((rx_module_b.io.writes.we) && (rx_module_b.io.writes.addr === U(0x2c))){
-//      sensor_regs(11) := rx_module_b.io.writes.dataIn
-//    }
-//    io.rx_led := rx_module_b.io.rx_led
-//
-//    val rx_done_b_delay1 = Reg(Bool()) init False
-//    val rx_done_b_delay2 = Reg(Bool()) init False
-//    rx_done_b_delay1 := Delay(rx_module_b.io.rx_frame_done,1)
-//    rx_done_b_delay2 := Delay(rx_module_b.io.rx_frame_done,2)
-//    gssl_txarea.rx_done_c := rx_module_b.io.rx_frame_done|rx_done_b_delay1|rx_done_b_delay2
-//
-//    val rx_frame_done = Reg(Bool()) init False
-//    rx_frame_done := rx_module_b.io.rx_frame_done
-//
-//    when(rx_frame_done.rise()){
-//      gssl_txarea.gssl_sensor_regs := sensor_regs
-//      gssl_txarea.gssl_sensor_regs_temp := sensor_regs
-//    }
   }
-  val ila_probe = ila("5",gssl_txarea.sensor_data_temp(0),gssl_txarea.sensor_data_temp(1),gssl_txarea.sensor_data_temp(2),
+  val ila_probe = ila("5",gssl_txarea.flag,gssl_txarea.tx_temp,gssl_txarea.sensor_data_temp(0),gssl_txarea.sensor_data_temp(1),gssl_txarea.sensor_data_temp(2),
     gssl_txarea.sensor_data_temp(3),gssl_txarea.sensor_data_temp(4),gssl_txarea.sensor_data_temp(5),
-    gssl_txarea.tx_temp)
+    gssl_txarea.gssl_sensor_regs(0),gssl_txarea.gssl_sensor_regs(1),gssl_txarea.gssl_sensor_regs(2),
+    gssl_txarea.gssl_sensor_regs(3),gssl_txarea.gssl_sensor_regs(4),gssl_txarea.gssl_sensor_regs(5))
 
 }
 

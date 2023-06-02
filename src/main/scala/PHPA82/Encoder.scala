@@ -1,6 +1,7 @@
 package PHPA82
 
 import MDCB_2.Encoder_Clr
+import PHPA82.ila_test.ila
 import spinal.core._
 import spinal.lib.bus.amba3.apb.{Apb3, Apb3Config, Apb3SlaveFactory}
 import spinal.lib.{Counter, IMasterSlave, master, slave}
@@ -99,8 +100,8 @@ case class Encoder_Top(inclr : Boolean) extends Component{
   val encoderclockdomain = ClockDomain(io.clk,io.reset)
   val encoderarea = new ClockingArea(encoderclockdomain){
 
-    val encoder_clr = new Encoder_Clr
-    encoder_clr.io.encoder_clr_in := io.encoder_clr_in
+//    val encoder_clr = new Encoder_Clr
+//    encoder_clr.io.encoder_clr_in := io.encoder_clr_in
 
     val zerosensor = new ZeroSensor
     zerosensor.io.zerosensor_in := io.encoderinterface.encoder_iphase
@@ -124,14 +125,8 @@ case class Encoder_Top(inclr : Boolean) extends Component{
     if(inclr){
       Encoder.enc_rstn := !encoder_iphase.rise()
     }else{
-      Encoder.enc_rstn := encoder_clr.io.encoder_clr_out
-      val encoder_lock_pos = Reg(Bits(32 bits)) init 0  addTag(crossClockDomain)
-      when(io.encoderinterface.encoder_iphase.rise()){
-        encoder_lock_pos := Encoder.encoder_position_out
-      }otherwise{
-        encoder_lock_pos := encoder_lock_pos
-      }
-      io.encoder_lock_pos := encoder_lock_pos
+      Encoder.enc_rstn := !io.encoder_clr_in
+      io.encoder_lock_pos := 0
     }
   }
 }
